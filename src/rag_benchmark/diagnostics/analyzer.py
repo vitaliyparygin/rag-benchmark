@@ -13,24 +13,22 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from rag_benchmark.classifier import UNKNOWN_TYPE
-from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.models import  BenchmarkQuery
-from rag_benchmark.pipeline import BenchmarkPipeline
-from rag_benchmark.logging import get_logger
-from rag_benchmark.utils.text import normalize_whitespace, slugify
-from rag_benchmark.analyzers.regex_analyzer import RegexAnalyzer, LABEL_REGEX
-from rag_benchmark.suggestions.regex_suggestions import build_regex_candidates
 from rag_benchmark.analyzers.field_coverage import FieldCoverageAnalyzer
 from rag_benchmark.analyzers.question_generation import QuestionGenerationAnalyzer
+from rag_benchmark.analyzers.regex_analyzer import LABEL_REGEX, RegexAnalyzer
+from rag_benchmark.classifier import UNKNOWN_TYPE
+from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.diagnostics.models import (
-    DocumentSummary,
-)
-from rag_benchmark.diagnostics.models import (
-    SuggestedClassificationRule,
     DocumentDiagnostic,
-    PipelineDiagnostics
+    DocumentSummary,
+    PipelineDiagnostics,
+    SuggestedClassificationRule,
 )
+from rag_benchmark.logging import get_logger
+from rag_benchmark.models import BenchmarkQuery
+from rag_benchmark.pipeline import BenchmarkPipeline
+from rag_benchmark.suggestions.regex_suggestions import build_regex_candidates
+from rag_benchmark.utils.text import normalize_whitespace, slugify
 
 logger = get_logger("diagnostics.analyzer")
 
@@ -93,7 +91,8 @@ def suggest_classification_rule(
     words = [w for w in re.split(r"[_\-\s]+", stem) if w]
     name_words = [w for w in words if not w.isdigit()] or words
     document_type = " ".join(w.capitalize() for w in name_words) if name_words else stem
-    filename_pattern = slugify(" ".join(name_words)).replace("-", " ") if name_words else stem.lower()
+    filename_pattern = slugify(" ".join(name_words)).replace("-",
+                                                             " ") if name_words else stem.lower()
     content_patterns = [kw.lower() for kw in keywords[:max_content_patterns]]
     return SuggestedClassificationRule(
         document_type=document_type,
@@ -225,12 +224,12 @@ def run_diagnostics(
                 summary=summary,
             )
         )
-        # RegexRenderer.render_regex_analysis(document_diagnostics)
-        all_regex_stats = [
-            stat
-            for diag in document_diagnostics
-            for stat in diag.regex_stats
-        ]
+        # # RegexRenderer.render_regex_analysis(document_diagnostics)
+        # all_regex_stats = [
+        #     stat
+        #     for diag in document_diagnostics
+        #     for stat in diag.regex_stats
+        # ]
 
         # RegexRenderer.render_unused(all_regex_stats)
         counter = Counter()

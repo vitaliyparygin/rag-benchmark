@@ -10,7 +10,7 @@ knowledge themselves, which is what keeps the core package framework
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, Difficulty, QuestionField
 

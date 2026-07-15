@@ -7,15 +7,15 @@ stable set of types instead of on each other.
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
-from pathlib import Path
 from enum import StrEnum
+from pathlib import Path
+
 from pydantic import BaseModel, Field, field_validator
 
-from dataclasses import dataclass, field
 
-class DocumentFormat(str, Enum):
+class DocumentFormat(StrEnum):
     """Supported raw document formats."""
 
     PDF = "pdf"
@@ -25,7 +25,7 @@ class DocumentFormat(str, Enum):
     UNKNOWN = "unknown"
 
 
-class Difficulty(str, Enum):
+class Difficulty(StrEnum):
     """Difficulty tiers for generated benchmark questions."""
 
     EASY = "easy"

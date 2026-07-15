@@ -1,12 +1,14 @@
 import json
+
 import typer
-from rag_benchmark.logging import configure_logging, get_logger
-from rag_benchmark.config import build_config
 from rich.console import Console
 from rich.table import Table
-from rag_benchmark.models import BenchmarkDataset, BenchmarkQuery
+
 from rag_benchmark.config import BenchmarkConfig
+from rag_benchmark.logging import configure_logging
 from rag_benchmark.metrics import validate_dataset
+from rag_benchmark.models import BenchmarkDataset, BenchmarkQuery
+
 console = Console()
 
 

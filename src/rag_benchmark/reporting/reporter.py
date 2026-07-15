@@ -1,6 +1,7 @@
 from rag_benchmark.diagnostics.reporter import DiagnosticsReporter
 from rag_benchmark.reporting.console import print_document_report, print_summary
 
+
 class DiagnosticsReporter:
 
     def render(

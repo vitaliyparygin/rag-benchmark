@@ -16,7 +16,7 @@ from __future__ import annotations
 from rag_benchmark.classifier import ClassificationRule
 from rag_benchmark.extractor import FieldRule
 from rag_benchmark.generators.base import QuestionSpec, QuestionTemplateMap
-from rag_benchmark.models import Difficulty, QuestionField
+from rag_benchmark.models import QuestionField
 
 TEMPLATE_NAME = "erp"
 
@@ -65,7 +65,8 @@ CLASSIFICATION_RULES: tuple[ClassificationRule, ...] = (
 
 EXTRACTION_RULES: dict[str, tuple[FieldRule, ...]] = {
     "Purchase Order": (
-        FieldRule("po_number", (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
+        FieldRule("po_number",
+                  (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
         FieldRule("vendor", (r"vendor\s*(?:name)?\s*[:\-]?\s*([^\n]+)",)),
         FieldRule("amount", (r"total\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",)),
         FieldRule("delivery_date", (r"delivery\s*date\s*[:\-]?\s*([\d/\-\.]+)",)),

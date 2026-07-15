@@ -1,7 +1,9 @@
 
 from __future__ import annotations
+
 from rag_benchmark.diagnostics.inspect import InspectResult
 from rag_benchmark.diagnostics.models import MissingImprovement
+
 
 class MissingImprovementsAnalyzer:
 
@@ -49,7 +51,7 @@ class MissingImprovementsAnalyzer:
                 MissingImprovement(
                     category="Questions",
                     item=field,
-                    suggestion=f"Question was not generated",
+                    suggestion="Question was not generated",
                 )
             )
 

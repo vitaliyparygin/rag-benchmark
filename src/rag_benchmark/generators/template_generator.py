@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from rag_benchmark.generators.base import QuestionGenerator, QuestionTemplateMap
-from rag_benchmark.models import (BenchmarkQuery,
-                                  ClassifiedDocument,
-                                  GenerationStats)
-from rag_benchmark.logging import get_logger
 from rich.console import Console
+
+from rag_benchmark.generators.base import QuestionGenerator, QuestionTemplateMap
+from rag_benchmark.logging import get_logger
+from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, GenerationStats
+
 logger = get_logger("generators.template")
 
 console = Console()
@@ -51,12 +51,15 @@ class TemplateQuestionGenerator(QuestionGenerator):
                 document_type=doc_type,
             )
             generated_for_doc = 0
-            logger.debug(f"generate.specs specs={specs} max_questions_per_document={max_questions_per_document}")
+            logger.debug(
+                f"generate.specs specs={specs} "
+                f"max_questions_per_document={max_questions_per_document}")
             for spec in specs:
 
                 if generated_for_doc >= max_questions_per_document:
                     logger.debug(f"generated_for_doc >= max_questions_per_document1"
-                          f"generated_for_doc={generated_for_doc} max_questions_per_document={max_questions_per_document}")
+                          f"generated_for_doc={generated_for_doc} "
+                                 f"max_questions_per_document={max_questions_per_document}")
                     break
 
                 for field in spec.fields:

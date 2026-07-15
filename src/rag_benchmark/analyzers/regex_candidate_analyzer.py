@@ -1,6 +1,9 @@
 from __future__ import annotations
+
 from collections import Counter
+
 from rag_benchmark.diagnostics.models import RegexCandidate
+
 
 class RegexCandidateAnalyzer:
 

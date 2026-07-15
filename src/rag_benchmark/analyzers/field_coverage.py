@@ -1,6 +1,8 @@
 from __future__ import annotations
-from rag_benchmark.models import ClassifiedDocument
+
 from rag_benchmark.diagnostics.models import FieldCoverageResult
+from rag_benchmark.models import ClassifiedDocument
+
 
 class FieldCoverageAnalyzer:
     """Analyze extracted metadata coverage for one document."""

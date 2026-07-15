@@ -1,13 +1,14 @@
 """Small shared utilities: logging setup, id/slug helpers, text helpers."""
 
 from __future__ import annotations
+
+import json
 from functools import cache
 from importlib.resources import files
-import json
+
 import yaml
+
 from rag_benchmark.models import ResourceGroup
-
-
 
 _LOGGER_NAME = "rag_benchmark.utils.resources"
 PACKAGE = "rag_benchmark.resources"

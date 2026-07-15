@@ -1,5 +1,6 @@
 from rag_benchmark.diagnostics.models import RegexStat
 
+
 class UnusedRegexAnalyzer:
 
     @staticmethod

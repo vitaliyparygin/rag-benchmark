@@ -9,7 +9,7 @@ modest, broadly applicable set of question patterns.
 from __future__ import annotations
 
 from rag_benchmark.generators.base import QuestionSpec, QuestionTemplateMap
-from rag_benchmark.models import  QuestionField
+from rag_benchmark.models import QuestionField
 
 TEMPLATE_NAME = "generic"
 

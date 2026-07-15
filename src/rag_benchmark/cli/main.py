@@ -11,21 +11,33 @@ Commands:
     inspect   Deep-dive into a single document's pipeline journey.
 """
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Annotated
-import typer
-from rag_benchmark.config import build_config
-from rag_benchmark.commands.init import run_init
-from rag_benchmark.commands.generate import run_generate
-from rag_benchmark.commands.report import run_report
-from rag_benchmark.commands.export import run_export
-from rag_benchmark.commands.diagnose import run_diagnose
-from rag_benchmark.commands.inspect import run_inspection
-from rag_benchmark.commands.validate import run_validate
-from rag_benchmark.commands.scan import run_scan
+
 from rich.console import Console
-from rag_benchmark.cli.options import TemplateOpt, ForceOpt, VerboseOpt, DryRunOpt, OutputOpt, ConfigOpt,DatasetOpt, FileOpt, SaveReportOpt
+
 from rag_benchmark.cli.app import app
+from rag_benchmark.cli.options import (
+    ConfigOpt,
+    DatasetOpt,
+    DryRunOpt,
+    FileOpt,
+    ForceOpt,
+    OutputOpt,
+    SaveReportOpt,
+    TemplateOpt,
+    VerboseOpt,
+)
+from rag_benchmark.commands.diagnose import run_diagnose
+from rag_benchmark.commands.export import run_export
+from rag_benchmark.commands.generate import run_generate
+from rag_benchmark.commands.init import run_init
+from rag_benchmark.commands.inspect import run_inspection
+from rag_benchmark.commands.report import run_report
+from rag_benchmark.commands.scan import run_scan
+from rag_benchmark.commands.validate import run_validate
+from rag_benchmark.config import build_config
+
 console = Console()
 
 
@@ -120,7 +132,7 @@ def inspect(
     output: OutputOpt = None,
     template: TemplateOpt = None,
     config: ConfigOpt = None,
-    file: FileOpt = False,
+    file: FileOpt = None,
     verbose: VerboseOpt = False,
     save_report: SaveReportOpt = False,
 ) -> None:
@@ -138,7 +150,7 @@ def validate(
     output: OutputOpt = None,
     template: TemplateOpt = None,
     config: ConfigOpt = None,
-    file: FileOpt = False,
+    file: FileOpt = None,
     verbose: VerboseOpt = False,
     save_report: SaveReportOpt = False,
 ) -> None:
@@ -156,7 +168,7 @@ def scan(
     output: OutputOpt = None,
     template: TemplateOpt = None,
     config: ConfigOpt = None,
-    file: FileOpt = False,
+    file: FileOpt = None,
     verbose: VerboseOpt = False,
     save_report: SaveReportOpt = False,
 ) -> None:

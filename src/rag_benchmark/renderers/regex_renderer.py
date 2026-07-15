@@ -1,11 +1,16 @@
-from rag_benchmark.diagnostics.models import RegexStat
-from rich.table import Table
-from rich.markup import escape
-from collections import defaultdict
-from rag_benchmark.diagnostics.models import (DocumentDiagnostic, RegexCandidate, RegexSuggestion)
-from rag_benchmark.suggestions.regex_suggestions import build_regex
-from collections import Counter
+from collections import Counter, defaultdict
+
 from rich.console import Console
+from rich.markup import escape
+from rich.table import Table
+
+from rag_benchmark.diagnostics.models import (
+    DocumentDiagnostic,
+    RegexStat,
+    RegexSuggestion,
+)
+from rag_benchmark.suggestions.regex_suggestions import build_regex
+
 console = Console()
 
 class RegexRenderer:

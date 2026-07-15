@@ -15,33 +15,30 @@ from pathlib import Path
 from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.diagnostics.analyzer import (
-    TEXT_PREVIEW_CHARS,
-    SuggestedClassificationRule,
-    extract_keywords,
-    suggest_classification_rule,
+    TEXT_PREVIEW_CHARS
 )
-from rag_benchmark.extractor import RegexMetadataExtractor
-from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, DocumentFormat, ScannedFile
-from rag_benchmark.pipeline import BenchmarkPipeline
-from rag_benchmark.scanner import detect_format
-from rag_benchmark.logging import get_logger
-from rag_benchmark.utils.text import truncate
 from rag_benchmark.diagnostics.models import (
-    TemplateSuggestion,
-    RegexSuggestion,
-    RegexStat,
-    RegexCandidate,
     ClassificationScore,
+    FieldCoverage,
+    GeneratedQuestion,
     MatchedKeyword,
     MetadataDetail,
-    RegexCoverage,
-    ReadinessReport,
-    InspectSummary,
-    GeneratedQuestion,
     QuestionCoverage,
-    FieldCoverage
+    ReadinessReport,
+    RegexCandidate,
+    RegexCoverage,
+    RegexStat,
+    RegexSuggestion,
+    TemplateSuggestion,
 )
+from rag_benchmark.extractor import RegexMetadataExtractor
 from rag_benchmark.generators.base import QuestionTemplateMap
+from rag_benchmark.logging import get_logger
+from rag_benchmark.models import ClassifiedDocument, DocumentFormat, ScannedFile
+from rag_benchmark.pipeline import BenchmarkPipeline
+from rag_benchmark.scanner import detect_format
+from rag_benchmark.utils.text import truncate
+
 logger = get_logger("diagnostics.inspect")
 
 
@@ -187,11 +184,11 @@ def inspect_document(
         max_questions_per_document=config.max_questions_per_document,
     )
 
-    keywords: list[str] = []
-    suggested_rule: SuggestedClassificationRule | None = None
-    if classification.document_type == UNKNOWN_TYPE:
-        keywords = extract_keywords(document.text)
-        suggested_rule = suggest_classification_rule(document.filename, keywords)
+    # keywords: list[str] = []
+    #suggested_rule: SuggestedClassificationRule | None = None
+    # if classification.document_type == UNKNOWN_TYPE:
+        # keywords = extract_keywords(document.text)
+        #suggested_rule = suggest_classification_rule(document.filename, keywords)
 
     logger.info(
         "Inspected %s: type=%s, fields=%d/%d, questions=%d",

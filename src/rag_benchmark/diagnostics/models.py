@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
-from rag_benchmark.models import BenchmarkDataset, BenchmarkQuery, ClassifiedDocument, ScannedFile
+from datetime import datetime
+
 from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.config import BenchmarkConfig
+from rag_benchmark.models import BenchmarkDataset, BenchmarkQuery, ClassifiedDocument
 from rag_benchmark.templates import TemplateDefinition
-from datetime import datetime
 
 #: Fields extracted in fewer than this percentage of documents are flagged
 #: as "partially working" rather than "completely missing".
@@ -147,18 +148,6 @@ class DocumentTypeMetadataCoverage:
     document_type: str
     fields: list[FieldCoverage]
     overall_coverage_percent: float
-
-# @dataclass
-# class DatasetCoverage:
-#
-# @dataclass
-# class ExtractionCoverage:
-#
-# @dataclass
-# class GenerationCoverage:
-#
-# @dataclass
-# class TemplateCoverage:
 
 
 @dataclass

@@ -1,5 +1,5 @@
-from rag_benchmark.diagnostics.models import MetadataCoverageResult
 from rag_benchmark.diagnostics.inspect import InspectResult
+from rag_benchmark.diagnostics.models import MetadataCoverageResult
 
 
 class MetadataCoverageAnalyzer:

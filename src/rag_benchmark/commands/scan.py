@@ -1,11 +1,13 @@
 from __future__ import annotations
+
 import typer
-from rag_benchmark.pipeline import BenchmarkPipeline
-from rag_benchmark.logging import configure_logging, get_logger
-from rag_benchmark.config import build_config
 from rich.console import Console
 from rich.table import Table
+
 from rag_benchmark.config import BenchmarkConfig
+from rag_benchmark.logging import configure_logging, get_logger
+from rag_benchmark.pipeline import BenchmarkPipeline
+
 console = Console()
 
 logger = get_logger("cli.scan")
@@ -33,7 +35,8 @@ def run_scan(
     table.add_column("Size (bytes)", justify="right")
 
     for scanned in files:
-        table.add_row(str(scanned.path.relative_to(cfg.dataset)), scanned.format.value, str(scanned.size_bytes))
+        table.add_row(str(scanned.path.relative_to(cfg.dataset)), scanned.format.value,
+                      str(scanned.size_bytes))
 
     console.print(table)
     console.print(f"[green]{len(files)}[/green] supported document(s) found.")

@@ -5,8 +5,8 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from rag_benchmark.models import DatasetStatistics
 from rag_benchmark.logging import get_logger
+from rag_benchmark.models import DatasetStatistics
 
 logger = get_logger("writers.markdown")
 

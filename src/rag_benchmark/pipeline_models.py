@@ -1,10 +1,10 @@
 from dataclasses import dataclass
+from rag_benchmark.models import ScannedFile
 from rag_benchmark.diagnostics.models import (
-    BenchmarkDataset,
     BenchmarkConfig,
+    BenchmarkDataset,
+    ClassifiedDocument,
     TemplateDefinition,
-    ScannedFile,
-    ClassifiedDocument
 )
 
 

@@ -1,9 +1,11 @@
 from __future__ import annotations
-from rag_benchmark.diagnostics.models import (DocumentDiagnostic,
-                                              QuestionCoverageResult)
-from rag_benchmark.diagnostics.inspect import InspectResult
-from rich.tree import Tree
+
 from rich.console import Console
+from rich.tree import Tree
+
+from rag_benchmark.diagnostics.inspect import InspectResult
+from rag_benchmark.diagnostics.models import DocumentDiagnostic, QuestionCoverageResult
+
 console = Console()
 
 class QuestionCoverageAnalyzer:

@@ -1,9 +1,12 @@
 from __future__ import annotations
+
+from rich.console import Console
 from rich.tree import Tree
+
+from rag_benchmark.diagnostics.models import DocumentDiagnostic, QuestionGeneration
 from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument
 from rag_benchmark.templates import TemplateDefinition
-from rag_benchmark.diagnostics.models import DocumentDiagnostic, QuestionGeneration
-from rich.console import Console
+
 console = Console()
 
 class QuestionGenerationAnalyzer:

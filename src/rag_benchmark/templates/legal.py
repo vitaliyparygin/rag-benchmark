@@ -5,7 +5,8 @@ from __future__ import annotations
 from rag_benchmark.classifier import ClassificationRule
 from rag_benchmark.extractor import FieldRule
 from rag_benchmark.generators.base import QuestionSpec, QuestionTemplateMap
-from rag_benchmark.models import  QuestionField
+from rag_benchmark.models import QuestionField
+
 TEMPLATE_NAME = "legal"
 
 CLASSIFICATION_RULES: tuple[ClassificationRule, ...] = (

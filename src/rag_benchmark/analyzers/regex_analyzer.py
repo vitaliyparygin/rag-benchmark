@@ -1,13 +1,14 @@
 import re
 from collections import Counter
-from rag_benchmark.models import ClassifiedDocument
-from rag_benchmark.templates import TemplateDefinition
-from rag_benchmark.diagnostics.models import RegexStat
-from rich.text import Text
-from rag_benchmark.suggestions.regex_suggestions import build_regex
-from rag_benchmark.models import ResourceGroup
-from rag_benchmark.utils.resources import load_json
+
 from rich.console import Console
+from rich.text import Text
+
+from rag_benchmark.diagnostics.models import RegexStat
+from rag_benchmark.models import ClassifiedDocument, ResourceGroup
+from rag_benchmark.suggestions.regex_suggestions import build_regex
+from rag_benchmark.templates import TemplateDefinition
+from rag_benchmark.utils.resources import load_json
 
 console = Console()
 LABEL_REGEX = re.compile(
@@ -43,16 +44,16 @@ class RegexAnalyzer:
                     text,
                     flags=re.IGNORECASE | re.MULTILINE,
                 )
-                value = None
+                # value = None
 
-                if found:
-                    first = found[0]
+                # if found:
+                    # first = found[0]
 
-                    if isinstance(first, tuple):
-                        value = first[0]
-                    else:
-                        value = first
-                field = getattr(rule, "name", None) or getattr(rule, "field_name")
+                    # if isinstance(first, tuple):
+                    #     value = first[0]
+                    # else:
+                    #     value = first
+                field = getattr(rule, "name", None) or rule.field_name
                 stats.append(
                     RegexStat(
                         document_type=doc.classification.document_type,

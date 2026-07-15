@@ -1,22 +1,20 @@
-from rag_benchmark.logging import get_logger
 from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.pipeline import BenchmarkPipeline
-
 from rag_benchmark.diagnostics.analyzer import run_diagnostics
-
+from rag_benchmark.diagnostics.models import (
+    DiagnosticsReport,
+)
+from rag_benchmark.diagnostics.recommendations import (
+    generate_recommendations,
+)
 from rag_benchmark.diagnostics.statistics import (
     compute_classification_stats,
     compute_metadata_coverage,
     compute_question_stats,
     compute_readiness,
 )
+from rag_benchmark.logging import get_logger
+from rag_benchmark.pipeline import BenchmarkPipeline
 
-from rag_benchmark.diagnostics.recommendations import (
-    generate_recommendations,
-)
-from rag_benchmark.diagnostics.models import (
-    DiagnosticsReport,
-)
 logger = get_logger("diagnostics")
 
 def build_diagnostics_report(

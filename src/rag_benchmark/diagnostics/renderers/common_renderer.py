@@ -1,8 +1,10 @@
-from rag_benchmark.renderers.regex_renderer import RegexRenderer
-from rich.table import Table
 from rich.console import Console
+from rich.table import Table
+
 from rag_benchmark.diagnostics.models import Recommendation
 from rag_benchmark.diagnostics.reporter import InspectResult
+from rag_benchmark.renderers.regex_renderer import RegexRenderer
+
 console = Console()
 
 class CommonRenderer:

@@ -8,16 +8,16 @@ trivially testable.
 from __future__ import annotations
 
 from rag_benchmark.classifier import UNKNOWN_TYPE
-from rag_benchmark.logging import get_logger
 from rag_benchmark.diagnostics.models import (
-    PipelineDiagnostics,
-    DocumentDiagnostic,
     ClassificationStats,
+    DocumentDiagnostic,
     DocumentTypeMetadataCoverage,
+    FieldCoverage,
+    PipelineDiagnostics,
     QuestionTypeStats,
     ReadinessScores,
-    FieldCoverage
 )
+from rag_benchmark.logging import get_logger
 
 logger = get_logger("diagnostics.statistics")
 

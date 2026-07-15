@@ -1,12 +1,16 @@
 import re
 from collections import Counter
-from rag_benchmark.diagnostics.models import  RegexCandidate
+
+from rag_benchmark.diagnostics.models import RegexCandidate
 from rag_benchmark.models import ResourceGroup
 from rag_benchmark.utils.resources import load_json
+
 #: Field name -> alternative phrasings worth adding to an extraction regex.
 #: A small, deliberately generic hint table — not meant to be exhaustive,
 #: just enough to unblock a developer looking at a 0%-coverage field.
-FIELD_SYNONYM_HINTS: dict[str, list[str]] = load_json(ResourceGroup.DICTIONARIES, "field_synonym_hints.json")
+FIELD_SYNONYM_HINTS: dict[ str, list[str]] = load_json(
+    ResourceGroup.DICTIONARIES, "field_synonym_hints.json"
+)
 
 def build_regex(label: str) -> str:
     escaped = re.escape(label)
@@ -33,7 +37,10 @@ def build_regex(label: str) -> str:
 
 def suggest_field_synonyms(field_name: str) -> list[str]:
     """Return alternative phrasings that might help extract a missing field."""
-    return FIELD_SYNONYM_HINTS.get(field_name, ["(no synonym hints available — inspect a sample document)"])
+    return FIELD_SYNONYM_HINTS.get(
+        field_name,
+        ["(no synonym hints available — inspect a sample document)"]
+    )
 
 
 @staticmethod

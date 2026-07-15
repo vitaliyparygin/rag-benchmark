@@ -1,7 +1,8 @@
-from rich.table import Table
-from rag_benchmark.diagnostics.models import (DocumentDiagnostic,
-                                              UnusedQuestionTemplate)
 from rich.console import Console
+from rich.table import Table
+
+from rag_benchmark.diagnostics.models import DocumentDiagnostic, UnusedQuestionTemplate
+
 console = Console()
 
 
@@ -15,12 +16,12 @@ class QuestionTemplateAnalyzer:
 
         unused = []
         for document_type, specs in template.question_templates.items():
-            generated = {
-                q.query
-                for d in diagnostics
-                if d.document_type == document_type
-                for q in d.questions
-            }
+            # generated = {
+            #     q.query
+            #     for d in diagnostics
+            #     if d.document_type == document_type
+            #     for q in d.questions
+            # }
             for spec in specs:
                 used = {
                     q.template_id

@@ -1,10 +1,13 @@
-from rag_benchmark.diagnostics.inspect import InspectResult
-from rag_benchmark.diagnostics.renderers.common_renderer import CommonRenderer
-from rich.table import Table
-from rich.panel import Panel
-from rich.console import Console
 from collections import defaultdict
+
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+
+from rag_benchmark.diagnostics.inspect import InspectResult
 from rag_benchmark.diagnostics.models import Recommendation
+from rag_benchmark.diagnostics.renderers.common_renderer import CommonRenderer
+
 console = Console()
 
 class InspectRenderer:

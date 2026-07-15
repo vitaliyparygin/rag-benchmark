@@ -11,12 +11,14 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
-from rag_benchmark.models import LatencyResult, RetrievalResult
 from rag_benchmark.logging import get_logger
+from rag_benchmark.models import LatencyResult, RetrievalResult
 
 logger = get_logger("writers.csv")
 
-_RETRIEVAL_HEADERS = ["query", "expected_document", "returned_document", "top_score", "success", "rank"]
+_RETRIEVAL_HEADERS = [
+    "query", "expected_document", "returned_document", "top_score", "success", "rank"
+]
 _LATENCY_HEADERS = [
     "query",
     "retriever_ms",

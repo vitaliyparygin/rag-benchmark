@@ -1,12 +1,15 @@
-from rag_benchmark.models import ClassifiedDocument
-from collections import Counter
 import re
-from rich.table import Table
+from collections import Counter
+
 from rich.console import Console
 from rich.markup import escape
+from rich.table import Table
+
+from rag_benchmark.models import ClassifiedDocument
 from rag_benchmark.suggestions.regex_suggestions import (
     suggest_field_synonyms,
 )
+
 console = Console()
 
 

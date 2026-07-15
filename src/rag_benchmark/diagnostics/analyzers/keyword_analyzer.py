@@ -1,7 +1,9 @@
 
 from __future__ import annotations
-from rag_benchmark.models import ClassifiedDocument
+
 from rag_benchmark.diagnostics.models import MatchedKeyword
+from rag_benchmark.models import ClassifiedDocument
+
 
 class KeywordAnalyzer:
 

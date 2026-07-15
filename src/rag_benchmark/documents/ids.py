@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
+
 def stable_document_id(path: Path) -> str:
     """Derive a short, stable, content-independent id from a file path.
 

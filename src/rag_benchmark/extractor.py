@@ -11,9 +11,9 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from rag_benchmark.models import ExtractedField, ExtractedMetadata
-from rag_benchmark.models import Document as DocumentModel
 from rag_benchmark.logging import get_logger
+from rag_benchmark.models import Document as DocumentModel
+from rag_benchmark.models import ExtractedField, ExtractedMetadata
 from rag_benchmark.utils.text import normalize_whitespace
 
 logger = get_logger("extractor")
@@ -59,7 +59,8 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         FieldRule("currency", (r"\b(USD|EUR|GBP|UAH|PLN)\b",)),
     ),
     "Purchase Order": (
-        FieldRule("po_number", (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
+        FieldRule("po_number",
+                  (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
         FieldRule("vendor", (r"vendor\s*(?:name)?\s*[:\-]?\s*([^\n]+)",)),
         FieldRule("amount", (r"total\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",)),
     ),

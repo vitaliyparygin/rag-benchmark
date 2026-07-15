@@ -7,7 +7,7 @@ console = Console()
 def print_document_report(document_name, document_type, extracted, required):
     console.rule(f"[bold cyan]{document_name}")
 
-    console.print(f"[green]Classification[/green]")
+    console.print("[green]Classification[/green]")
     console.print(f"✔ {document_type}")
     console.print()
 

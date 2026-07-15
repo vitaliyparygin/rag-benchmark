@@ -1,6 +1,7 @@
 from __future__ import annotations
-import unicodedata
+
 import re
+import unicodedata
 
 
 def slugify(value: str) -> str:

@@ -7,14 +7,15 @@ without asserting on prose.
 
 from __future__ import annotations
 
-from rag_benchmark.logging import get_logger
 from rag_benchmark.diagnostics.models import (
-    PipelineDiagnostics,
     ClassificationStats,
     DocumentTypeMetadataCoverage,
+    PipelineDiagnostics,
     QuestionTypeStats,
-    Recommendation
+    Recommendation,
 )
+from rag_benchmark.logging import get_logger
+
 logger = get_logger("diagnostics.recommendations")
 
 #: Fields extracted in fewer than this percentage of documents are flagged
@@ -44,7 +45,8 @@ def _unknown_document_recommendations(diagnostics: PipelineDiagnostics) -> list[
             continue
         seen_types.add(rule.document_type)
 
-        content_hint = ", ".join(rule.content_patterns) if rule.content_patterns else "(none detected)"
+        content_hint = ", ".join(
+            rule.content_patterns) if rule.content_patterns else "(none detected)"
         recommendations.append(
             Recommendation(
                 context=rule.document_type,

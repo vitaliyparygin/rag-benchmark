@@ -17,16 +17,16 @@ from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.extractor import MetadataExtractor, RegexMetadataExtractor
 from rag_benchmark.generators.base import QuestionGenerator
 from rag_benchmark.generators.template_generator import TemplateQuestionGenerator
+from rag_benchmark.logging import get_logger
 from rag_benchmark.models import (
     BenchmarkDataset,
     ClassifiedDocument,
     ScannedFile,
 )
-from rag_benchmark.pipeline_models import PipelineResult
 from rag_benchmark.pdf_reader import ReaderRegistry
+from rag_benchmark.pipeline_models import PipelineResult
 from rag_benchmark.scanner import DocumentScanner
 from rag_benchmark.templates import TemplateDefinition, load_template
-from rag_benchmark.logging import get_logger
 
 logger = get_logger("pipeline")
 
@@ -125,7 +125,8 @@ class BenchmarkPipeline:
         )
         return BenchmarkDataset(queries=queries, template=template.name)
 
-    # def run(self, config: BenchmarkConfig) -> tuple[list[ClassifiedDocument], BenchmarkDataset, TemplateDefinition]:
+    # def run(self, config: BenchmarkConfig) -> tuple[
+    #     list[ClassifiedDocument], BenchmarkDataset, TemplateDefinition]:
     #     """Run the full pipeline end-to-end for a given configuration.
     #
     #     Returns:

@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import Counter
 
 from rag_benchmark.classifier import UNKNOWN_TYPE
+from rag_benchmark.logging import get_logger
 from rag_benchmark.models import (
     BenchmarkDataset,
     ClassifiedDocument,
@@ -12,7 +13,6 @@ from rag_benchmark.models import (
     ValidationIssue,
     ValidationReport,
 )
-from rag_benchmark.logging import get_logger
 
 logger = get_logger("metrics")
 

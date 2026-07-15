@@ -1,13 +1,17 @@
 from __future__ import annotations
+
 from pathlib import Path
 from typing import Annotated
+
 import typer
-from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.templates import available_builtin_templates
-from rag_benchmark.logging import configure_logging, get_logger
-from rag_benchmark.io import ensure_writable
-from rag_benchmark.cli.options import  TemplateOpt, ForceOpt
 from rich.console import Console
+
+from rag_benchmark.cli.options import ForceOpt, TemplateOpt
+from rag_benchmark.config import BenchmarkConfig
+from rag_benchmark.io import ensure_writable
+from rag_benchmark.logging import configure_logging, get_logger
+from rag_benchmark.templates import available_builtin_templates
+
 console = Console()
 
 logger = get_logger("cli.init")

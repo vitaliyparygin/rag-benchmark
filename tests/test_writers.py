@@ -48,7 +48,9 @@ def test_write_retrieval_csv_writes_headers_even_when_empty(tmp_path: Path) -> N
     with out.open(encoding="utf-8") as handle:
         reader = csv.reader(handle)
         header = next(reader)
-    assert header == ["query", "expected_document", "returned_document", "top_score", "success", "rank"]
+    assert header == [
+        "query", "expected_document", "returned_document", "top_score", "success", "rank"
+    ]
 
 
 def test_write_retrieval_csv_writes_rows(tmp_path: Path) -> None:
@@ -70,7 +72,7 @@ def test_write_latency_csv_writes_headers(tmp_path: Path) -> None:
     with out.open(encoding="utf-8") as handle:
         header = next(csv.reader(handle))
     assert header == [
-        "query", "retriever_ms", "research_ms", "summarizer_ms", "citation_ms", "total_ms", "tokens",
+        "query", "retriever_ms", "research_ms", "summarizer_ms", "citation_ms", "total_ms", "tokens"
     ]
 
 
