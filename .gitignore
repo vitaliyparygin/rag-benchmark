@@ -48,3 +48,5 @@ benchmark.yaml
 
 # Logs
 *.log
+
+tmp/

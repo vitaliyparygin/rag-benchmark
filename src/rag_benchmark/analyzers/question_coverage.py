@@ -13,7 +13,7 @@ class QuestionCoverageAnalyzer:
 
 
     @staticmethod
-    def analyze(result: InspectResult):
+    def analyze(result: InspectResult) -> QuestionCoverageResult:
 
         expected = len(result.expected_fields)
         generated = len(result.questions)
@@ -30,7 +30,7 @@ class QuestionCoverageAnalyzer:
     @staticmethod
     def report(
             diagnostics: list[DocumentDiagnostic],
-    ):
+    ) -> None:
 
         console.rule("[bold]Question Coverage[/bold]")
         for diag in diagnostics:

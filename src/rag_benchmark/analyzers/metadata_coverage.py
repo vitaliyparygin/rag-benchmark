@@ -5,7 +5,7 @@ from rag_benchmark.diagnostics.models import MetadataCoverageResult
 class MetadataCoverageAnalyzer:
 
     @staticmethod
-    def analyze(result: InspectResult):
+    def analyze(result: InspectResult) -> MetadataCoverageResult:
 
         expected = len(result.expected_fields)
         extracted = len(result.classified.metadata.fields)

@@ -13,7 +13,7 @@ def diagnose_documents(
     classified_documents,
     template,
     max_questions_per_document,
-):
+) -> None:
 
     missing_counter = Counter()
     unknown_counter = Counter()

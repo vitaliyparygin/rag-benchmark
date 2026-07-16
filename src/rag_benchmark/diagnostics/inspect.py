@@ -14,9 +14,7 @@ from pathlib import Path
 
 from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.diagnostics.analyzer import (
-    TEXT_PREVIEW_CHARS
-)
+from rag_benchmark.diagnostics.analyzer import TEXT_PREVIEW_CHARS
 from rag_benchmark.diagnostics.models import (
     ClassificationScore,
     FieldCoverage,

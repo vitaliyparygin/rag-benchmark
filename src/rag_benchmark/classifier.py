@@ -12,9 +12,10 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
+from rich.console import Console
+
 from rag_benchmark.logging import get_logger
 from rag_benchmark.models import ClassificationCandidate, ClassificationResult, Document
-from rich.console import Console
 
 logger = get_logger("classifier")
 console = Console()

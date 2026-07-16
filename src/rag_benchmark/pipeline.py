@@ -156,13 +156,13 @@ class BenchmarkPipeline:
     def execute(self, config: BenchmarkConfig) -> PipelineResult:
         template = self._resolve_template(config)
 
-        scanned_files = self.scan(
+        scanned = self.scan(
             config.dataset,
             recursive=config.recursive,
         )
 
         classified = self.classify(
-            scanned_files,
+            scanned,
             template,
         )
 
@@ -177,7 +177,7 @@ class BenchmarkPipeline:
         return PipelineResult(
             config=config,
             template=template,
-            scanned_files=scanned_files,
+            scanned_files=scanned,
             classified_documents=classified,
             dataset=dataset,
         )

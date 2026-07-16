@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
-from rag_benchmark.models import ScannedFile
+
 from rag_benchmark.diagnostics.models import (
     BenchmarkConfig,
     BenchmarkDataset,
     ClassifiedDocument,
     TemplateDefinition,
 )
+from rag_benchmark.models import ScannedFile
 
 
 @dataclass
@@ -18,7 +21,6 @@ class PipelineResult:
 
     def execute(self, config: BenchmarkConfig) -> PipelineResult:
         template = self._resolve_template(config)
-
         scanned = self.scan(
             config.dataset,
             recursive=config.recursive,
@@ -38,6 +40,7 @@ class PipelineResult:
         dataset.source_dataset = config.dataset
 
         return PipelineResult(
+            config=config,
             scanned_files=scanned,
             classified_documents=classified,
             dataset=dataset,

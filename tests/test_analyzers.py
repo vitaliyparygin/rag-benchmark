@@ -9,6 +9,7 @@ import pytest
 from rag_benchmark.analyzers.field_coverage import FieldCoverageAnalyzer
 from rag_benchmark.analyzers.question_coverage import QuestionCoverageAnalyzer
 from rag_benchmark.analyzers.regex_analyzer import RegexAnalyzer
+from rag_benchmark.diagnostics.models import DocumentSummary
 
 
 def test_field_coverage():
@@ -129,35 +130,20 @@ def test_question_coverage():
 
 
 def test_document_summary():
-    inspect = SimpleNamespace(
-        classified=SimpleNamespace(
-            classification=SimpleNamespace(
-                document_type="Invoice",
-            ),
-            document=SimpleNamespace(
-                filename="Invoice.pdf",
-            ),
-            metadata=SimpleNamespace(
-                fields={
-                    "invoice_number": "INV-001",
-                    "amount": "100",
-                },
-            ),
-        ),
-
-        missing_fields=[
-            "customer",
-        ],
-
+    summary = DocumentSummary(
+        filename="Invoice.pdf",
+        document_type="Invoice",
+        extracted_fields=["invoice_number", "amount"],
+        missing_fields=["customer"],
         regex_stats=[],
-
-        field_coverage=SimpleNamespace(
-            coverage=2 / 3,
-        ),
-
-        question_coverage=SimpleNamespace(
-            expected=3,
-            generated=2,
-            coverage=2 / 3,
-        ),
+        field_coverage=2 / 3,
     )
+
+    assert summary.filename == "Invoice.pdf"
+    assert summary.document_type == "Invoice"
+    assert summary.extracted_fields == [
+        "invoice_number",
+        "amount",
+    ]
+    assert summary.missing_fields == ["customer"]
+    assert summary.field_coverage == 2 / 3

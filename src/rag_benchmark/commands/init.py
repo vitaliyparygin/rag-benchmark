@@ -16,6 +16,20 @@ console = Console()
 
 logger = get_logger("cli.init")
 
+DEFAULT_CONFIG = {
+    "dataset": "datasets",
+    "output": "benchmarks",
+
+    "template": "generic",
+
+    "reader": "pdfplumber",
+    "question_generator": "template",
+
+    "language": "en",
+    "recursive": True,
+
+    "max_questions_per_document": 6,
+}
 
 def run_init(
     output: Annotated[Path, typer.Option("--output", help="Directory to scaffold.")] = Path("."),
@@ -25,16 +39,21 @@ def run_init(
     """Scaffold a benchmark.yaml config file and dataset/output directories."""
     configure_logging(verbose=True)
     config_path = output / "benchmark.yaml"
-    ensure_writable(config_path, force)
 
+    ensure_writable(config_path, force)
+    dataset_dir = output / "datasets"
+    benchmark_dir = output / "benchmarks"
     cfg = BenchmarkConfig(
-        dataset=output / "datasets",
-        output=output / "benchmarks",
+        dataset=Path("datasets"),
+        output=Path("benchmarks"),
         template=template or "generic",
     )
+    assert cfg.dataset is not None
+    config_path.parent.mkdir(parents=True, exist_ok=True)
     cfg.save(config_path)
-    cfg.dataset.mkdir(parents=True, exist_ok=True)
-    cfg.output.mkdir(parents=True, exist_ok=True)
+
+    dataset_dir.mkdir(parents=True, exist_ok=True)
+    benchmark_dir.mkdir(parents=True, exist_ok=True)
 
     console.print(f"[green]Initialized[/green] config at {config_path}")
     console.print(f"  dataset directory: {cfg.dataset}")

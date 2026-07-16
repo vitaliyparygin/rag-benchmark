@@ -12,8 +12,10 @@ Commands:
 """
 from __future__ import annotations
 
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
+import typer
 from rich.console import Console
 
 from rag_benchmark.cli.app import app
@@ -37,9 +39,7 @@ from rag_benchmark.commands.report import run_report
 from rag_benchmark.commands.scan import run_scan
 from rag_benchmark.commands.validate import run_validate
 from rag_benchmark.config import build_config
-from importlib.metadata import version, PackageNotFoundError
 
-import typer
 console = Console()
 
 

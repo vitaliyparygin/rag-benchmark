@@ -11,7 +11,7 @@ class ReadinessAnalyzer:
         metadata,
         questions,
         regex_score
-    ):
+    ) -> ReadinessReport:
         metadata_score = metadata.coverage
         question_score = questions.coverage
         regex_score = regex_score.coverage
