@@ -37,10 +37,36 @@ from rag_benchmark.commands.report import run_report
 from rag_benchmark.commands.scan import run_scan
 from rag_benchmark.commands.validate import run_validate
 from rag_benchmark.config import build_config
+from importlib.metadata import version, PackageNotFoundError
 
+import typer
 console = Console()
 
 
+
+def version_callback(value: bool):
+    if not value:
+        return
+
+    try:
+        print(f"rag-benchmark {version('rag-benchmark')}")
+    except PackageNotFoundError:
+        print("rag-benchmark (development)")
+
+    raise typer.Exit()
+
+
+@app.callback()
+def main(
+    version: bool = typer.Option(
+        False,
+        "--version",
+        help="Show rag-benchmark version and exit.",
+        callback=version_callback,
+        is_eager=True,
+    ),
+):
+    pass
 
 def run_with_config(
     runner,
