@@ -167,7 +167,6 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
             ),
             tags=("retrieval", "erp", "metadata"),
         ),
-
         QuestionSpec(
             key="Invoice Supplier",
             query_template=["Who issued {filename}?"],
@@ -180,7 +179,6 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
             ),
             tags=("retrieval", "erp", "metadata"),
         ),
-
         QuestionSpec(
             key="Invoice Customer",
             query_template=["Who is the customer on {filename}?"],
@@ -192,7 +190,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
                 QuestionField("due_date"),
             ),
             tags=("retrieval", "erp", "metadata"),
-        )
+        ),
     ],
     "Contract": [
         QuestionSpec(

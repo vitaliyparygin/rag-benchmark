@@ -17,7 +17,6 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Invoice": [
         QuestionSpec(
             "Invoice",
-
             query_template=[
                 "What is the {field} on invoice {filename}?",
                 "Extract the {field} from {filename}.",
@@ -35,7 +34,9 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Vendor Profile": [
         QuestionSpec(
             "Vendor Profile",
-            ["What is the {field} of the vendor described in {filename}?",],
+            [
+                "What is the {field} of the vendor described in {filename}?",
+            ],
             fields=(
                 QuestionField("vendor"),
                 QuestionField("phone"),
@@ -47,7 +48,9 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Generic Contract": [
         QuestionSpec(
             "Generic Contract",
-            ["What is the {field} in the contract {filename}?",],
+            [
+                "What is the {field} in the contract {filename}?",
+            ],
             fields=(
                 QuestionField("contract_number"),
                 QuestionField("customer"),
@@ -60,7 +63,9 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Bank Statement": [
         QuestionSpec(
             "Bank Statement",
-            ["What is the {field} shown in {filename}?",],
+            [
+                "What is the {field} shown in {filename}?",
+            ],
             fields=(
                 QuestionField("account_number"),
                 QuestionField("statement_period"),
@@ -71,14 +76,18 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Meeting Minutes": [
         QuestionSpec(
             "Meeting Minutes",
-            ["Who attended the meeting recorded in {filename}?",],
+            [
+                "Who attended the meeting recorded in {filename}?",
+            ],
             fields=(QuestionField("attendees"),),
         ),
     ],
     "Project Report": [
         QuestionSpec(
             "Project Report",
-            ["What is the current {field} of the project in {filename}?",],
+            [
+                "What is the current {field} of the project in {filename}?",
+            ],
             fields=(
                 QuestionField("project_name"),
                 QuestionField("status"),

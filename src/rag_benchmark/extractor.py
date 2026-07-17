@@ -63,7 +63,6 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"bill\s*to\s*:\s*([^\n]+)",
             ),
         ),
-
         FieldRule(
             "amount",
             (
@@ -105,7 +104,6 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"client\s*:\s*([^\n]+)",
             ),
         ),
-
         FieldRule(
             "start_date",
             (
@@ -113,18 +111,16 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"start\s*date\s*:\s*([\d-]+)",
             ),
         ),
-
         FieldRule(
             "end_date",
             (
                 r"valid\s+until\s*:\s*([\d-]+)",
                 r"end\s*date\s*:\s*([\d-]+)",
             ),
-        )
+        ),
     ),
     "Generic Contract": (
         FieldRule("contract_number", (r"contract\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
-
         FieldRule("contractor", (r"contractor\s*[:\-]?\s*([^\n]+)",)),
         FieldRule(
             "customer",
@@ -133,7 +129,6 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"client\s*:\s*([^\n]+)",
             ),
         ),
-
         FieldRule(
             "start_date",
             (
@@ -141,14 +136,13 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"start\s*date\s*:\s*([\d-]+)",
             ),
         ),
-
         FieldRule(
             "end_date",
             (
                 r"valid\s+until\s*:\s*([\d-]+)",
                 r"end\s*date\s*:\s*([\d-]+)",
             ),
-        )
+        ),
     ),
     "Insurance Policy": (
         FieldRule("policy_number", (r"policy\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
@@ -161,31 +155,34 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         FieldRule("engineer", (r"(?:assigned\s*)?engineer\s*[:\-]?\s*([^\n]+)",)),
     ),
     "Bank Statement": (
-        FieldRule("account_number",
-                  (
-                      r"account\s*(?:no|number)\s*[:\-]?\s*([A-Z]{2,}-\d[\d-]*)",
-                      r"номер\s+сч[её]та\s*[:\-]?\s*([A-Z]{2,}-\d[\d-]*)",
-                      r"account\s*#\s*([A-Z]{2,}-\d[\d-]*)",
-                  )
-                  ),
-        FieldRule("statement_period", (
-            r"statement\s*period\s*[:\-]?\s*([^\n]+)",
-            r"период\s+выписки\s*[:\-]?\s*([^\n]+)",
-        )),
-        FieldRule("balance", (
-            r"финальн\w*\s+баланс[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
-            r"closing\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
-            r"final\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
-        ), ),
+        FieldRule(
+            "account_number",
+            (
+                r"account\s*(?:no|number)\s*[:\-]?\s*([A-Z]{2,}-\d[\d-]*)",
+                r"номер\s+сч[её]та\s*[:\-]?\s*([A-Z]{2,}-\d[\d-]*)",
+                r"account\s*#\s*([A-Z]{2,}-\d[\d-]*)",
+            ),
+        ),
+        FieldRule(
+            "statement_period",
+            (
+                r"statement\s*period\s*[:\-]?\s*([^\n]+)",
+                r"период\s+выписки\s*[:\-]?\s*([^\n]+)",
+            ),
+        ),
+        FieldRule(
+            "balance",
+            (
+                r"финальн\w*\s+баланс[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
+                r"closing\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
+                r"final\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
+            ),
+        ),
     ),
     "CRM Opportunity": (
-        FieldRule("opportunity_name", (
-            r"opportunity(?:\s*name)?\s*[:\-]?\s*([^\n]+)",
-        )),
+        FieldRule("opportunity_name", (r"opportunity(?:\s*name)?\s*[:\-]?\s*([^\n]+)",)),
         FieldRule("stage", (r"(?:deal\s*)?stage\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule("value", (
-            r"value\s*[:\-]?\s*([\d,]+(?:\.\d{2})?)",
-        )),
+        FieldRule("value", (r"value\s*[:\-]?\s*([\d,]+(?:\.\d{2})?)",)),
     ),
     "Project Report": (
         FieldRule("project_name", (r"project\s*(?:name)?\s*[:\-]?\s*([^\n]+)",)),

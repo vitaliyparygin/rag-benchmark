@@ -12,6 +12,7 @@ logger = get_logger("generators.template")
 
 console = Console()
 
+
 class TemplateQuestionGenerator(QuestionGenerator):
     """Generates questions by filling QuestionSpec templates with metadata.
 
@@ -78,9 +79,7 @@ class TemplateQuestionGenerator(QuestionGenerator):
                         field_name_value = available_fields[field_name]
 
                     display_name = (
-                        question_field.aliases[0]
-                        if question_field.aliases
-                        else field_name_value
+                        question_field.aliases[0] if question_field.aliases else field_name_value
                     )
 
                     for template in spec.query_template:

@@ -60,7 +60,6 @@ class DocumentScanner:
         """
         from pathlib import Path
 
-
         dataset_dir = Path(dataset_dir)
         if not dataset_dir.exists():
             raise FileNotFoundError(f"Dataset directory not found: {dataset_dir}")

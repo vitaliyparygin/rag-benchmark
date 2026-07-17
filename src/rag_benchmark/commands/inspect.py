@@ -20,6 +20,7 @@ from rag_benchmark.pipeline import BenchmarkPipeline
 console = Console()
 logger = get_logger("cli.inspect")
 
+
 def run_inspection(
     cfg: BenchmarkConfig,
     *,
