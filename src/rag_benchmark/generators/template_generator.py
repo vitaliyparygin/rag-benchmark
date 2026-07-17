@@ -74,12 +74,11 @@ class TemplateQuestionGenerator(QuestionGenerator):
                         if question_field.required:
                             continue
 
-                        field_name_value = field_name.replace("_", " ")
-                    else:
-                        field_name_value = available_fields[field_name]
 
                     display_name = (
-                        question_field.aliases[0] if question_field.aliases else field_name_value
+                        question_field.aliases[0]
+                        if question_field.aliases
+                        else field_name.replace("_", " ")
                     )
 
                     for template in spec.query_template:

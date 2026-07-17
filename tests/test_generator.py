@@ -47,11 +47,17 @@ def test_template_generator_skips_spec_when_any_required_field_missing() -> None
         "Invoice": [
             QuestionSpec(
                 key="Invoice",
-                query_template="What is the {field} on {filename}?",
+                query_template=[
+                    "What is the {field} on invoice {filename}?",
+                    "Extract the {field} from {filename}.",
+                    "Find the invoice {field}.",
+                    "Which {field} appears on this invoice?",
+                ],
                 fields=[
                     QuestionField("invoice_number"),
                     QuestionField("amount"),
                     QuestionField("customer"),
+                    QuestionField("currency"),
                 ],
                 tags=("retrieval",),
             )
@@ -61,31 +67,23 @@ def test_template_generator_skips_spec_when_any_required_field_missing() -> None
     queries = generator.generate(
         [_classified_invoice()], template_map, max_questions_per_document=10
     )
-
     # "customer" was never extracted, so the whole spec (all-or-nothing on
     # required fields) should be skipped, and no question generated for it.
-    assert queries == [
-        BenchmarkQuery(
-            id=1,
-            query="What is the invoice number on invoice_001.txt?",
-            expected_document="invoice_001.txt",
-            expected_fields=["invoice_number"],
-            document_type="Invoice",
-            difficulty="easy",
-            tags=["retrieval"],
-            template_id="Invoice",
-        ),
-        BenchmarkQuery(
-            id=2,
-            query="What is the amount on invoice_001.txt?",
-            expected_document="invoice_001.txt",
-            expected_fields=["amount"],
-            document_type="Invoice",
-            difficulty="easy",
-            tags=["retrieval"],
-            template_id="Invoice",
-        ),
-    ]
+    assert len(queries) == 16
+
+    assert {
+               q.expected_fields[0]
+               for q in queries
+           } == {
+               "invoice_number",
+               "amount",
+               "customer",
+               "currency",
+           }
+    assert any(
+        q.query == "What is the invoice number on invoice invoice_001.txt?"
+        for q in queries
+    )
 
 
 def test_template_generator_generates_when_all_required_fields_present() -> None:
@@ -93,7 +91,7 @@ def test_template_generator_generates_when_all_required_fields_present() -> None
         "Invoice": [
             QuestionSpec(
                 key="Invoice",
-                query_template="What is the {field} on {filename}?",
+                query_template=["What is the {field} on {filename}?"],
                 fields=[
                     QuestionField("invoice_number"),
                     QuestionField("amount"),
@@ -118,7 +116,7 @@ def test_template_generator_respects_max_questions_per_document() -> None:
         "Invoice": [
             QuestionSpec(
                 key="Invoice",
-                query_template="What is the {field} on {filename}?",
+                query_template=["What is the {field} on {filename}?"],
                 fields=[
                     QuestionField("invoice_number"),
                     QuestionField("amount"),

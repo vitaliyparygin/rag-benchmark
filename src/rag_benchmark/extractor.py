@@ -65,9 +65,10 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         ),
         FieldRule(
             "amount",
-            (
-                r"amount\s*:\s*([\d,.]+)",
-                r"total(?:\s+amount)?\s*:\s*([\d,.]+)",
+            patterns=(
+                r"total\s*(?:due|amount)?\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",
+                r"amount\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",
+                r"сумма\s*[:\-]?\s*([\d,]+\.\d{2})",
             ),
         ),
         FieldRule(
@@ -78,7 +79,10 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"seller\s*:\s*([^\n]+)",
             ),
         ),
-        FieldRule("currency", (r"\b(USD|EUR|GBP|UAH|PLN)\b",)),
+        FieldRule("currency", patterns=(
+            r"amount.*?\b(USD|EUR|UAH|PLN|GBP)\b",
+            r"\b(USD|EUR|UAH|PLN|GBP)\b",
+        ), ),
     ),
     "Purchase Order": (
         FieldRule(
@@ -100,8 +104,8 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         FieldRule(
             "customer",
             (
-                r"customer\s*:\s*([^\n]+)",
-                r"client\s*:\s*([^\n]+)",
+                r"customer\s*[:\-]?\s*([^\n]+)",
+                r"bill\s*to\s*[:\-]?\s*([^\n]+)",
             ),
         ),
         FieldRule(
@@ -125,24 +129,25 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         FieldRule(
             "customer",
             (
-                r"customer\s*:\s*([^\n]+)",
-                r"client\s*:\s*([^\n]+)",
+                r"customer\s*[:\-]?\s*([^\n]+)",
+                r"client\s*[:\-]?\s*([^\n]+)",
             ),
         ),
         FieldRule(
             "start_date",
             (
-                r"signed\s*:\s*([\d-]+)",
-                r"start\s*date\s*:\s*([\d-]+)",
+                r"signed\s*[:\-]?\s*([\d\-\.]+)",
+                r"start\s*date\s*[:\-]?\s*([\d\-\.]+)",
             ),
         ),
+
         FieldRule(
             "end_date",
             (
-                r"valid\s+until\s*:\s*([\d-]+)",
-                r"end\s*date\s*:\s*([\d-]+)",
+                r"valid\s*until\s*[:\-]?\s*([\d\-\.]+)",
+                r"end\s*date\s*[:\-]?\s*([\d\-\.]+)",
             ),
-        ),
+        )
     ),
     "Insurance Policy": (
         FieldRule("policy_number", (r"policy\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
@@ -158,9 +163,9 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         FieldRule(
             "account_number",
             (
-                r"account\s*(?:no|number)\s*[:\-]?\s*([A-Z]{2,}-\d[\d-]*)",
-                r"номер\s+сч[её]та\s*[:\-]?\s*([A-Z]{2,}-\d[\d-]*)",
-                r"account\s*#\s*([A-Z]{2,}-\d[\d-]*)",
+                r"номер\s+сч[её]та\s*[:\-]?\s*([A-Za-z0-9\-]+)",
+                r"account\s*(?:number|no)\s*[:\-]?\s*([A-Za-z0-9\-]+)",
+                r"account\s*#\s*([A-Za-z0-9\-]+)",
             ),
         ),
         FieldRule(
@@ -173,7 +178,7 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         FieldRule(
             "balance",
             (
-                r"финальн\w*\s+баланс[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
+                r"финальн\w*\s+баланс[\s\S]{0,120}?\$?([\d,]+\.\d{2})",
                 r"closing\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
                 r"final\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
             ),
