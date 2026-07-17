@@ -41,7 +41,7 @@ class QuestionGenerationAnalyzer:
                     missing_fields.append(field_name)
 
             if not template_used:
-                unused_templates.append(spec.query_template)
+                unused_templates.append(spec.query_template[0])
 
         generated = len(questions)
         skipped = max(

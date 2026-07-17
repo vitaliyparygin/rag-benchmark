@@ -120,7 +120,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Purchase Order": [
         QuestionSpec(
             "Purchase Order",
-            "What is the {field} on purchase order {filename}?",
+            ["What is the {field} on purchase order {filename}?"],
             fields=(
                 QuestionField("po_number"),
                 QuestionField("vendor"),
@@ -133,7 +133,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Invoice": [
         QuestionSpec(
             "Invoice",
-            "What is the {field} on invoice {filename}?",
+            ["What is the {field} on invoice {filename}?"],
             fields=(
                 QuestionField("invoice_number"),
                 QuestionField("amount"),
@@ -145,7 +145,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         ),
         QuestionSpec(
             key="Invoice Amount",
-            query_template="What is the invoice amount in {filename}?",
+            query_template=["What is the invoice amount in {filename}?"],
             fields=(
                 QuestionField("invoice_number"),
                 QuestionField("amount"),
@@ -157,7 +157,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         ),
         QuestionSpec(
             key="Invoice Currency",
-            query_template="Which currency is used in {filename}?",
+            query_template=["Which currency is used in {filename}?"],
             fields=(
                 QuestionField("invoice_number"),
                 QuestionField("amount"),
@@ -170,7 +170,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
 
         QuestionSpec(
             key="Invoice Supplier",
-            query_template="Who issued {filename}?",
+            query_template=["Who issued {filename}?"],
             fields=(
                 QuestionField("invoice_number"),
                 QuestionField("amount"),
@@ -183,7 +183,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
 
         QuestionSpec(
             key="Invoice Customer",
-            query_template="Who is the customer on {filename}?",
+            query_template=["Who is the customer on {filename}?"],
             fields=(
                 QuestionField("invoice_number"),
                 QuestionField("amount"),
@@ -197,7 +197,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Contract": [
         QuestionSpec(
             "Contract",
-            "What is the {field} in contract {filename}?",
+            ["What is the {field} in contract {filename}?"],
             fields=(
                 QuestionField("contract_number"),
                 QuestionField("customer"),
@@ -211,7 +211,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Vendor Profile": [
         QuestionSpec(
             "Vendor Profile",
-            "What is the {field} of the vendor in {filename}?",
+            ["What is the {field} of the vendor in {filename}?"],
             fields=(
                 QuestionField("vendor"),
                 QuestionField("phone"),
@@ -224,7 +224,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Service Ticket": [
         QuestionSpec(
             "Service Ticket",
-            "What is the {field} for service ticket {filename}?",
+            ["What is the {field} for service ticket {filename}?"],
             fields=(
                 QuestionField("ticket_number"),
                 QuestionField("status"),
@@ -237,7 +237,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "CRM Opportunity": [
         QuestionSpec(
             "CRM Opportunity",
-            "What is the {field} of the opportunity in {filename}?",
+            ["What is the {field} of the opportunity in {filename}?"],
             fields=(
                 QuestionField("opportunity_name"),
                 QuestionField("stage"),
@@ -249,7 +249,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Project": [
         QuestionSpec(
             "Project",
-            "What is the {field} of the project described in {filename}?",
+            ["What is the {field} of the project described in {filename}?"],
             fields=(
                 QuestionField("project_name"),
                 QuestionField("status"),
@@ -261,7 +261,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Employee": [
         QuestionSpec(
             "Employee",
-            "What is the {field} for the employee record in {filename}?",
+            ["What is the {field} for the employee record in {filename}?"],
             fields=(
                 QuestionField("employee_id"),
                 QuestionField("department"),

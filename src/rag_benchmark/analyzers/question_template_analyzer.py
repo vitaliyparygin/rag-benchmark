@@ -31,7 +31,7 @@ class QuestionTemplateAnalyzer:
                     unused.append(
                         UnusedQuestionTemplate(
                             document_type=document_type,
-                            template=spec.query_template,
+                            template=spec.query_template[0],
                         )
                     )
         return unused

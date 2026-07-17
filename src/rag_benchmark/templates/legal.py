@@ -58,7 +58,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "NDA": [
         QuestionSpec(
             "nda",
-            "What is the {field} of the NDA in {filename}?",
+            ["What is the {field} of the NDA in {filename}?"],
             fields=(
                 QuestionField("effective_date"),
                 QuestionField("disclosing_party"),
@@ -70,7 +70,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Litigation Brief": [
         QuestionSpec(
             "Litigation Brief",
-            "Who is the {field} named in {filename}?",
+            ["Who is the {field} named in {filename}?"],
             fields=(
                 QuestionField("plaintiff"),
                 QuestionField("defendant"),
@@ -81,7 +81,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Contract": [
         QuestionSpec(
             "Contract",
-            "What is the {field} specified in contract {filename}?",
+            ["What is the {field} specified in contract {filename}?"],
             fields=(
                 QuestionField("governing_law"),
                 QuestionField("start_date"),
@@ -93,7 +93,7 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
     "Power of Attorney": [
         QuestionSpec(
             "ower of Attorney",
-            "Who is the {field} in the power of attorney {filename}?",
+            ["Who is the {field} in the power of attorney {filename}?"],
             fields=(
                 QuestionField("principal"),
                 QuestionField("agent"),

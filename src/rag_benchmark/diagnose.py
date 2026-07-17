@@ -59,7 +59,7 @@ def diagnose_documents(
                     missing_counter[field_name] += 1
                     console.print(f"[red]✗ {question_field:<20} missing")
                     continue
-                question = spec.query_template.format(
+                question = spec.query_template[0].format(
                     field=field_name.replace("_", " "),
                     filename=doc.document.filename,
                     **metadata,
