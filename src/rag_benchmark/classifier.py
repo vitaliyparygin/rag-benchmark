@@ -15,8 +15,14 @@ from dataclasses import dataclass, field
 from rich.console import Console
 
 from rag_benchmark.logging import get_logger
-from rag_benchmark.models import ClassificationCandidate, ClassificationResult, Document
 
+from .models import ClassificationCandidate, ClassificationResult, Document
+
+__all__ = [
+    "ClassificationResult",
+    "ClassificationCandidate",
+    "DocumentClassifier",
+]
 logger = get_logger("classifier")
 console = Console()
 
@@ -175,13 +181,7 @@ class DefaultClassifier(DocumentClassifier):
             key=lambda x: x.confidence,
             reverse=True,
         )
-        logger.info(
-            "%s -> %s, confidence {%.2f}",
-            document.filename,
-            best_type,
-            best_score
-
-        )
+        logger.info("%s -> %s, confidence {%.2f}", document.filename, best_type, best_score)
 
         return ClassificationResult(
             document_id=document.id,

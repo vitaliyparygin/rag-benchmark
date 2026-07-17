@@ -91,8 +91,9 @@ def suggest_classification_rule(
     words = [w for w in re.split(r"[_\-\s]+", stem) if w]
     name_words = [w for w in words if not w.isdigit()] or words
     document_type = " ".join(w.capitalize() for w in name_words) if name_words else stem
-    filename_pattern = slugify(" ".join(name_words)).replace("-",
-                                                             " ") if name_words else stem.lower()
+    filename_pattern = (
+        slugify(" ".join(name_words)).replace("-", " ") if name_words else stem.lower()
+    )
     content_patterns = [kw.lower() for kw in keywords[:max_content_patterns]]
     return SuggestedClassificationRule(
         document_type=document_type,
@@ -102,9 +103,9 @@ def suggest_classification_rule(
 
 
 def run_diagnostics(
-        pipeline: BenchmarkPipeline,
-        config: BenchmarkConfig,
-        file: str | None = None,
+    pipeline: BenchmarkPipeline,
+    config: BenchmarkConfig,
+    file: str | None = None,
 ) -> PipelineDiagnostics:
     """Run the full pipeline in read-only mode and collect diagnostic data.
 
@@ -143,7 +144,7 @@ def run_diagnostics(
 
     logger.info("Diagnostics: %d question(s) generated", len(dataset.queries))
 
-    extractor = pipeline._build_extractor(template)
+    # extractor = pipeline._build_extractor(template)
 
     questions_by_document: dict[str, list[BenchmarkQuery]] = defaultdict(list)
 
@@ -154,16 +155,18 @@ def run_diagnostics(
 
     if file:
         classified_documents = [
-            d
-            for d in classified_documents
-            if file.lower() in d.document.filename.lower()
+            d for d in classified_documents if file.lower() in d.document.filename.lower()
         ]
 
     for classified in classified_documents:
 
-        expected_fields = extractor.expected_fields(
-            classified.classification.document_type
-        )
+        expected_fields = [
+            rule.name
+            for rule in template.extraction_rules.get(
+                classified.classification.document_type,
+                (),
+            )
+        ]
 
         field_result = FieldCoverageAnalyzer.analyze(
             classified,
@@ -189,9 +192,7 @@ def run_diagnostics(
         summary = DocumentSummary(
             filename=classified.document.filename,
             document_type=classified.classification.document_type,
-            extracted_fields=list(
-                classified.metadata.fields.keys()
-            ),
+            extracted_fields=list(classified.metadata.fields.keys()),
             missing_fields=field_result.missing,
             regex_stats=regex_result,
             field_coverage=field_result.coverage,
@@ -213,11 +214,9 @@ def run_diagnostics(
                 classified=classified,
                 expected_fields=expected_fields,
                 missing_fields=field_result.missing,
-
                 questions=document_questions,
                 keywords=keywords,
                 suggested_rule=suggested_rule,
-
                 field_coverage=field_result,
                 regex_analysis=regex_result,
                 question_generation=question_generation,
@@ -232,7 +231,7 @@ def run_diagnostics(
         # ]
 
         # RegexRenderer.render_unused(all_regex_stats)
-        counter = Counter()
+        counter: Counter[str] = Counter()
 
         for diag in document_diagnostics:
             text = diag.document.text
@@ -242,7 +241,7 @@ def run_diagnostics(
 
         build_regex_candidates(counter)
 
-    diag = PipelineDiagnostics(
+    pipeline_diag = PipelineDiagnostics(
         config=config,
         template=template,
         classified_documents=classified_documents,
@@ -250,4 +249,4 @@ def run_diagnostics(
         document_diagnostics=document_diagnostics,
     )
 
-    return diag
+    return pipeline_diag

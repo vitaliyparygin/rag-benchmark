@@ -7,12 +7,17 @@ a specific SDK version and can be unit tested with a fake client.
 from __future__ import annotations
 
 import json
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
+
+from anthropic.types import TextBlock
 
 from rag_benchmark.generators.base import QuestionGenerator, QuestionTemplateMap
 from rag_benchmark.logging import get_logger
 from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, Difficulty
 from rag_benchmark.utils.text import truncate
+
+if TYPE_CHECKING:
+    pass
 
 logger = get_logger("generators.llm")
 
@@ -99,15 +104,16 @@ class LLMQuestionGenerator(QuestionGenerator):
                             document_type=doc_type,
                             difficulty=Difficulty(item.get("difficulty", "easy")),
                             tags=item.get("tags", []),
-                            template_id=item.get("key", '')
+                            template_id=item.get("key", ""),
                         )
                     )
                     next_id += 1
                 except (KeyError, ValueError) as exc:
                     logger.warning("Skipping malformed LLM question item: %s", exc)
 
-        logger.info("Generated %d LLM question(s) from %d document(s)",
-                    len(queries), len(documents))
+        logger.info(
+            "Generated %d LLM question(s) from %d document(s)", len(queries), len(documents)
+        )
         return queries
 
 
@@ -137,6 +143,9 @@ class AnthropicLLMClient:
             system=system,
             messages=[{"role": "user", "content": user}],
         )
-        return "".join(
-            block.text for block in response.content if getattr(block, "type", "") == "text"
-        )
+        parts: list[str] = []
+        for block in response.content:
+            if isinstance(block, TextBlock):
+                parts.append(block.text)
+
+        return "".join(parts)

@@ -16,7 +16,7 @@ from rag_benchmark.diagnostics.models import (
     DocumentTypeMetadataCoverage,
     QuestionTypeStats,
     ReadinessScores,
-    FieldCoverage
+    FieldCoverageStatistic
 )
 
 logger = get_logger("diagnostics.statistics")
@@ -113,11 +113,11 @@ def compute_metadata_coverage(
         if not expected_fields:
             continue
 
-        field_coverages: list[FieldCoverage] = []
+        field_coverages: list[FieldCoverageStatistic] = []
         for field_name in expected_fields:
             with_field = sum(1 for d in diags if field_name in d.extracted_fields)
             field_coverages.append(
-                FieldCoverage(
+                FieldCoverageStatistic(
                     field_name=field_name,
                     documents_with_field=with_field,
                     total_documents_of_type=len(diags),

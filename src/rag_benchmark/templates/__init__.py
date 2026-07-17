@@ -98,9 +98,7 @@ def load_template(name_or_path: str) -> TemplateDefinition:
 
     question_templates: QuestionTemplateMap | None = getattr(module, "QUESTION_TEMPLATES", None)
     if question_templates is None:
-        raise ValueError(
-            f"Template module '{module.__name__}' must define QUESTION_TEMPLATES"
-        )
+        raise ValueError(f"Template module '{module.__name__}' must define QUESTION_TEMPLATES")
 
     classification_rules: tuple[ClassificationRule, ...] = getattr(
         module, "CLASSIFICATION_RULES", ()

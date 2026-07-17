@@ -19,9 +19,8 @@ from rich.syntax import Syntax
 from rich.table import Table
 from rich.tree import Tree
 
-from rag_benchmark.diagnostics.analyzer import DocumentDiagnostic
 from rag_benchmark.diagnostics.inspect import InspectResult
-from rag_benchmark.diagnostics.models import DiagnosticsReport, Recommendation
+from rag_benchmark.diagnostics.models import DiagnosticsReport, DocumentDiagnostic, Recommendation
 from rag_benchmark.diagnostics.recommendations import (
     SEVERITY_CRITICAL,
     SEVERITY_INFO,
@@ -59,6 +58,19 @@ class DiagnosticsReporter:
         self._console = console or Console()
 
     # -- Section 1: Pipeline Overview ------------------------------------
+    # def render(
+    #     self,
+    #     report: DiagnosticsReporter,
+    #     verbose: bool = False,
+    # ) -> None:
+    #
+    #     print_summary(report.summary)
+    #
+    #     # print_document_types(report.document_types)
+    #
+    #     if verbose:
+    #         for document in report.documents:
+    #             print_document_report(document)
 
     def _build_overview_panel(self, report: DiagnosticsReport) -> Panel:
         config = report.pipeline_diagnostics.config
@@ -123,9 +135,7 @@ class DiagnosticsReporter:
         table.add_column("Document Type")
         table.add_column("Count", justify="right")
 
-        for doc_type, count in sorted(
-                report.classification.counts.items(), key=lambda kv: -kv[1]
-        ):
+        for doc_type, count in sorted(report.classification.counts.items(), key=lambda kv: -kv[1]):
             style = "dim" if doc_type == "Unknown" else None
             table.add_row(doc_type, str(count), style=style)
 
@@ -233,8 +243,8 @@ class DiagnosticsReporter:
     # # -- Section 9: Recommendations --------------------------------------------
 
     def render_recommendations(
-            self,
-            recommendations: list[Recommendation],
+        self,
+        recommendations: list[Recommendation],
     ) -> None:
         if not recommendations:
             return
@@ -288,8 +298,10 @@ class DiagnosticsReporter:
     @staticmethod
     def _verbose_document_branch(diag: DocumentDiagnostic) -> Tree:
         branch = Tree(f"[bold]{diag.classified.document.filename}[/bold]")
-        branch.add(f"Classification: {diag.classified.classification.document_type} "
-                   f"(confidence {diag.classified.classification.confidence:.2f})")
+        branch.add(
+            f"Classification: {diag.classified.classification.document_type} "
+            f"(confidence {diag.classified.classification.confidence:.2f})"
+        )
         branch.add(f"Metadata: {diag.classified.metadata.as_plain_dict() or '(none)'}")
         branch.add(f"Missing fields: {', '.join(diag.missing_fields) or '(none)'}")
         questions_branch = branch.add(f"Generated questions ({len(diag.questions)})")
@@ -400,10 +412,10 @@ class DiagnosticsReporter:
             content_branch = suggestion_tree.add("Content pattern(s)")
             for pattern in rule.content_patterns or ["(none detected)"]:
                 content_branch.add(pattern)
-            if result.keywords:
+            if result.matched_keywords:
                 keywords_branch = suggestion_tree.add("Detected keywords")
-                for keyword in result.keywords:
-                    keywords_branch.add(keyword)
+                for keyword in result.matched_keywords:
+                    keywords_branch.add(keyword.keyword)
             self._console.print(suggestion_tree)
         elif result.missing_fields:
             suggestion_tree = Tree("[bold]Suggestions[/bold]")
@@ -421,8 +433,9 @@ def _coverage_color(percent: float) -> str:
     return "red"
 
 
-def generate_markdown_report(report: DiagnosticsReport,
-                             generated_at: datetime | None = None) -> str:
+def generate_markdown_report(
+    report: DiagnosticsReport, generated_at: datetime | None = None
+) -> str:
     """Render a DiagnosticsReport as a standalone Markdown document.
 
     Args:
@@ -466,12 +479,16 @@ def generate_markdown_report(report: DiagnosticsReport,
         lines.append("|---|---|")
         for field_coverage in coverage.fields:
             lines.append(
-                f"| {field_coverage.field_name} | {field_coverage.coverage_percent:.0f}% |")
+                f"| {field_coverage.field_name} | {field_coverage.coverage_percent:.0f}% |"
+            )
         lines.append(f"\nOverall: {coverage.overall_coverage_percent:.0f}%\n")
 
-    lines += ["## Question Generation", "",
-              "| Document Type | Possible | Generated | Skipped | Coverage |",
-              "|---|---|---|---|---|"]
+    lines += [
+        "## Question Generation",
+        "",
+        "| Document Type | Possible | Generated | Skipped | Coverage |",
+        "|---|---|---|---|---|",
+    ]
     for stats in report.question_stats:
         lines.append(
             f"| {stats.document_type} | {stats.possible} | {stats.generated} | "
@@ -482,7 +499,8 @@ def generate_markdown_report(report: DiagnosticsReport,
     if report.recommendations:
         for rec in report.recommendations:
             lines.append(
-                f"- **[{rec.severity.upper()}] {rec.context}**: {rec.issue} → {rec.suggestion}")
+                f"- **[{rec.severity.upper()}] {rec.context}**: {rec.issue} → {rec.suggestion}"
+            )
     else:
         lines.append("- None — the dataset looks benchmark-ready.")
 
@@ -502,7 +520,7 @@ def generate_markdown_report(report: DiagnosticsReport,
 
 
 def write_markdown_report(
-        report: DiagnosticsReport, output_path: Path, generated_at: datetime | None = None
+    report: DiagnosticsReport, output_path: Path, generated_at: datetime | None = None
 ) -> Path:
     """Render and write the diagnostics Markdown report to disk.
 

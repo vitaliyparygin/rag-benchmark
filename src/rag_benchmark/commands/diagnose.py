@@ -14,6 +14,7 @@ console = Console()
 
 logger = get_logger("cli.diagnose")
 
+
 def run_diagnose(
     cfg: BenchmarkConfig,
     *,

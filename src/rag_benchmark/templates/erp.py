@@ -65,8 +65,10 @@ CLASSIFICATION_RULES: tuple[ClassificationRule, ...] = (
 
 EXTRACTION_RULES: dict[str, tuple[FieldRule, ...]] = {
     "Purchase Order": (
-        FieldRule("po_number",
-                  (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
+        FieldRule(
+            "po_number",
+            (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",),
+        ),
         FieldRule("vendor", (r"vendor\s*(?:name)?\s*[:\-]?\s*([^\n]+)",)),
         FieldRule("amount", (r"total\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",)),
         FieldRule("delivery_date", (r"delivery\s*date\s*[:\-]?\s*([\d/\-\.]+)",)),
@@ -119,12 +121,12 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Purchase Order",
             "What is the {field} on purchase order {filename}?",
-            fields=[
+            fields=(
                 QuestionField("po_number"),
                 QuestionField("vendor"),
                 QuestionField("amount"),
                 QuestionField("amoudelivery_datent"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],
@@ -132,13 +134,13 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Invoice",
             "What is the {field} on invoice {filename}?",
-            fields=[
+            fields=(
                 QuestionField("invoice_number"),
                 QuestionField("amount"),
                 QuestionField("customer"),
                 QuestionField("currency"),
                 QuestionField("due_date"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],
@@ -146,13 +148,13 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Contract",
             "What is the {field} in contract {filename}?",
-            fields=[
+            fields=(
                 QuestionField("contract_number"),
                 QuestionField("customer"),
                 QuestionField("contractor"),
                 QuestionField("start_date"),
                 QuestionField("end_date"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],
@@ -160,12 +162,12 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Vendor Profile",
             "What is the {field} of the vendor in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("vendor"),
                 QuestionField("phone"),
                 QuestionField("email"),
                 QuestionField("address"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],
@@ -173,12 +175,12 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Service Ticket",
             "What is the {field} for service ticket {filename}?",
-            fields=[
+            fields=(
                 QuestionField("ticket_number"),
                 QuestionField("status"),
                 QuestionField("engineer"),
                 QuestionField("priority"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],
@@ -186,11 +188,11 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "CRM Opportunity",
             "What is the {field} of the opportunity in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("opportunity_name"),
                 QuestionField("stage"),
                 QuestionField("value"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],
@@ -198,11 +200,11 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Project",
             "What is the {field} of the project described in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("project_name"),
                 QuestionField("status"),
                 QuestionField("manager"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],
@@ -210,11 +212,11 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Employee",
             "What is the {field} for the employee record in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("employee_id"),
                 QuestionField("department"),
                 QuestionField("hire_date"),
-            ],
+            ),
             tags=("retrieval", "erp", "metadata"),
         ),
     ],

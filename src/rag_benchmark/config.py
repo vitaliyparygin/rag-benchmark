@@ -79,6 +79,7 @@ class BenchmarkConfig(BaseModel):
         with path.open("w", encoding="utf-8") as handle:
             yaml.safe_dump(payload, handle, sort_keys=False)
 
+
 def build_config(
     dataset: Path | None,
     output: Path | None,
@@ -90,7 +91,6 @@ def build_config(
     cfg = base.with_overrides(dataset=dataset, output=output, template=template)
     if cfg.dataset is None:
         raise typer.BadParameter(
-            "Dataset directory is required. "
-            "Run 'rag-benchmark init' or pass --dataset."
+            "Dataset directory is required. " "Run 'rag-benchmark init' or pass --dataset."
         )
     return cfg

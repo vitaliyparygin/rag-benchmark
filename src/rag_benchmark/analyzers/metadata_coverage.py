@@ -13,9 +13,6 @@ class MetadataCoverageAnalyzer:
         return MetadataCoverageResult(
             expected=expected,
             extracted=extracted,
-            missing=expected-extracted,
-            coverage=(
-                extracted / expected * 100
-                if expected else 0.0
-            ),
+            missing=expected - extracted,
+            coverage=(extracted / expected * 100 if expected else 0.0),
         )

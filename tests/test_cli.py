@@ -50,9 +50,12 @@ def test_generate_writes_benchmark_json(dataset_dir: Path, tmp_path: Path) -> No
         app,
         [
             "generate",
-            "--dataset", str(dataset_dir),
-            "--output", str(output_dir),
-            "--template", "generic",
+            "--dataset",
+            str(dataset_dir),
+            "--output",
+            str(output_dir),
+            "--template",
+            "generic",
         ],
     )
     assert result.exit_code == 0
@@ -68,8 +71,10 @@ def test_generate_dry_run_does_not_write_file(dataset_dir: Path, tmp_path: Path)
         app,
         [
             "generate",
-            "--dataset", str(dataset_dir),
-            "--output", str(output_dir),
+            "--dataset",
+            str(dataset_dir),
+            "--output",
+            str(output_dir),
             "--dry-run",
         ],
     )

@@ -10,6 +10,7 @@ Commands:
     diagnose  Run the full pipeline read-only and explain pipeline health.
     inspect   Deep-dive into a single document's pipeline journey.
 """
+
 from __future__ import annotations
 
 from importlib.metadata import PackageNotFoundError, version
@@ -42,9 +43,10 @@ from rag_benchmark.config import build_config
 
 console = Console()
 
+__all__ = ["app"]
 
 
-def version_callback(value: bool):
+def version_callback(value: bool) -> None:
     if not value:
         return
 
@@ -65,34 +67,18 @@ def main(
         callback=version_callback,
         is_eager=True,
     ),
-):
+) -> None:
     pass
 
-def run_with_config(
-    runner,
-    dataset,
-    output,
-    template,
-    config,
-    verbose,
-):
-
-    cfg = build_config(
-        dataset,
-        output,
-        template,
-        config,
-    )
-
-    runner(cfg,verbose)
 
 @app.command()
 def init(
     output: Path = Path("."),
     template: TemplateOpt = "generic",
     force: ForceOpt = False,
-):
+) -> None:
     run_init(output, template, force)
+
 
 @app.command()
 def generate(
@@ -105,7 +91,8 @@ def generate(
     dry_run: DryRunOpt = False,
 ) -> None:
     cfg = build_config(dataset, output, template, config)
-    run_generate(cfg,  verbose=verbose, force=force, dry_run=dry_run)
+    run_generate(cfg, verbose=verbose, force=force, dry_run=dry_run)
+
 
 @app.command()
 def report(
@@ -118,7 +105,8 @@ def report(
     dry_run: DryRunOpt = False,
 ) -> None:
     cfg = build_config(dataset, output, template, config)
-    run_report(cfg,  verbose=verbose, force=force, dry_run=dry_run)
+    run_report(cfg, verbose=verbose, force=force, dry_run=dry_run)
+
 
 @app.command()
 def export(
@@ -131,7 +119,7 @@ def export(
     dry_run: DryRunOpt = False,
 ) -> None:
     cfg = build_config(dataset, output, template, config)
-    run_export(cfg,  verbose=verbose, force=force, dry_run=dry_run)
+    run_export(cfg, verbose=verbose, force=force, dry_run=dry_run)
 
 
 @app.command()
@@ -152,6 +140,7 @@ def diagnose(
         file=file,
     )
 
+
 @app.command()
 def inspect(
     dataset: DatasetOpt = None,
@@ -170,6 +159,7 @@ def inspect(
         file=file,
     )
 
+
 @app.command()
 def validate(
     dataset: DatasetOpt = None,
@@ -187,6 +177,7 @@ def validate(
         save_report=save_report,
         file=file,
     )
+
 
 @app.command()
 def scan(

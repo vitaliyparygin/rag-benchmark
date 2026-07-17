@@ -13,6 +13,7 @@ console = Console()
 
 logger = get_logger("cli.export")
 
+
 def run_export(
     cfg: BenchmarkConfig,
     *,

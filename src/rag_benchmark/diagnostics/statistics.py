@@ -12,7 +12,7 @@ from rag_benchmark.diagnostics.models import (
     ClassificationStats,
     DocumentDiagnostic,
     DocumentTypeMetadataCoverage,
-    FieldCoverage,
+    FieldCoverageStatistic,
     PipelineDiagnostics,
     QuestionTypeStats,
     ReadinessScores,
@@ -44,6 +44,7 @@ def _mean(values: list[float]) -> float:
     if not values:
         return 0.0
     return round(sum(values) / len(values), 1)
+
 
 def compute_classification_stats(diagnostics: PipelineDiagnostics) -> ClassificationStats:
     """Tally how many documents landed in each document type.
@@ -113,11 +114,11 @@ def compute_metadata_coverage(
         if not expected_fields:
             continue
 
-        field_coverages: list[FieldCoverage] = []
+        field_coverages: list[FieldCoverageStatistic] = []
         for field_name in expected_fields:
             with_field = sum(1 for d in diags if field_name in d.extracted_fields)
             field_coverages.append(
-                FieldCoverage(
+                FieldCoverageStatistic(
                     field_name=field_name,
                     documents_with_field=with_field,
                     total_documents_of_type=len(diags),
@@ -164,17 +165,9 @@ def compute_question_stats(diagnostics: PipelineDiagnostics) -> list[QuestionTyp
         possible_per_document = sum(len(spec.fields) or 1 for spec in specs)
         possible = possible_per_document * len(diags)
         generated = sum(
-            d.question_generation.generated
-            if d.question_generation
-            else 0
-            for d in diags
+            d.question_generation.generated if d.question_generation else 0 for d in diags
         )
-        skipped = sum(
-            d.question_generation.skipped
-            if d.question_generation
-            else 0
-            for d in diags
-        )
+        skipped = sum(d.question_generation.skipped if d.question_generation else 0 for d in diags)
 
         results.append(
             QuestionTypeStats(

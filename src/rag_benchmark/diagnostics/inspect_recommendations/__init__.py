@@ -1,4 +1,3 @@
-
 from .document import generate_document_recommendations
 
 __all__ = [

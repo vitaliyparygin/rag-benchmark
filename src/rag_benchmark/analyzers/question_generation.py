@@ -9,6 +9,7 @@ from rag_benchmark.templates import TemplateDefinition
 
 console = Console()
 
+
 class QuestionGenerationAnalyzer:
 
     @staticmethod
@@ -23,11 +24,7 @@ class QuestionGenerationAnalyzer:
             (),
         )
         available = classified.metadata.as_plain_dict()
-        generated_fields = {
-            field
-            for q in questions
-            for field in q.expected_fields
-        }
+        generated_fields = {field for q in questions for field in q.expected_fields}
 
         possible = 0
         missing_fields: list[str] = []
@@ -35,13 +32,13 @@ class QuestionGenerationAnalyzer:
 
         for spec in specs:
             template_used = False
-            for field in spec.fields:
+            for questions_field in spec.fields:
                 possible += 1
-                name = field.name
-                if name in available:
+                field_name = questions_field.name
+                if field_name in available:
                     template_used = True
                 else:
-                    missing_fields.append(name)
+                    missing_fields.append(field_name)
 
             if not template_used:
                 unused_templates.append(spec.query_template)
@@ -51,11 +48,7 @@ class QuestionGenerationAnalyzer:
             possible - generated,
             0,
         )
-        coverage = (
-            generated / possible
-            if possible
-            else 1.0
-        )
+        coverage = generated / possible if possible else 1.0
 
         return QuestionGeneration(
             possible=possible,
@@ -70,7 +63,7 @@ class QuestionGenerationAnalyzer:
     @staticmethod
     def report(
         diagnostics: list[DocumentDiagnostic],
-    ):
+    ) -> None:
         console.print()
         tree = Tree("[bold]Generated Questions[/bold]")
         for diag in diagnostics:

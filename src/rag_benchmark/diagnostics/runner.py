@@ -17,6 +17,7 @@ from rag_benchmark.pipeline import BenchmarkPipeline
 
 logger = get_logger("diagnostics")
 
+
 def build_diagnostics_report(
     pipeline: BenchmarkPipeline,
     config: BenchmarkConfig,

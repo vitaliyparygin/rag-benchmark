@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import typer
@@ -29,6 +28,9 @@ def run_inspection(
     file: str | None = None,
 ) -> None:
     """Deep-dive into a single document: classification, metadata, questions, raw text."""
+    if file is None:
+        raise ValueError("inspect requires --file")
+
     configure_logging(verbose=verbose)
     pipeline = BenchmarkPipeline()
 

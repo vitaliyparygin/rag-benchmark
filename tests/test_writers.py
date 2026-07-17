@@ -28,7 +28,7 @@ def _query(i: int) -> BenchmarkQuery:
         document_type="Invoice",
         difficulty=Difficulty.EASY,
         tags=["retrieval"],
-        template_id='Invoice'
+        template_id="Invoice",
     )
 
 
@@ -49,15 +49,24 @@ def test_write_retrieval_csv_writes_headers_even_when_empty(tmp_path: Path) -> N
         reader = csv.reader(handle)
         header = next(reader)
     assert header == [
-        "query", "expected_document", "returned_document", "top_score", "success", "rank"
+        "query",
+        "expected_document",
+        "returned_document",
+        "top_score",
+        "success",
+        "rank",
     ]
 
 
 def test_write_retrieval_csv_writes_rows(tmp_path: Path) -> None:
     results = [
         RetrievalResult(
-            query="q1", expected_document="doc.txt", returned_document="doc.txt",
-            top_score=0.95, success=True, rank=1,
+            query="q1",
+            expected_document="doc.txt",
+            returned_document="doc.txt",
+            top_score=0.95,
+            success=True,
+            rank=1,
         )
     ]
     out = write_retrieval_csv(results, tmp_path / "retrieval_metrics.csv")
@@ -72,7 +81,13 @@ def test_write_latency_csv_writes_headers(tmp_path: Path) -> None:
     with out.open(encoding="utf-8") as handle:
         header = next(csv.reader(handle))
     assert header == [
-        "query", "retriever_ms", "research_ms", "summarizer_ms", "citation_ms", "total_ms", "tokens"
+        "query",
+        "retriever_ms",
+        "research_ms",
+        "summarizer_ms",
+        "citation_ms",
+        "total_ms",
+        "tokens",
     ]
 
 

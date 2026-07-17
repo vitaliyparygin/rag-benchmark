@@ -14,17 +14,24 @@ plugin**, so the same package works across every RAG project you own.
 Documents  ─▶  Scan  ─▶  Classify  ─▶  Extract Metadata  ─▶  Generate Questions  ─▶  Export
 ```
 
-## Badges
+# rag-benchmark
 
-![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-
-![License](https://img.shields.io/badge/license-MIT-green)
 
 ![CI](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml/badge.svg)
-
 ![PyPI](https://img.shields.io/pypi/v/rag-benchmark)
-
 ![Downloads](https://img.shields.io/pypi/dm/rag-benchmark)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Tests](https://img.shields.io/badge/tests-pytest-green)
+![Typing](https://img.shields.io/badge/type%20checked-mypy-blue)
+![Lint](https://img.shields.io/badge/lint-ruff-blue)
+![Format](https://img.shields.io/badge/code%20style-black-000000)
+![chat](https://gitter.im/vitaliyparygin/rag-benchmark;)
+
+Release
+![CI](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://codecov.io/gh/vitaliyparygin/rag-benchmark)
+
 
 
 ## Features

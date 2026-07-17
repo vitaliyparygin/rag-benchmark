@@ -53,8 +53,6 @@ def run_validate(
     else:
         console.print("[green]No issues found.[/green]")
 
-    console.print(
-        f"{report_result.error_count} error(s), {report_result.warning_count} warning(s)"
-    )
+    console.print(f"{report_result.error_count} error(s), {report_result.warning_count} warning(s)")
     if report_result.has_errors:
         raise typer.Exit(code=1)

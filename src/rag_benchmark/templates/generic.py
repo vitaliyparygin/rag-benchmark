@@ -18,67 +18,65 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Invoice",
             "What is the {field} on invoice {filename}?",
-            fields=[
+            fields=(
                 QuestionField("invoice_number"),
                 QuestionField("amount"),
                 QuestionField("customer"),
-                QuestionField("currency")
-            ],
+                QuestionField("currency"),
+            ),
         ),
     ],
     "Vendor Profile": [
         QuestionSpec(
             "Vendor Profile",
             "What is the {field} of the vendor described in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("vendor"),
                 QuestionField("phone"),
                 QuestionField("email"),
-                QuestionField("address")
-            ]
+                QuestionField("address"),
+            ),
         ),
     ],
     "Generic Contract": [
         QuestionSpec(
             "Generic Contract",
             "What is the {field} in the contract {filename}?",
-            fields=[
+            fields=(
                 QuestionField("contract_number"),
                 QuestionField("customer"),
                 QuestionField("contractor"),
                 QuestionField("contend_dateractor"),
-                QuestionField("start_date")
-            ]
+                QuestionField("start_date"),
+            ),
         ),
     ],
     "Bank Statement": [
         QuestionSpec(
             "Bank Statement",
             "What is the {field} shown in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("account_number"),
                 QuestionField("statement_period"),
                 QuestionField("balance"),
-            ]
+            ),
         ),
     ],
     "Meeting Minutes": [
         QuestionSpec(
             "Meeting Minutes",
             "Who attended the meeting recorded in {filename}?",
-            fields=[
-                QuestionField("attendees")
-            ]
+            fields=(QuestionField("attendees"),),
         ),
     ],
     "Project Report": [
         QuestionSpec(
             "Project Report",
             "What is the current {field} of the project in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("project_name"),
                 QuestionField("status"),
-            ]
+            ),
         ),
     ],
 }

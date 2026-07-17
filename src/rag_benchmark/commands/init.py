@@ -19,17 +19,14 @@ logger = get_logger("cli.init")
 DEFAULT_CONFIG = {
     "dataset": "datasets",
     "output": "benchmarks",
-
     "template": "generic",
-
     "reader": "pdfplumber",
     "question_generator": "template",
-
     "language": "en",
     "recursive": True,
-
     "max_questions_per_document": 6,
 }
+
 
 def run_init(
     output: Annotated[Path, typer.Option("--output", help="Directory to scaffold.")] = Path("."),

@@ -18,12 +18,12 @@ LABEL_REGEX = re.compile(
     flags=re.MULTILINE,
 )
 
-class RegexSuggestionEngine:
 
+class RegexSuggestionEngine:
 
     @staticmethod
     def render_dataset_suggestions(documents: list[ClassifiedDocument]) -> None:
-        counter = Counter()
+        counter: Counter[str] = Counter()
         for doc in documents:
             text = doc.document.text
             for match in LABEL_REGEX.finditer(text):
@@ -50,12 +50,6 @@ class RegexSuggestionEngine:
         hints = suggest_field_synonyms(field)
 
         if hints:
-            console.print(
-                f"[yellow]{field}[/yellow]: add regex for "
-                + ", ".join(hints)
-            )
+            console.print(f"[yellow]{field}[/yellow]: add regex for " + ", ".join(hints))
         else:
-            console.print(
-                f"[yellow]{field}[/yellow]: "
-                "no synonym hints available"
-            )
+            console.print(f"[yellow]{field}[/yellow]: " "no synonym hints available")

@@ -13,9 +13,11 @@ from dataclasses import dataclass
 
 from rag_benchmark.logging import get_logger
 from rag_benchmark.models import Document as DocumentModel
-from rag_benchmark.models import ExtractedField, ExtractedMetadata
 from rag_benchmark.utils.text import normalize_whitespace
 
+from .models import ExtractedField, ExtractedMetadata
+
+__all__ = ["ExtractedField", "ExtractedMetadata"]
 logger = get_logger("extractor")
 
 
@@ -59,8 +61,10 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
         FieldRule("currency", (r"\b(USD|EUR|GBP|UAH|PLN)\b",)),
     ),
     "Purchase Order": (
-        FieldRule("po_number",
-                  (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
+        FieldRule(
+            "po_number",
+            (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",),
+        ),
         FieldRule("vendor", (r"vendor\s*(?:name)?\s*[:\-]?\s*([^\n]+)",)),
         FieldRule("amount", (r"total\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",)),
     ),
@@ -153,9 +157,7 @@ class RegexMetadataExtractor(MetadataExtractor):
                         break
 
         if not fields and rules:
-            logger.debug(
-                "No fields extracted for %s (type=%s)", document.filename, document_type
-            )
+            logger.debug("No fields extracted for %s (type=%s)", document.filename, document_type)
 
         return ExtractedMetadata(
             document_id=document.id, document_type=document_type, fields=fields

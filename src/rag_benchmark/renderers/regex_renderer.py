@@ -13,6 +13,7 @@ from rag_benchmark.suggestions.regex_suggestions import build_regex
 
 console = Console()
 
+
 class RegexRenderer:
 
     @staticmethod
@@ -32,7 +33,7 @@ class RegexRenderer:
         console.print(table)
 
     @staticmethod
-    def render_regex_analysis(diagnostics: list[DocumentDiagnostic]):
+    def render_regex_analysis(diagnostics: list[DocumentDiagnostic]) -> None:
         console.rule("Regex Analysis")
         for diag in diagnostics:
             if not diag.regex_stats:
@@ -45,20 +46,13 @@ class RegexRenderer:
                 console.print(f"\n[cyan]{field}[/cyan]")
                 for stat in stats:
                     if stat.matched:
-                        console.print(
-                            f"[green]✓[/green] {stat.pattern}"
-                        )
+                        console.print(f"[green]✓[/green] {stat.pattern}")
                         if stat.matched_text:
-                            console.print(
-                                f"    matched : {stat.matched_text}"
-                            )
+                            console.print(f"    matched : {stat.matched_text}")
                         if stat.value:
-                            console.print(
-                                f"    value   : {stat.value}"
-                            )
+                            console.print(f"    value   : {stat.value}")
                     else:
-                        console.print(
-                            f"[red]✗[/red] {stat.pattern}")
+                        console.print(f"[red]✗[/red] {stat.pattern}")
 
     @staticmethod
     def render_unused(stats: list[RegexStat]) -> None:
@@ -102,7 +96,7 @@ class RegexRenderer:
 
     @staticmethod
     def render_regex_suggestions(
-            suggestions: list[RegexSuggestion],
+        suggestions: list[RegexSuggestion],
     ) -> None:
         table = Table(title="Suggested Regex")
 
@@ -114,7 +108,7 @@ class RegexRenderer:
 
             table.add_row(
                 suggestion.label,
-                str(suggestion.count),
+                str(suggestion.occurrences),
             )
 
         console.print(table)

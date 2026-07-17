@@ -13,6 +13,7 @@ console = Console()
 
 logger = get_logger("cli.report")
 
+
 def run_report(
     cfg: BenchmarkConfig,
     *,

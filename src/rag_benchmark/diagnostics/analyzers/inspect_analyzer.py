@@ -6,7 +6,6 @@ from rag_benchmark.analyzers.readiness_analyzer import ReadinessAnalyzer
 from rag_benchmark.analyzers.regex_analyzer import RegexAnalyzer
 from rag_benchmark.analyzers.regex_candidate_analyzer import RegexCandidateAnalyzer
 from rag_benchmark.analyzers.regex_suggestion_analyzer import RegexSuggestionAnalyzer
-from rag_benchmark.analyzers.unused_regex_analyzer import UnusedRegexAnalyzer
 from rag_benchmark.diagnostics.analyzers.metadata_details_analyzer import MetadataDetailsAnalyzer
 from rag_benchmark.diagnostics.analyzers.missing_improvements_analyzer import (
     MissingImprovementsAnalyzer,
@@ -24,7 +23,6 @@ class InspectAnalyzer:
     @staticmethod
     def analyze(
         result: InspectResult,
-
     ) -> None:
         """
         Populate InspectResult with extra diagnostics.
@@ -32,7 +30,7 @@ class InspectAnalyzer:
         # template = result.question_templates
         regex_stats = RegexAnalyzer.analyze(
             result.classified,
-            result.question_templates,
+            result.template,
         )
 
         result.regex_stats = regex_stats
@@ -56,14 +54,14 @@ class InspectAnalyzer:
             result.regex_candidates,
         )
 
+        # result.unused_regex = UnusedRegexAnalyzer.analyze(
+        #     result.regex_stats,
+        # )
 
-        result.unused_regex = UnusedRegexAnalyzer.analyze(
-            result.regex_stats,
-        )
-
-        result.metadata_coverage = MetadataCoverageAnalyzer.analyze(
+        metadata_coverage = MetadataCoverageAnalyzer.analyze(
             result,
         )
+        print(type(metadata_coverage))
         result.question_coverage = QuestionCoverageAnalyzer.analyze(
             result,
         )
@@ -71,13 +69,11 @@ class InspectAnalyzer:
             result,
         )
         result.missing_improvements = MissingImprovementsAnalyzer.analyze(result)
-        result.readiness = (
-            ReadinessAnalyzer.analyze(
-                result,
-                result.metadata_coverage,
-                result.question_coverage,
-                result.regex_coverage,
-            )
+        result.readiness = ReadinessAnalyzer.analyze(
+            result,
+            result.field_coverage,
+            result.question_coverage,
+            result.regex_coverage,
         )
 
         result.metadata_details = MetadataDetailsAnalyzer.analyze(

@@ -74,6 +74,7 @@ class BenchmarkPipeline:
                 an injected scanner's own configuration always wins.
         """
         scanner = self.scanner or DocumentScanner(recursive=recursive)
+
         return scanner.scan(dataset_dir)
 
     def classify(
@@ -143,7 +144,14 @@ class BenchmarkPipeline:
     #     dataset.source_dataset = config.dataset
     #     return classified_documents, dataset, template
 
-    def run(self, config: BenchmarkConfig):
+    def run(
+        self,
+        config: BenchmarkConfig,
+    ) -> tuple[
+        list[ClassifiedDocument],
+        BenchmarkDataset,
+        TemplateDefinition,
+    ]:
         result = self.execute(config)
 
         return (
@@ -152,8 +160,10 @@ class BenchmarkPipeline:
             result.template,
         )
 
-
     def execute(self, config: BenchmarkConfig) -> PipelineResult:
+        if config.dataset is None:
+            raise ValueError("Dataset is required.")
+
         template = self._resolve_template(config)
 
         scanned = self.scan(

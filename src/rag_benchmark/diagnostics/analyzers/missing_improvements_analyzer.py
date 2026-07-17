@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from rag_benchmark.diagnostics.inspect import InspectResult
@@ -30,21 +29,13 @@ class MissingImprovementsAnalyzer:
                 )
         template = result.question_templates
 
-        question_specs = template.question_templates.get(
+        question_specs = template.get(
             result.classified.classification.document_type,
             [],
         )
 
-        expected = {
-            field.name
-            for spec in question_specs
-            for field in spec.fields
-        }
-        generated = {
-            q.field
-            for q in result.questions
-            if hasattr(q, "field")
-        }
+        expected = {field.name for spec in question_specs for field in spec.fields}
+        generated = {q.field for q in result.questions if hasattr(q, "field")}
 
         for field in sorted(expected - generated):
             improvements.append(

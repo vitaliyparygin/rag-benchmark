@@ -1,5 +1,6 @@
 import re
 from collections import Counter
+from typing import cast
 
 from rag_benchmark.diagnostics.models import RegexCandidate
 from rag_benchmark.models import ResourceGroup
@@ -8,9 +9,16 @@ from rag_benchmark.utils.resources import load_json
 #: Field name -> alternative phrasings worth adding to an extraction regex.
 #: A small, deliberately generic hint table — not meant to be exhaustive,
 #: just enough to unblock a developer looking at a 0%-coverage field.
-FIELD_SYNONYM_HINTS: dict[ str, list[str]] = load_json(
-    ResourceGroup.DICTIONARIES, "field_synonym_hints.json"
+
+
+FIELD_SYNONYM_HINTS = cast(
+    dict[str, list[str]],
+    load_json(
+        ResourceGroup.DICTIONARIES,
+        "field_synonym_hints.json",
+    ),
 )
+
 
 def build_regex(label: str) -> str:
     escaped = re.escape(label)
@@ -38,14 +46,12 @@ def build_regex(label: str) -> str:
 def suggest_field_synonyms(field_name: str) -> list[str]:
     """Return alternative phrasings that might help extract a missing field."""
     return FIELD_SYNONYM_HINTS.get(
-        field_name,
-        ["(no synonym hints available — inspect a sample document)"]
+        field_name, ["(no synonym hints available — inspect a sample document)"]
     )
 
 
-@staticmethod
 def build_regex_candidates(
-        labels: Counter[str],
+    labels: Counter[str],
 ) -> list[RegexCandidate]:
 
     candidates = []
@@ -134,10 +140,7 @@ def suggest_regex(label: str) -> str:
     # Email
     #
     elif "email" in lower:
-        value = (
-            r"([A-Za-z0-9._%+-]+@"
-            r"[A-Za-z0-9.-]+\.[A-Za-z]{2,})"
-        )
+        value = r"([A-Za-z0-9._%+-]+@" r"[A-Za-z0-9.-]+\.[A-Za-z]{2,})"
 
     #
     # Phone
@@ -169,4 +172,3 @@ def suggest_regex(label: str) -> str:
         value = r"(.+)"
 
     return rf"{escaped}\s*[:\-]?\s*{value}"
-

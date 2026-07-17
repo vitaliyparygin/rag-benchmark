@@ -11,9 +11,7 @@ TemplateOpt = Annotated[
     str | None,
     typer.Option("--template", help="Template name, file path, or module path."),
 ]
-ConfigOpt = Annotated[
-    Path | None, typer.Option("--config", help="Path to benchmark.yaml.")
-]
+ConfigOpt = Annotated[Path | None, typer.Option("--config", help="Path to benchmark.yaml.")]
 ForceOpt = Annotated[bool, typer.Option("--force", help="Overwrite existing output files.")]
 VerboseOpt = Annotated[bool, typer.Option("--verbose", help="Enable INFO-level logging.")]
 DryRunOpt = Annotated[

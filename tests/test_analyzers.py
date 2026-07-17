@@ -49,24 +49,22 @@ def test_field_coverage():
     assert result.coverage == 2 / 3
 
 
-
 class Rule:
     def __init__(self, name, patterns):
         self.name = name
         self.patterns = patterns
+
 
 def test_regex_analyzer():
     document = SimpleNamespace(
         classification=SimpleNamespace(
             document_type="Vendor Profile",
         ),
-        document=SimpleNamespace(
-            text="""
+        document=SimpleNamespace(text="""
 Vendor Name: Tech Supplies Ltd
 Phone: +380671234567
 Email: sales@test.com
-"""
-        ),
+"""),
     )
 
     template = SimpleNamespace(
@@ -74,21 +72,15 @@ Email: sales@test.com
             "Vendor Profile": (
                 Rule(
                     "vendor",
-                    (
-                        r"Vendor\s*Name:\s*(.+)",
-                    ),
+                    (r"Vendor\s*Name:\s*(.+)",),
                 ),
                 Rule(
                     "phone",
-                    (
-                        r"Phone:\s*([+\d]+)",
-                    ),
+                    (r"Phone:\s*([+\d]+)",),
                 ),
                 Rule(
                     "email",
-                    (
-                        r"Email:\s*(.+)",
-                    ),
+                    (r"Email:\s*(.+)",),
                 ),
             )
         }
@@ -108,6 +100,7 @@ Email: sales@test.com
 
     assert result[2].field == "email"
     assert result[2].matches == 1
+
 
 def test_question_coverage():
     result = SimpleNamespace(

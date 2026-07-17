@@ -6,7 +6,10 @@ from datetime import datetime
 from pathlib import Path
 
 from rag_benchmark.logging import get_logger
-from rag_benchmark.models import DocumentFormat, ScannedFile
+
+from .models import DocumentFormat, ScannedFile
+
+__all__ = ["DocumentFormat", "ScannedFile"]
 
 logger = get_logger("scanner")
 

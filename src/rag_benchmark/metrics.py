@@ -31,9 +31,7 @@ def compute_statistics(
     Returns:
         A populated DatasetStatistics instance.
     """
-    doc_type_counts = Counter(
-        cd.classification.document_type for cd in classified_documents
-    )
+    doc_type_counts = Counter(cd.classification.document_type for cd in classified_documents)
     unknown_count = doc_type_counts.get(UNKNOWN_TYPE, 0)
 
     field_counts: Counter[str] = Counter()

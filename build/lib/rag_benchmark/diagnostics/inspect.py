@@ -21,7 +21,7 @@ from rag_benchmark.diagnostics.analyzer import (
     suggest_classification_rule,
 )
 from rag_benchmark.extractor import RegexMetadataExtractor
-from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, DocumentFormat, ScannedFile
+from rag_benchmark.models import  ClassifiedDocument, DocumentFormat, ScannedFile
 from rag_benchmark.pipeline import BenchmarkPipeline
 from rag_benchmark.scanner import detect_format
 from rag_benchmark.logging import get_logger
@@ -36,10 +36,9 @@ from rag_benchmark.diagnostics.models import (
     MetadataDetail,
     RegexCoverage,
     ReadinessReport,
-    InspectSummary,
     GeneratedQuestion,
     QuestionCoverage,
-    FieldCoverage
+    FieldCoverageStatistic
 )
 from rag_benchmark.generators.base import QuestionTemplateMap
 logger = get_logger("diagnostics.inspect")
@@ -74,7 +73,7 @@ class InspectResult:
     matched_keywords: list[MatchedKeyword] = field(default_factory=list)
 
     metadata_details: list[MetadataDetail] = field(default_factory=list)
-    field_coverage: FieldCoverage | None = None
+    field_coverage: FieldCoverageStatistic | None = None
 
     regex_stats: list[RegexStat] = field(default_factory=list)
     regex_coverage: RegexCoverage | None = None

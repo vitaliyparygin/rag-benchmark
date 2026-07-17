@@ -1,11 +1,12 @@
 from rich.console import Console
 from rich.table import Table
 
+from rag_benchmark.diagnostics.inspect import InspectResult
 from rag_benchmark.diagnostics.models import Recommendation
-from rag_benchmark.diagnostics.reporter import InspectResult
 from rag_benchmark.renderers.regex_renderer import RegexRenderer
 
 console = Console()
+
 
 class CommonRenderer:
     """Rich renderer for `rag-benchmark inspect`."""
@@ -18,7 +19,6 @@ class CommonRenderer:
 
         CommonRenderer.render_regex(report)
         CommonRenderer.render_question_coverage(report)
-
 
     @staticmethod
     def render_file_information(report: InspectResult) -> None:
@@ -37,23 +37,19 @@ class CommonRenderer:
         # table.add_row("Question generator", config.question_generator)
         table.add_row(
             "Detected type",
-            f"{classification.document_type} "
-            f"(confidence {classification.confidence:.2f})",
+            f"{classification.document_type} " f"(confidence {classification.confidence:.2f})",
         )
 
         console.print(table)
 
-
     @staticmethod
     def render_regex(report: InspectResult) -> None:
         if getattr(report, "regex_stats", None):
-            RegexRenderer.render_regex_stats(
-                report.regex_stats
-            )
+            RegexRenderer.render_regex_stats(report.regex_stats)
 
         if report.regex_candidates:
             RegexRenderer.render_regex_suggestions(
-                report.regex_candidates
+                report.regex_suggestions,
             )
 
     @staticmethod
@@ -104,7 +100,6 @@ class CommonRenderer:
     #
     #     console.print(table)
 
-
     @staticmethod
     def render_classification(report: InspectResult) -> None:
 
@@ -147,7 +142,7 @@ class CommonRenderer:
         table.add_column("Keyword")
 
         for i, keyword in enumerate(report.matched_keywords, 1):
-            table.add_row(str(i), keyword)
+            table.add_row(str(i), keyword.keyword)
 
         console.print(table)
 
@@ -211,7 +206,7 @@ class CommonRenderer:
 
     @staticmethod
     def render_recommendations(
-            recommendations: list[Recommendation],
+        recommendations: list[Recommendation],
     ) -> None:
         if not recommendations:
             return

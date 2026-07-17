@@ -58,20 +58,33 @@ def test_template_generator_skips_spec_when_any_required_field_missing() -> None
         ]
     }
     generator = TemplateQuestionGenerator()
-    queries = generator.generate([_classified_invoice()], template_map,
-                                 max_questions_per_document=10)
+    queries = generator.generate(
+        [_classified_invoice()], template_map, max_questions_per_document=10
+    )
 
     # "customer" was never extracted, so the whole spec (all-or-nothing on
     # required fields) should be skipped, and no question generated for it.
     assert queries == [
-        BenchmarkQuery(id=1, query='What is the invoice number on invoice_001.txt?',
-                       expected_document='invoice_001.txt', expected_fields=['invoice_number'],
-                       document_type='Invoice',
-                       difficulty="easy", tags=['retrieval'], template_id='Invoice'),
-        BenchmarkQuery(id=2, query='What is the amount on invoice_001.txt?',
-                       expected_document='invoice_001.txt',
-                       expected_fields=['amount'], document_type='Invoice',
-                       difficulty="easy", tags=['retrieval'], template_id='Invoice'),
+        BenchmarkQuery(
+            id=1,
+            query="What is the invoice number on invoice_001.txt?",
+            expected_document="invoice_001.txt",
+            expected_fields=["invoice_number"],
+            document_type="Invoice",
+            difficulty="easy",
+            tags=["retrieval"],
+            template_id="Invoice",
+        ),
+        BenchmarkQuery(
+            id=2,
+            query="What is the amount on invoice_001.txt?",
+            expected_document="invoice_001.txt",
+            expected_fields=["amount"],
+            document_type="Invoice",
+            difficulty="easy",
+            tags=["retrieval"],
+            template_id="Invoice",
+        ),
     ]
 
 
@@ -90,8 +103,9 @@ def test_template_generator_generates_when_all_required_fields_present() -> None
         ]
     }
     generator = TemplateQuestionGenerator()
-    queries = generator.generate([_classified_invoice()], template_map,
-                                 max_questions_per_document=10)
+    queries = generator.generate(
+        [_classified_invoice()], template_map, max_questions_per_document=10
+    )
 
     assert len(queries) == 2
     assert {q.expected_fields[0] for q in queries} == {"invoice_number", "amount"}
@@ -108,13 +122,14 @@ def test_template_generator_respects_max_questions_per_document() -> None:
                 fields=[
                     QuestionField("invoice_number"),
                     QuestionField("amount"),
-                ]
+                ],
             )
         ]
     }
     generator = TemplateQuestionGenerator()
-    queries = generator.generate([_classified_invoice()], template_map,
-                                 max_questions_per_document=1)
+    queries = generator.generate(
+        [_classified_invoice()], template_map, max_questions_per_document=1
+    )
     assert len(queries) == 1
 
 
@@ -144,18 +159,18 @@ def test_llm_generator_parses_valid_json_response() -> None:
         ]
     )
     generator = LLMQuestionGenerator(client=_FakeLLMClient(response))
-    queries = generator.generate([_classified_invoice()], {"Invoice": []},
-                                 max_questions_per_document=5
-                                 )
+    queries = generator.generate(
+        [_classified_invoice()], {"Invoice": []}, max_questions_per_document=5
+    )
     assert len(queries) == 1
     assert queries[0].query == "What is the invoice number?"
 
 
 def test_llm_generator_skips_malformed_response_gracefully() -> None:
     generator = LLMQuestionGenerator(client=_FakeLLMClient("not json"))
-    queries = generator.generate([_classified_invoice()], {"Invoice": []},
-                                 max_questions_per_document=5
-                                 )
+    queries = generator.generate(
+        [_classified_invoice()], {"Invoice": []}, max_questions_per_document=5
+    )
     assert queries == []
 
 

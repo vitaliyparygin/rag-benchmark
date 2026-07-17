@@ -64,11 +64,11 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Patient Record",
             "What is the {field} recorded for the patient in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("patient_id"),
                 QuestionField("diagnosis"),
                 QuestionField("date_of_birth"),
-            ],
+            ),
             tags=("retrieval", "medical", "metadata"),
         ),
     ],
@@ -76,11 +76,11 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Lab Report",
             "What is the {field} reported in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("specimen"),
                 QuestionField("test_name"),
                 QuestionField("result"),
-            ],
+            ),
             tags=("retrieval", "medical", "metadata"),
         ),
     ],
@@ -88,11 +88,11 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Prescription",
             "What is the {field} listed on the prescription in {filename}?",
-            fields=[
+            fields=(
                 QuestionField("medication"),
                 QuestionField("dosage"),
                 QuestionField("rerefillssult"),
-            ],
+            ),
             tags=("retrieval", "medical", "metadata"),
         ),
     ],
@@ -100,10 +100,10 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
         QuestionSpec(
             "Discharge Summary",
             "What is the {field} in the discharge summary {filename}?",
-            fields=[
+            fields=(
                 QuestionField("admission_date"),
                 QuestionField("discharge_date"),
-            ],
+            ),
             tags=("retrieval", "medical", "metadata"),
         ),
     ],

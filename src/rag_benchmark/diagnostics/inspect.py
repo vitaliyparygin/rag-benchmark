@@ -14,27 +14,33 @@ from pathlib import Path
 
 from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.diagnostics.analyzer import TEXT_PREVIEW_CHARS
+from rag_benchmark.diagnostics.analyzer import (
+    TEXT_PREVIEW_CHARS,
+    extract_keywords,
+    suggest_classification_rule,
+)
 from rag_benchmark.diagnostics.models import (
     ClassificationScore,
-    FieldCoverage,
-    GeneratedQuestion,
+    FieldCoverageStatistic,
     MatchedKeyword,
     MetadataDetail,
-    QuestionCoverage,
+    MissingImprovement,
+    QuestionCoverageResult,
     ReadinessReport,
     RegexCandidate,
     RegexCoverage,
     RegexStat,
     RegexSuggestion,
+    SuggestedClassificationRule,
     TemplateSuggestion,
 )
 from rag_benchmark.extractor import RegexMetadataExtractor
 from rag_benchmark.generators.base import QuestionTemplateMap
 from rag_benchmark.logging import get_logger
-from rag_benchmark.models import ClassifiedDocument, DocumentFormat, ScannedFile
+from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, DocumentFormat, ScannedFile
 from rag_benchmark.pipeline import BenchmarkPipeline
 from rag_benchmark.scanner import detect_format
+from rag_benchmark.templates import TemplateDefinition
 from rag_benchmark.utils.text import truncate
 
 logger = get_logger("diagnostics.inspect")
@@ -53,33 +59,33 @@ class InspectResult:
     # Source
     scanned_file: ScannedFile
     classified: ClassifiedDocument
-
+    template: TemplateDefinition
     question_templates: QuestionTemplateMap
-    questions: list[GeneratedQuestion]
+    questions: list[BenchmarkQuery]
 
     # Metadata
     expected_fields: list[str]
     missing_fields: list[str]
     available_fields: list[str]
-
     text_preview: str
 
     # Filled by InspectAnalyzer
     classification_scores: list[ClassificationScore] = field(default_factory=list)
     matched_keywords: list[MatchedKeyword] = field(default_factory=list)
-
+    missing_improvements: list[MissingImprovement] = field(default_factory=list)
     metadata_details: list[MetadataDetail] = field(default_factory=list)
-    field_coverage: FieldCoverage | None = None
+    field_coverage: FieldCoverageStatistic | None = None
 
     regex_stats: list[RegexStat] = field(default_factory=list)
     regex_coverage: RegexCoverage | None = None
     regex_candidates: list[RegexCandidate] = field(default_factory=list)
     regex_suggestions: list[RegexSuggestion] = field(default_factory=list)
 
-    question_coverage: QuestionCoverage | None = None
+    question_coverage: QuestionCoverageResult | None = None
     template_suggestions: list[TemplateSuggestion] = field(default_factory=list)
 
     readiness: ReadinessReport | None = None
+    suggested_rule: SuggestedClassificationRule | None = None
 
     @property
     def is_unknown(self) -> bool:
@@ -122,9 +128,7 @@ def find_document(dataset_dir: Path, name: str, recursive: bool = True) -> Path:
 
 
 def inspect_document(
-    pipeline: BenchmarkPipeline,
-    config: BenchmarkConfig,
-    filename: str
+    pipeline: BenchmarkPipeline, config: BenchmarkConfig, filename: str
 ) -> InspectResult:
     """Run a single document through the full pipeline and collect diagnostics.
 
@@ -140,6 +144,8 @@ def inspect_document(
         DocumentNotFoundError: If no matching file is found.
         UnsupportedDocumentError: If the file's format has no reader.
     """
+    if config.dataset is None:
+        raise ValueError("Dataset directory is required.")
     path = find_document(config.dataset, filename, recursive=config.recursive)
     logger.debug("Resolved '%s' to %s", filename, path)
 
@@ -182,11 +188,11 @@ def inspect_document(
         max_questions_per_document=config.max_questions_per_document,
     )
 
-    # keywords: list[str] = []
-    #suggested_rule: SuggestedClassificationRule | None = None
-    # if classification.document_type == UNKNOWN_TYPE:
-        # keywords = extract_keywords(document.text)
-        #suggested_rule = suggest_classification_rule(document.filename, keywords)
+    keywords: list[str] = []
+    suggested_rule: SuggestedClassificationRule | None = None
+    if classification.document_type == UNKNOWN_TYPE:
+        keywords = extract_keywords(document.text)
+        suggested_rule = suggest_classification_rule(document.filename, keywords)
 
     logger.info(
         "Inspected %s: type=%s, fields=%d/%d, questions=%d",
@@ -200,10 +206,12 @@ def inspect_document(
     return InspectResult(
         scanned_file=scanned,
         classified=classified,
-        question_templates=template,
+        question_templates=template.question_templates,
         questions=questions,
         expected_fields=expected_fields,
         missing_fields=missing_fields,
-        available_fields=available,
+        available_fields=list(available),
         text_preview=truncate(document.text, TEXT_PREVIEW_CHARS),
+        suggested_rule=suggested_rule,
+        template=template,
     )

@@ -36,7 +36,6 @@ class TemplateQuestionGenerator(QuestionGenerator):
 
             specs = template_map.get(doc_type, [])
 
-
             if not specs:
                 logger.debug(
                     "No question specs for document_type=%s (%s)",
@@ -53,29 +52,32 @@ class TemplateQuestionGenerator(QuestionGenerator):
             generated_for_doc = 0
             logger.debug(
                 f"generate.specs specs={specs} "
-                f"max_questions_per_document={max_questions_per_document}")
+                f"max_questions_per_document={max_questions_per_document}"
+            )
             for spec in specs:
 
                 if generated_for_doc >= max_questions_per_document:
-                    logger.debug(f"generated_for_doc >= max_questions_per_document1"
-                          f"generated_for_doc={generated_for_doc} "
-                                 f"max_questions_per_document={max_questions_per_document}")
+                    logger.debug(
+                        f"generated_for_doc >= max_questions_per_document1"
+                        f"generated_for_doc={generated_for_doc} "
+                        f"max_questions_per_document={max_questions_per_document}"
+                    )
                     break
 
-                for field in spec.fields:
+                for question_field in spec.fields:
 
                     if generated_for_doc >= max_questions_per_document:
                         break
-
-                    if field.name not in available_fields:
-                        if field.required:
-                            doc_stats.missing_fields.append(field.name)
+                    field_name = question_field.name
+                    if field_name not in available_fields:
+                        if question_field.required:
+                            doc_stats.missing_fields.append(field_name)
                         continue
 
                     display_name = (
-                        field.aliases[0]
-                        if field.aliases
-                        else field.name.replace("_", " ")
+                        question_field.aliases[0]
+                        if question_field.aliases
+                        else field_name.replace("_", " ")
                     )
                     query_text = spec.query_template.format(
                         field=display_name,
@@ -88,15 +90,15 @@ class TemplateQuestionGenerator(QuestionGenerator):
                             id=next_id,
                             query=query_text,
                             expected_document=classified.document.filename,
-                            expected_fields=[field.name],
+                            expected_fields=[field_name],
                             document_type=doc_type,
                             difficulty=spec.difficulty,
                             tags=list(spec.tags),
-                            template_id=spec.key
+                            template_id=spec.key,
                         )
                     )
                     doc_stats.generated_questions += 1
-                    doc_stats.generated_fields.append(field.name)
+                    doc_stats.generated_fields.append(field_name)
 
                     next_id += 1
                     generated_for_doc += 1

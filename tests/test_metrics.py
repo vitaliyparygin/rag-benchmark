@@ -19,11 +19,16 @@ from rag_benchmark.models import (
 
 def _classified(doc_type: str, filename: str) -> ClassifiedDocument:
     document = Document(
-        id=filename, path=Path(filename), filename=filename,
-        format=DocumentFormat.TXT, text="x", char_count=1,
+        id=filename,
+        path=Path(filename),
+        filename=filename,
+        format=DocumentFormat.TXT,
+        text="x",
+        char_count=1,
     )
-    classification = ClassificationResult(document_id=filename, document_type=doc_type,
-                                          confidence=0.5)
+    classification = ClassificationResult(
+        document_id=filename, document_type=doc_type, confidence=0.5
+    )
     metadata = ExtractedMetadata(document_id=filename, document_type=doc_type, fields={})
     return ClassifiedDocument(document=document, classification=classification, metadata=metadata)
 
@@ -33,8 +38,13 @@ def test_compute_statistics_counts_and_averages() -> None:
     dataset = BenchmarkDataset(
         queries=[
             BenchmarkQuery(
-                id=1, query="q1", expected_document="a.txt", expected_fields=[],
-                document_type="Invoice", difficulty=Difficulty.EASY, template_id="Invoice"
+                id=1,
+                query="q1",
+                expected_document="a.txt",
+                expected_fields=[],
+                document_type="Invoice",
+                difficulty=Difficulty.EASY,
+                template_id="Invoice",
             )
         ]
     )
@@ -50,10 +60,22 @@ def test_compute_statistics_counts_and_averages() -> None:
 def test_validate_dataset_detects_duplicate_ids() -> None:
     dataset = BenchmarkDataset(
         queries=[
-            BenchmarkQuery(id=1, query="q1", expected_document="a.txt", document_type="Invoice",
-                           difficulty=Difficulty.EASY, template_id="Invoice"),
-            BenchmarkQuery(id=1, query="q2", expected_document="a.txt", document_type="Invoice",
-                           difficulty=Difficulty.EASY, template_id="Invoice"),
+            BenchmarkQuery(
+                id=1,
+                query="q1",
+                expected_document="a.txt",
+                document_type="Invoice",
+                difficulty=Difficulty.EASY,
+                template_id="Invoice",
+            ),
+            BenchmarkQuery(
+                id=1,
+                query="q2",
+                expected_document="a.txt",
+                document_type="Invoice",
+                difficulty=Difficulty.EASY,
+                template_id="Invoice",
+            ),
         ]
     )
     report = validate_dataset(dataset)
@@ -65,9 +87,14 @@ def test_validate_dataset_detects_duplicate_ids() -> None:
 def test_validate_dataset_detects_missing_expected_document() -> None:
     dataset = BenchmarkDataset(
         queries=[
-            BenchmarkQuery(id=1, query="q1", expected_document="", document_type="Invoice",
-                           difficulty=Difficulty.EASY,
-                           template_id="Invoice"),
+            BenchmarkQuery(
+                id=1,
+                query="q1",
+                expected_document="",
+                document_type="Invoice",
+                difficulty=Difficulty.EASY,
+                template_id="Invoice",
+            ),
         ]
     )
     report = validate_dataset(dataset)
@@ -80,9 +107,13 @@ def test_validate_dataset_detects_missing_extracted_fields() -> None:
     dataset = BenchmarkDataset(
         queries=[
             BenchmarkQuery(
-                id=1, query="q1", expected_document="a.txt",
-                expected_fields=["invoice_number"], document_type="Invoice",
-                difficulty=Difficulty.EASY, template_id="Invoice"
+                id=1,
+                query="q1",
+                expected_document="a.txt",
+                expected_fields=["invoice_number"],
+                document_type="Invoice",
+                difficulty=Difficulty.EASY,
+                template_id="Invoice",
             )
         ]
     )
@@ -94,8 +125,14 @@ def test_validate_dataset_detects_missing_extracted_fields() -> None:
 def test_validate_dataset_no_issues_on_clean_dataset() -> None:
     dataset = BenchmarkDataset(
         queries=[
-            BenchmarkQuery(id=1, query="q1", expected_document="a.txt", document_type="Invoice",
-                           difficulty=Difficulty.EASY, template_id="Invoice"),
+            BenchmarkQuery(
+                id=1,
+                query="q1",
+                expected_document="a.txt",
+                document_type="Invoice",
+                difficulty=Difficulty.EASY,
+                template_id="Invoice",
+            ),
         ]
     )
     report = validate_dataset(dataset)

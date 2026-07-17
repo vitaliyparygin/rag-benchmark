@@ -14,17 +14,9 @@ class FieldCoverageAnalyzer:
     ) -> FieldCoverageResult:
         available = list(classified.metadata.fields.keys())
 
-        missing = [
-            field
-            for field in expected_fields
-            if field not in available
-        ]
+        missing = [field for field in expected_fields if field not in available]
 
-        coverage = (
-            len(available) / len(expected_fields)
-            if expected_fields
-            else 1.0
-        )
+        coverage = len(available) / len(expected_fields) if expected_fields else 1.0
 
         return FieldCoverageResult(
             expected=expected_fields,

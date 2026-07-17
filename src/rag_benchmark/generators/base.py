@@ -20,6 +20,7 @@ class QuestionSpec:
     """
     Template describing one family of questions.
     """
+
     key: str
     query_template: str
     fields: tuple[QuestionField, ...]
@@ -32,6 +33,7 @@ class QuestionSpec:
 QuestionTemplateMap = dict[str, list[QuestionSpec]]
 
 TemplateRegistry = QuestionTemplateMap
+
 
 class QuestionGenerator(ABC):
     """Abstract interface for turning classified documents into questions."""

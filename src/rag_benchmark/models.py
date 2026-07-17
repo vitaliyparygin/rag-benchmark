@@ -62,10 +62,12 @@ class Document(BaseModel):
 
     model_config = {"arbitrary_types_allowed": True}
 
+
 class ClassificationCandidate(BaseModel):
     document_type: str
     confidence: float
     matched_signals: list[str] = Field(default_factory=list)
+
 
 class ClassificationResult(BaseModel):
     document_id: str
@@ -193,11 +195,13 @@ class DatasetStatistics(BaseModel):
     metadata_field_counts: dict[str, int] = Field(default_factory=dict)
     warnings: list[str] = Field(default_factory=list)
 
+
 @dataclass(slots=True)
 class GenerationStats:
     """
     Statistics for one processed document.
     """
+
     document_name: str
     document_type: str
     generated_questions: int = 0
@@ -205,13 +209,14 @@ class GenerationStats:
     missing_fields: list[str] = field(default_factory=list)
     available_fields: list[str] = field(default_factory=list)
     skipped_fields: list[str] = field(default_factory=list)
-    generated_questions: int = 0
     max_possible_questions: int = 0
+
 
 @dataclass(slots=True)
 class QuestionGenerationResult:
     queries: list[BenchmarkQuery]
     statistics: list[GenerationStats]
+
 
 @dataclass
 class QuestionField:
@@ -219,6 +224,10 @@ class QuestionField:
     required: bool = False
     aliases: list[str] = field(default_factory=list)
     weight: int = 1
+
+    def __str__(self) -> str:
+        return self.name
+
 
 @dataclass
 class Summary:
@@ -230,15 +239,10 @@ class Summary:
     skipped_questions: int
     coverage: float
 
+
 class ResourceGroup(StrEnum):
     DICTIONARIES = "dictionaries"
     PROMPTS = "prompts"
     REGEX = "regex"
     TEMPLATES = "templates"
     EXAMPLES = "examples"
-
-
-
-
-
-

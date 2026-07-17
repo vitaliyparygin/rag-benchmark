@@ -6,6 +6,8 @@ from rag_benchmark.diagnostics.models import Recommendation
 SEVERITY_CRITICAL = "critical"
 SEVERITY_WARNING = "warning"
 SEVERITY_INFO = "info"
+
+
 def generate_document_recommendations(
     result: InspectResult,
 ) -> list[Recommendation]:
@@ -69,10 +71,7 @@ def generate_document_recommendations(
             )
         )
 
-    if (
-        result.classified.classification.document_type
-        not in template.question_templates
-    ):
+    if result.classified.classification.document_type not in template:
         recommendations.append(
             Recommendation(
                 context=result.classified.classification.document_type,
