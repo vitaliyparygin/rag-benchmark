@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from rich.console import Console
-from rich.tree import Tree
 
-from rag_benchmark.diagnostics.models import DocumentDiagnostic, QuestionCoverageResult
 from rag_benchmark.diagnostics.inspect import InspectResult
+from rag_benchmark.diagnostics.models import QuestionCoverageResult
+
 console = Console()
 
 

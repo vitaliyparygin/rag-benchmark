@@ -71,32 +71,38 @@ class TemplateQuestionGenerator(QuestionGenerator):
                     field_name = question_field.name
                     if field_name not in available_fields:
                         if question_field.required:
-                            doc_stats.missing_fields.append(field_name)
-                        continue
+                            continue
+
+                        value = field_name.replace("_", " ")
+                    else:
+                        value = available_fields[field_name]
 
                     display_name = (
                         question_field.aliases[0]
                         if question_field.aliases
                         else field_name.replace("_", " ")
                     )
-                    query_text = spec.query_template.format(
-                        field=display_name,
-                        filename=classified.document.filename,
-                        **available_fields,
-                    )
 
-                    queries.append(
-                        BenchmarkQuery(
-                            id=next_id,
-                            query=query_text,
-                            expected_document=classified.document.filename,
-                            expected_fields=[field_name],
-                            document_type=doc_type,
-                            difficulty=spec.difficulty,
-                            tags=list(spec.tags),
-                            template_id=spec.key,
+                    for template in spec.query_template:
+                        query_text = template.format(
+                            field=display_name,
+                            filename=classified.document.filename,
+                            **available_fields,
                         )
-                    )
+
+                        queries.append(
+                            BenchmarkQuery(
+                                id=next_id,
+                                query=query_text,
+                                expected_document=classified.document.filename,
+                                expected_fields=[field_name],
+                                document_type=doc_type,
+                                difficulty=spec.difficulty,
+                                tags=list(spec.tags),
+                                template_id=spec.key,
+                            )
+                        )
+
                     doc_stats.generated_questions += 1
                     doc_stats.generated_fields.append(field_name)
 

@@ -22,7 +22,7 @@ class QuestionSpec:
     """
 
     key: str
-    query_template: str
+    query_template: list[str]
     fields: tuple[QuestionField, ...]
     difficulty: Difficulty = Difficulty.EASY
     tags: tuple[str, ...] = ()

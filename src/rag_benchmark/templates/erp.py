@@ -143,6 +143,56 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
             ),
             tags=("retrieval", "erp", "metadata"),
         ),
+        QuestionSpec(
+            key="Invoice Amount",
+            query_template="What is the invoice amount in {filename}?",
+            fields=(
+                QuestionField("invoice_number"),
+                QuestionField("amount"),
+                QuestionField("customer"),
+                QuestionField("currency"),
+                QuestionField("due_date"),
+            ),
+            tags=("retrieval", "erp", "metadata"),
+        ),
+        QuestionSpec(
+            key="Invoice Currency",
+            query_template="Which currency is used in {filename}?",
+            fields=(
+                QuestionField("invoice_number"),
+                QuestionField("amount"),
+                QuestionField("customer"),
+                QuestionField("currency"),
+                QuestionField("due_date"),
+            ),
+            tags=("retrieval", "erp", "metadata"),
+        ),
+
+        QuestionSpec(
+            key="Invoice Supplier",
+            query_template="Who issued {filename}?",
+            fields=(
+                QuestionField("invoice_number"),
+                QuestionField("amount"),
+                QuestionField("customer"),
+                QuestionField("currency"),
+                QuestionField("due_date"),
+            ),
+            tags=("retrieval", "erp", "metadata"),
+        ),
+
+        QuestionSpec(
+            key="Invoice Customer",
+            query_template="Who is the customer on {filename}?",
+            fields=(
+                QuestionField("invoice_number"),
+                QuestionField("amount"),
+                QuestionField("customer"),
+                QuestionField("currency"),
+                QuestionField("due_date"),
+            ),
+            tags=("retrieval", "erp", "metadata"),
+        )
     ],
     "Contract": [
         QuestionSpec(
