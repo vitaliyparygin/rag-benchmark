@@ -70,10 +70,8 @@ class TemplateQuestionGenerator(QuestionGenerator):
                     if generated_for_doc >= max_questions_per_document:
                         break
                     field_name = question_field.name
-                    if field_name not in available_fields:
-                        if question_field.required:
-                            continue
-
+                    if field_name not in available_fields and question_field.required:
+                        continue
 
                     display_name = (
                         question_field.aliases[0]

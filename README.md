@@ -18,18 +18,18 @@ Documents  ─▶  Scan  ─▶  Classify  ─▶  Extract Metadata  ─▶  Gen
 
 > Benchmark framework for evaluating Retrieval-Augmented Generation (RAG) systems.
 
-[![CI](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/vitaliyparygin/rag-benchmark?sort=semver)](https://github.com/vitaliyparygin/rag-benchmark/releases)
-[![PyPI](https://img.shields.io/pypi/v/rag-benchmark)](https://pypi.org/project/rag-benchmark/)
-[![Python](https://img.shields.io/pypi/pyversions/rag-benchmark)](https://pypi.org/project/rag-benchmark/)
-[![Downloads](https://img.shields.io/pypi/dm/rag-benchmark)](https://pypi.org/project/rag-benchmark/)
-[![License](https://img.shields.io/github/license/vitaliyparygin/rag-benchmark)](LICENSE)
-[![Codecov](https://codecov.io/gh/vitaliyparygin/rag-benchmark/branch/main/graph/badge.svg)](https://codecov.io/gh/vitaliyparygin/rag-benchmark)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Lint: Ruff](https://img.shields.io/badge/lint-ruff-blue)](https://github.com/astral-sh/ruff)
-[![Type checked: mypy](https://img.shields.io/badge/type_checked-mypy-blue)](https://mypy-lang.org)
-[![Tests](https://img.shields.io/badge/tests-pytest-success)](https://docs.pytest.org)
+![Python](https://img.shields.io/badge/python-3.10+-blue)
+![PyPI](https://img.shields.io/pypi/v/rag-benchmark)
+![Downloads](https://img.shields.io/pypi/dm/rag-benchmark)
 
+[![CI](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml)
+
+![Tests](https://img.shields.io/badge/tests-pytest-success)
+![Lint](https://img.shields.io/badge/lint-ruff-blue)
+![Typing](https://img.shields.io/badge/mypy-enabled-blue)
+![Formatter](https://img.shields.io/badge/code%20style-black-000000)
+
+![License](https://img.shields.io/badge/license-MIT-green)
 
 
 ## Features

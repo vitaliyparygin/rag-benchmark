@@ -79,10 +79,13 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"seller\s*:\s*([^\n]+)",
             ),
         ),
-        FieldRule("currency", patterns=(
-            r"amount.*?\b(USD|EUR|UAH|PLN|GBP)\b",
-            r"\b(USD|EUR|UAH|PLN|GBP)\b",
-        ), ),
+        FieldRule(
+            "currency",
+            patterns=(
+                r"amount.*?\b(USD|EUR|UAH|PLN|GBP)\b",
+                r"\b(USD|EUR|UAH|PLN|GBP)\b",
+            ),
+        ),
     ),
     "Purchase Order": (
         FieldRule(
@@ -140,14 +143,13 @@ DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
                 r"start\s*date\s*[:\-]?\s*([\d\-\.]+)",
             ),
         ),
-
         FieldRule(
             "end_date",
             (
                 r"valid\s*until\s*[:\-]?\s*([\d\-\.]+)",
                 r"end\s*date\s*[:\-]?\s*([\d\-\.]+)",
             ),
-        )
+        ),
     ),
     "Insurance Policy": (
         FieldRule("policy_number", (r"policy\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),

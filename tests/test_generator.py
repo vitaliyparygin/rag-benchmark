@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from rag_benchmark.generators.base import BenchmarkQuery, QuestionSpec
+from rag_benchmark.generators.base import QuestionSpec
 from rag_benchmark.generators.llm_generator import LLMQuestionGenerator
 from rag_benchmark.generators.template_generator import TemplateQuestionGenerator
 from rag_benchmark.models import (
@@ -71,19 +71,13 @@ def test_template_generator_skips_spec_when_any_required_field_missing() -> None
     # required fields) should be skipped, and no question generated for it.
     assert len(queries) == 16
 
-    assert {
-               q.expected_fields[0]
-               for q in queries
-           } == {
-               "invoice_number",
-               "amount",
-               "customer",
-               "currency",
-           }
-    assert any(
-        q.query == "What is the invoice number on invoice invoice_001.txt?"
-        for q in queries
-    )
+    assert {q.expected_fields[0] for q in queries} == {
+        "invoice_number",
+        "amount",
+        "customer",
+        "currency",
+    }
+    assert any(q.query == "What is the invoice number on invoice invoice_001.txt?" for q in queries)
 
 
 def test_template_generator_generates_when_all_required_fields_present() -> None:

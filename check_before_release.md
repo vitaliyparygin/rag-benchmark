@@ -16,3 +16,7 @@ rag-benchmark inspect --file "Bank Statement.pdf"
 
 pytest
 python -m build
+
+black .
+ruff check .
+mypy src  
