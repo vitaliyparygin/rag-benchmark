@@ -18,18 +18,18 @@ Documents  ─▶  Scan  ─▶  Classify  ─▶  Extract Metadata  ─▶  Gen
 
 > Benchmark framework for evaluating Retrieval-Augmented Generation (RAG) systems.
 
+![License](https://img.shields.io/badge/license-MIT-green)
 ![Python](https://img.shields.io/badge/python-3.10+-blue)
-![PyPI](https://img.shields.io/pypi/v/rag-benchmark)
-![Downloads](https://img.shields.io/pypi/dm/rag-benchmark)
-
 [![CI](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/vitaliyparygin/rag-benchmark/actions/workflows/ci.yml)
+[![Chat](https://badges.gitter.im/rag-benchmark/community.svg)](https://app.gitter.im/#/room/#rag-benchmark:gitter.im)
 
 ![Tests](https://img.shields.io/badge/tests-pytest-success)
-![Lint](https://img.shields.io/badge/lint-ruff-blue)
 ![Typing](https://img.shields.io/badge/mypy-enabled-blue)
 ![Formatter](https://img.shields.io/badge/code%20style-black-000000)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-![License](https://img.shields.io/badge/license-MIT-green)
+
+
 
 
 ## Features
