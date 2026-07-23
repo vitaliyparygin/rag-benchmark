@@ -5,7 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from rag_benchmark.generators.base import QuestionSpec
+from rules.models import QuestionField
+
+from rag_benchmark.generators.base import QuestionTemplateRule
 from rag_benchmark.generators.llm_generator import LLMQuestionGenerator
 from rag_benchmark.generators.template_generator import TemplateQuestionGenerator
 from rag_benchmark.models import (
@@ -15,7 +17,6 @@ from rag_benchmark.models import (
     DocumentFormat,
     ExtractedField,
     ExtractedMetadata,
-    QuestionField,
 )
 
 
@@ -45,7 +46,7 @@ def _classified_invoice() -> ClassifiedDocument:
 def test_template_generator_skips_spec_when_any_required_field_missing() -> None:
     template_map = {
         "Invoice": [
-            QuestionSpec(
+            QuestionTemplateRule(
                 key="Invoice",
                 query_template=[
                     "What is the {field} on invoice {filename}?",
@@ -83,7 +84,7 @@ def test_template_generator_skips_spec_when_any_required_field_missing() -> None
 def test_template_generator_generates_when_all_required_fields_present() -> None:
     template_map = {
         "Invoice": [
-            QuestionSpec(
+            QuestionTemplateRule(
                 key="Invoice",
                 query_template=["What is the {field} on {filename}?"],
                 fields=[
@@ -108,7 +109,7 @@ def test_template_generator_generates_when_all_required_fields_present() -> None
 def test_template_generator_respects_max_questions_per_document() -> None:
     template_map = {
         "Invoice": [
-            QuestionSpec(
+            QuestionTemplateRule(
                 key="Invoice",
                 query_template=["What is the {field} on {filename}?"],
                 fields=[

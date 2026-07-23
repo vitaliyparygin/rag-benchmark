@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from rag_benchmark.generators.base import QuestionGenerator, QuestionTemplateMap
-from rag_benchmark.models import (BenchmarkQuery,
-                                  ClassifiedDocument,
-                                  GenerationStats)
-from rag_benchmark.logging import get_logger
 from rich.console import Console
+
+from rag_benchmark.generators.base import QuestionGenerator, QuestionTemplateMap
+from rag_benchmark.logging import get_logger
+from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, GenerationStats
+
 logger = get_logger("generators.template")
 
 console = Console()
+
 
 class TemplateQuestionGenerator(QuestionGenerator):
     """Generates questions by filling QuestionSpec templates with metadata.
@@ -31,14 +32,10 @@ class TemplateQuestionGenerator(QuestionGenerator):
         stats: list[GenerationStats] = []
         next_id = 1
 
-        console.print(
-            f"[yellow]Generated[/yellow]"
-        )
         for classified in documents:
             doc_type = classified.classification.document_type
 
             specs = template_map.get(doc_type, [])
-
 
             if not specs:
                 logger.debug(
@@ -54,49 +51,56 @@ class TemplateQuestionGenerator(QuestionGenerator):
                 document_type=doc_type,
             )
             generated_for_doc = 0
-            logger.debug(f"generate.specs specs={specs} max_questions_per_document={max_questions_per_document}")
+            logger.debug(
+                f"generate.specs specs={specs} "
+                f"max_questions_per_document={max_questions_per_document}"
+            )
             for spec in specs:
 
                 if generated_for_doc >= max_questions_per_document:
-                    logger.debug(f"generated_for_doc >= max_questions_per_document1"
-                          f"generated_for_doc={generated_for_doc} max_questions_per_document={max_questions_per_document}")
+                    logger.debug(
+                        f"generated_for_doc >= max_questions_per_document1"
+                        f"generated_for_doc={generated_for_doc} "
+                        f"max_questions_per_document={max_questions_per_document}"
+                    )
                     break
 
-                for field in spec.fields:
+                for question_field in spec.fields:
 
                     if generated_for_doc >= max_questions_per_document:
                         break
-
-                    if field.name not in available_fields:
-                        if field.required:
-                            doc_stats.missing_fields.append(field.name)
+                    field_name = question_field.name
+                    if field_name not in available_fields and question_field.required:
                         continue
 
                     display_name = (
-                        field.aliases[0]
-                        if field.aliases
-                        else field.name.replace("_", " ")
-                    )
-                    query_text = spec.query_template.format(
-                        field=display_name,
-                        filename=classified.document.filename,
-                        **available_fields,
+                        question_field.aliases[0]
+                        if question_field.aliases
+                        else field_name.replace("_", " ")
                     )
 
-                    queries.append(
-                        BenchmarkQuery(
-                            id=next_id,
-                            query=query_text,
-                            expected_document=classified.document.filename,
-                            expected_fields=[field.name],
-                            document_type=doc_type,
-                            difficulty=spec.difficulty,
-                            tags=list(spec.tags),
-                            template_id=spec.key
+                    for template in spec.query_template:
+                        query_text = template.format(
+                            field=display_name,
+                            filename=classified.document.filename,
+                            **available_fields,
                         )
-                    )
+
+                        queries.append(
+                            BenchmarkQuery(
+                                id=next_id,
+                                query=query_text,
+                                expected_document=classified.document.filename,
+                                expected_fields=[field_name],
+                                document_type=doc_type,
+                                difficulty=spec.difficulty,
+                                tags=list(spec.tags),
+                                template_id=spec.key,
+                            )
+                        )
+
                     doc_stats.generated_questions += 1
-                    doc_stats.generated_fields.append(field.name)
+                    doc_stats.generated_fields.append(field_name)
 
                     next_id += 1
                     generated_for_doc += 1

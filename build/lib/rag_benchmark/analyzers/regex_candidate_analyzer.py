@@ -1,6 +1,9 @@
 from __future__ import annotations
+
 from collections import Counter
+
 from rag_benchmark.diagnostics.models import RegexCandidate
+
 
 class RegexCandidateAnalyzer:
 
@@ -8,7 +11,7 @@ class RegexCandidateAnalyzer:
     def extract_candidate_labels(text: str) -> Counter[str]:
         """Extract possible metadata labels from raw document text."""
 
-        labels = Counter()
+        labels: Counter[str] = Counter()
         for line in text.splitlines():
             line = line.strip()
             if not line:
@@ -21,10 +24,9 @@ class RegexCandidateAnalyzer:
 
         return labels
 
-
     @staticmethod
-    def collect_candidates(text: str) -> Counter[str]:
-        counter = Counter()
+    def collect_candidates(text: str) -> list[RegexCandidate]:
+        counter: Counter[str] = Counter()
 
         for line in text.splitlines():
             if ":" not in line:
@@ -42,16 +44,16 @@ class RegexCandidateAnalyzer:
             for label, count in counter.items()
         ]
 
-
     @staticmethod
     def collect_candidates_from_documents(
-            texts: list[str],
+        texts: list[str],
     ) -> Counter[str]:
         counter: Counter[str] = Counter()
 
         for text in texts:
-            counter.update(
-                RegexCandidateAnalyzer.collect_candidates(text)
-            )
-
+            # counter.update(
+            #     RegexCandidateAnalyzer.collect_candidates(text)
+            # )
+            for candidate in RegexCandidateAnalyzer.collect_candidates(text):
+                counter[candidate.label] += candidate.count
         return counter

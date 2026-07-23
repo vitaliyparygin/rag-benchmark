@@ -1,15 +1,18 @@
 from __future__ import annotations
+
 import typer
-from rag_benchmark.pipeline import BenchmarkPipeline
-from rag_benchmark.logging import configure_logging, get_logger
-from rag_benchmark.config import build_config
-from rag_benchmark.io import ensure_writable
 from rich.console import Console
+
 from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.metrics import compute_statistics, validate_dataset
+from rag_benchmark.io import ensure_writable
+from rag_benchmark.logging import configure_logging, get_logger
+from rag_benchmark.metrics import compute_statistics
+from rag_benchmark.pipeline import BenchmarkPipeline
+
 console = Console()
 
 logger = get_logger("cli.export")
+
 
 def run_export(
     cfg: BenchmarkConfig,

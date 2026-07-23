@@ -1,13 +1,20 @@
+from collections.abc import Collection, Mapping
+
 from rich.console import Console
 from rich.table import Table
 
 console = Console()
 
 
-def print_document_report(document_name, document_type, extracted, required):
+def print_document_report(
+    document_name: str,
+    document_type: str,
+    extracted: Mapping[str, object],
+    required: Collection[str],
+) -> None:
     console.rule(f"[bold cyan]{document_name}")
 
-    console.print(f"[green]Classification[/green]")
+    console.print("[green]Classification[/green]")
     console.print(f"✔ {document_type}")
     console.print()
 
@@ -33,11 +40,7 @@ def print_document_report(document_name, document_type, extracted, required):
 
     console.print(table)
 
-    coverage = (
-        generated / len(required) * 100
-        if required
-        else 100
-    )
+    coverage = generated / len(required) * 100 if required else 100
     console.print()
 
     console.print(f"Questions generated : {generated}")
@@ -46,13 +49,13 @@ def print_document_report(document_name, document_type, extracted, required):
 
 
 def print_summary(
-    total_docs,
-    classified_docs,
-    extracted_fields,
-    total_fields,
-    generated_questions,
-    skipped_questions,
-):
+    total_docs: int,
+    classified_docs: int,
+    extracted_fields: int,
+    total_fields: int,
+    generated_questions: int,
+    skipped_questions: int,
+) -> None:
     table = Table(title="Benchmark Diagnose Summary")
 
     table.add_column("Metric")

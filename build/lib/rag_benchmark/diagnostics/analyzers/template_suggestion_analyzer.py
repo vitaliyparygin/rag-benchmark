@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from rag_benchmark.diagnostics.inspect import InspectResult
 from rag_benchmark.diagnostics.models import TemplateSuggestion
+
 
 class TemplateSuggestionAnalyzer:
 

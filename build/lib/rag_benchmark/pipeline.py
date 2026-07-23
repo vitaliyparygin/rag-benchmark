@@ -17,16 +17,17 @@ from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.extractor import MetadataExtractor, RegexMetadataExtractor
 from rag_benchmark.generators.base import QuestionGenerator
 from rag_benchmark.generators.template_generator import TemplateQuestionGenerator
+from rag_benchmark.logging import get_logger
 from rag_benchmark.models import (
     BenchmarkDataset,
     ClassifiedDocument,
     ScannedFile,
 )
-from rag_benchmark.pipeline_models import PipelineResult
 from rag_benchmark.pdf_reader import ReaderRegistry
+from rag_benchmark.pipeline_models import PipelineResult
 from rag_benchmark.scanner import DocumentScanner
-from rag_benchmark.templates import TemplateDefinition, load_template
-from rag_benchmark.logging import get_logger
+from rules.models import TemplateDefinition
+from rules.loader import load_template
 
 logger = get_logger("pipeline")
 
@@ -74,6 +75,7 @@ class BenchmarkPipeline:
                 an injected scanner's own configuration always wins.
         """
         scanner = self.scanner or DocumentScanner(recursive=recursive)
+
         return scanner.scan(dataset_dir)
 
     def classify(
@@ -125,7 +127,8 @@ class BenchmarkPipeline:
         )
         return BenchmarkDataset(queries=queries, template=template.name)
 
-    # def run(self, config: BenchmarkConfig) -> tuple[list[ClassifiedDocument], BenchmarkDataset, TemplateDefinition]:
+    # def run(self, config: BenchmarkConfig) -> tuple[
+    #     list[ClassifiedDocument], BenchmarkDataset, TemplateDefinition]:
     #     """Run the full pipeline end-to-end for a given configuration.
     #
     #     Returns:
@@ -142,7 +145,14 @@ class BenchmarkPipeline:
     #     dataset.source_dataset = config.dataset
     #     return classified_documents, dataset, template
 
-    def run(self, config: BenchmarkConfig):
+    def run(
+        self,
+        config: BenchmarkConfig,
+    ) -> tuple[
+        list[ClassifiedDocument],
+        BenchmarkDataset,
+        TemplateDefinition,
+    ]:
         result = self.execute(config)
 
         return (
@@ -151,17 +161,19 @@ class BenchmarkPipeline:
             result.template,
         )
 
-
     def execute(self, config: BenchmarkConfig) -> PipelineResult:
+        if config.dataset is None:
+            raise ValueError("Dataset is required.")
+
         template = self._resolve_template(config)
 
-        scanned_files = self.scan(
+        scanned = self.scan(
             config.dataset,
             recursive=config.recursive,
         )
 
         classified = self.classify(
-            scanned_files,
+            scanned,
             template,
         )
 
@@ -176,7 +188,7 @@ class BenchmarkPipeline:
         return PipelineResult(
             config=config,
             template=template,
-            scanned_files=scanned_files,
+            scanned_files=scanned,
             classified_documents=classified,
             dataset=dataset,
         )

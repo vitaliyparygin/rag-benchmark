@@ -1,9 +1,12 @@
 import re
 from collections import Counter
-from rich.table import Table
-from rag_benchmark.models import ClassifiedDocument
+
 from rich.console import Console
 from rich.markup import escape
+from rich.table import Table
+
+from rag_benchmark.models import ClassifiedDocument
+
 console = Console()
 
 LABEL_REGEX = re.compile(
@@ -11,11 +14,12 @@ LABEL_REGEX = re.compile(
     flags=re.MULTILINE,
 )
 
+
 def print_regex_candidates(
     documents: list[ClassifiedDocument],
-):
+) -> None:
 
-    counter = Counter()
+    counter: Counter[str] = Counter()
     for doc in documents:
         text = doc.document.text
         for match in LABEL_REGEX.finditer(text):

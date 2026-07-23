@@ -25,28 +25,14 @@ from __future__ import annotations
 import importlib
 import importlib.util
 import sys
-from dataclasses import dataclass, field
 from pathlib import Path
 from types import ModuleType
 
-from rag_benchmark.classifier import ClassificationRule
-from rag_benchmark.extractor import FieldRule
-from rag_benchmark.generators.base import QuestionTemplateMap
 from rag_benchmark.logging import get_logger
 
 logger = get_logger("templates")
 
 _BUILTIN_TEMPLATES = {"generic", "erp", "medical", "legal"}
-
-
-@dataclass(frozen=True)
-class TemplateDefinition:
-    """Fully resolved template, ready to hand to classifier/extractor/generator."""
-
-    name: str
-    question_templates: QuestionTemplateMap
-    classification_rules: tuple[ClassificationRule, ...] = field(default_factory=tuple)
-    extraction_rules: dict[str, tuple[FieldRule, ...]] = field(default_factory=dict)
 
 
 def _load_module(name_or_path: str) -> ModuleType:
@@ -79,40 +65,41 @@ def _load_module(name_or_path: str) -> ModuleType:
         ) from exc
 
 
-def load_template(name_or_path: str) -> TemplateDefinition:
-    """Load a template by built-in name, file path, or dotted module path.
-
-    Args:
-        name_or_path: One of "generic", "erp", "medical", "legal"; a
-            filesystem path to a plugin .py file; or a dotted module path
-            importable from the current environment.
-
-    Returns:
-        A resolved TemplateDefinition.
-
-    Raises:
-        ValueError: If the template cannot be found or is missing the
-            required QUESTION_TEMPLATES attribute.
-    """
-    module = _load_module(name_or_path)
-
-    question_templates: QuestionTemplateMap | None = getattr(module, "QUESTION_TEMPLATES", None)
-    if question_templates is None:
-        raise ValueError(f"Template module '{module.__name__}' must define QUESTION_TEMPLATES")
-
-    classification_rules: tuple[ClassificationRule, ...] = getattr(
-        module, "CLASSIFICATION_RULES", ()
-    )
-    extraction_rules: dict[str, tuple[FieldRule, ...]] = getattr(module, "EXTRACTION_RULES", {})
-
-    display_name = getattr(module, "TEMPLATE_NAME", Path(name_or_path).stem)
-
-    return TemplateDefinition(
-        name=display_name,
-        question_templates=question_templates,
-        classification_rules=classification_rules,
-        extraction_rules=extraction_rules,
-    )
+# def load_template(name_or_path: str) -> TemplateDefinition:
+#     """Load a template by built-in name, file path, or dotted module path.
+#
+#     Args:
+#         name_or_path: One of "generic", "erp", "medical", "legal"; a
+#             filesystem path to a plugin .py file; or a dotted module path
+#             importable from the current environment.
+#
+#     Returns:
+#         A resolved TemplateDefinition.
+#
+#     Raises:
+#         ValueError: If the template cannot be found or is missing the
+#             required QUESTION_TEMPLATES attribute.
+#     """
+#
+#     base = RULES_DIR / "yaml" / name_or_path
+#     classification = ()
+#     if (base / "classification_rules.yaml").exists():
+#         classification = load_classification_rules(base / "classification_rules.yaml")
+#
+#     extraction = {}
+#     if (base / "extraction_rules.yaml").exists():
+#         extraction = load_extraction_rules(base / "extraction_rules.yaml")
+#
+#     questions = {}
+#     if (base / "question_templates.yaml").exists():
+#         questions = load_question_templates(base / "question_templates.yaml")
+#
+#     return TemplateDefinition(
+#         name=name_or_path,
+#         classification_rules=classification,
+#         extraction_rules=extraction,
+#         question_templates=questions,
+#     )
 
 
 def available_builtin_templates() -> list[str]:

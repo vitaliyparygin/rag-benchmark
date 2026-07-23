@@ -1,11 +1,15 @@
-from rag_benchmark.diagnostics.inspect import InspectResult
-from rag_benchmark.diagnostics.renderers.common_renderer import CommonRenderer
-from rich.table import Table
-from rich.panel import Panel
-from rich.console import Console
 from collections import defaultdict
+
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+
+from rag_benchmark.diagnostics.inspect import InspectResult
 from rag_benchmark.diagnostics.models import Recommendation
+from rag_benchmark.diagnostics.renderers.common_renderer import CommonRenderer
+
 console = Console()
+
 
 class InspectRenderer:
     """Rich renderer for `rag-benchmark inspect`."""
@@ -37,8 +41,6 @@ class InspectRenderer:
         CommonRenderer.render_readiness(report)
         InspectRenderer.render_missing_improvements(report)
         CommonRenderer.render_recommendations(recommendations)
-
-
 
     @staticmethod
     def render_metadata(report: InspectResult) -> None:
@@ -78,9 +80,6 @@ class InspectRenderer:
             )
         )
 
-
-
-
     # @staticmethod
     # def render_template_suggestions(report: InspectResult) -> None:
     #     suggestions = getattr(report, "template_suggestions", None)
@@ -98,8 +97,6 @@ class InspectRenderer:
     #
     #     console.print(table)
 
-
-
     # @staticmethod
     # def render_keywords(report: InspectResult) -> None:
     #     if not getattr(report, "matched_keywords", None):
@@ -113,7 +110,6 @@ class InspectRenderer:
     #         table.add_row(str(i), keyword)
     #
     #     console.print(table)
-
 
     # @staticmethod
     # def render_metadata_details(report: InspectResult) -> None:
@@ -137,11 +133,6 @@ class InspectRenderer:
     #
     #     console.print(table)
 
-
-
-
-
-
     # @staticmethod
     # def render_regex_coverage(report: InspectResult) -> None:
     #     if report.regex_coverage is None:
@@ -159,8 +150,6 @@ class InspectRenderer:
     #     table.add_row("Coverage", f"{rc.coverage:.1%}")
     #
     #     console.print(table)
-
-
 
     @staticmethod
     def render_template_suggestions(report: InspectResult) -> None:
@@ -180,7 +169,6 @@ class InspectRenderer:
                 suggestion.reason,
             )
         console.print(table)
-
 
     @staticmethod
     def render_missing_improvements(report: InspectResult) -> None:

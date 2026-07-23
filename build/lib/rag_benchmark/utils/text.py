@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import re
 import unicodedata
+
 
 def slugify(value: str) -> str:
     """Convert a string into a filesystem/tag-safe lowercase slug."""

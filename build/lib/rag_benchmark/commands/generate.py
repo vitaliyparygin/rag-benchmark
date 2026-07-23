@@ -1,14 +1,18 @@
 from __future__ import annotations
+
 import typer
-from rag_benchmark.pipeline import BenchmarkPipeline
-from rag_benchmark.logging import configure_logging, get_logger
-from rag_benchmark.analyzers.regex_analyzer import RegexAnalyzer
-from rag_benchmark.io import ensure_writable
 from rich.console import Console
+
+from rag_benchmark.analyzers.regex_analyzer import RegexAnalyzer
 from rag_benchmark.config import BenchmarkConfig
+from rag_benchmark.io import ensure_writable
+from rag_benchmark.logging import configure_logging, get_logger
+from rag_benchmark.pipeline import BenchmarkPipeline
+
 console = Console()
 
 logger = get_logger("cli.generate")
+
 
 def run_generate(
     cfg: BenchmarkConfig,

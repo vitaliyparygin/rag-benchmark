@@ -1,22 +1,25 @@
-
 from __future__ import annotations
+
 import typer
-from rag_benchmark.pipeline import BenchmarkPipeline
-from rag_benchmark.logging import configure_logging, get_logger
-from rag_benchmark.config import build_config
 from rich.console import Console
+
+from rag_benchmark.config import BenchmarkConfig
+from rag_benchmark.diagnostics.analyzers.inspect_analyzer import InspectAnalyzer
 from rag_benchmark.diagnostics.inspect import (
     DocumentNotFoundError,
     UnsupportedDocumentError,
     inspect_document,
 )
-from rag_benchmark.diagnostics.analyzers.inspect_analyzer import InspectAnalyzer
-from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.diagnostics.inspect_recommendations.document import generate_document_recommendations
+from rag_benchmark.diagnostics.inspect_recommendations.document import (
+    generate_document_recommendations,
+)
 from rag_benchmark.diagnostics.renderers.inspect_renderer import InspectRenderer
+from rag_benchmark.logging import configure_logging, get_logger
+from rag_benchmark.pipeline import BenchmarkPipeline
 
 console = Console()
 logger = get_logger("cli.inspect")
+
 
 def run_inspection(
     cfg: BenchmarkConfig,
@@ -26,9 +29,12 @@ def run_inspection(
     file: str | None = None,
 ) -> None:
     """Deep-dive into a single document: classification, metadata, questions, raw text."""
+    if file is None:
+        raise ValueError("inspect requires --file")
+
     configure_logging(verbose=verbose)
     pipeline = BenchmarkPipeline()
-    print(pipeline, cfg, file)
+
     try:
         result = inspect_document(pipeline, cfg, file)
     except (DocumentNotFoundError, UnsupportedDocumentError) as exc:

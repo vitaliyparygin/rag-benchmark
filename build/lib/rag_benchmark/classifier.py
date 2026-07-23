@@ -12,12 +12,18 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
-from rag_benchmark.models import ClassificationResult,ClassificationCandidate, Document
+from rich.console import Console
 
 from rag_benchmark.logging import get_logger
-logger = get_logger("classifier")
+from rules.models import ClassificationRule
+from .models import ClassificationCandidate, ClassificationResult, Document
 
-from rich.console import Console
+__all__ = [
+    "ClassificationResult",
+    "ClassificationCandidate",
+    "DocumentClassifier",
+]
+logger = get_logger("classifier")
 console = Console()
 
 UNKNOWN_TYPE = "Unknown"
@@ -40,21 +46,21 @@ class DocumentClassifier(ABC):
         raise NotImplementedError
 
 
-@dataclass(frozen=True)
-class ClassificationRule:
-    """A single rule mapping filename/content signals to a document type.
-
-    Attributes:
-        document_type: The label produced when this rule matches.
-        filename_patterns: Regex patterns checked against the filename.
-        content_patterns: Regex patterns checked against document text.
-        content_weight: Relative importance of a content match vs filename.
-    """
-
-    document_type: str
-    filename_patterns: tuple[str, ...] = field(default_factory=tuple)
-    content_patterns: tuple[str, ...] = field(default_factory=tuple)
-    content_weight: float = 0.7
+# @dataclass(frozen=True)
+# class ClassificationRule:
+#     """A single rule mapping filename/content signals to a document type.
+#
+#     Attributes:
+#         document_type: The label produced when this rule matches.
+#         filename_patterns: Regex patterns checked against the filename.
+#         content_patterns: Regex patterns checked against document text.
+#         content_weight: Relative importance of a content match vs filename.
+#     """
+#
+#     document_type: str
+#     filename_patterns: tuple[str, ...] = field(default_factory=tuple)
+#     content_patterns: tuple[str, ...] = field(default_factory=tuple)
+#     content_weight: float = 0.7
 
 
 # Generic, domain-agnostic default rule set. Callers/templates can supply
@@ -175,13 +181,7 @@ class DefaultClassifier(DocumentClassifier):
             key=lambda x: x.confidence,
             reverse=True,
         )
-        logger.info(
-            "%s -> %s, confidence {%s}",
-            document.filename,
-            best_type,
-            best_score
-
-        )
+        logger.info("%s -> %s, confidence {%.2f}", document.filename, best_type, best_score)
 
         return ClassificationResult(
             document_id=document.id,

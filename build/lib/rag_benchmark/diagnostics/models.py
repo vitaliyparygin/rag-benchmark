@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from rag_benchmark.models import BenchmarkDataset, BenchmarkQuery, ClassifiedDocument, ScannedFile
-from rag_benchmark.classifier import UNKNOWN_TYPE
-from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.templates import TemplateDefinition
 from datetime import datetime
+
+from rag_benchmark.classifier import UNKNOWN_TYPE, ClassificationResult
+from rag_benchmark.config import BenchmarkConfig
+from rag_benchmark.extractor import ExtractedMetadata
+from rag_benchmark.models import BenchmarkDataset, BenchmarkQuery, ClassifiedDocument, Document
+from rules.models import TemplateDefinition
 
 #: Fields extracted in fewer than this percentage of documents are flagged
 #: as "partially working" rather than "completely missing".
@@ -30,12 +34,14 @@ class SuggestedClassificationRule:
     filename_pattern: str
     content_patterns: list[str]
 
+
 @dataclass(slots=True)
 class QuestionCoverage:
     filename: str
     generated: list[str]
     missing: list[str]
     coverage: float
+
 
 @dataclass
 class DocumentDiagnostic:
@@ -51,26 +57,19 @@ class DocumentDiagnostic:
     keywords: list[str] = field(default_factory=list)
     suggested_rule: SuggestedClassificationRule | None = None
     # analyzer results
-    field_coverage: FieldCoverage | None = None
+    field_coverage: FieldCoverageResult | None = None
     regex_analysis: list[RegexStat] = field(default_factory=list)
 
     # presentation object
     summary: DocumentSummary | None = None
 
-
-
     @property
     def is_unknown(self) -> bool:
-        return (
-            self.classified.classification.document_type
-            == UNKNOWN_TYPE
-        )
+        return self.classified.classification.document_type == UNKNOWN_TYPE
 
     @property
     def available_fields(self) -> list[str]:
-        return list(
-            self.classified.metadata.fields.keys()
-        )
+        return list(self.classified.metadata.fields.keys())
 
     @property
     def filename(self) -> str:
@@ -85,15 +84,15 @@ class DocumentDiagnostic:
         return list(self.classified.metadata.fields.keys())
 
     @property
-    def metadata(self):
+    def metadata(self) -> ExtractedMetadata:
         return self.classified.metadata
 
     @property
-    def classification(self):
+    def classification(self) -> ClassificationResult:
         return self.classified.classification
 
     @property
-    def document(self):
+    def document(self) -> Document:
         return self.classified.document
 
     @property
@@ -101,7 +100,6 @@ class DocumentDiagnostic:
         if self.field_coverage is None:
             return 0.0
         return self.field_coverage.coverage
-
 
     @property
     def regex_stats(self) -> list[RegexStat]:
@@ -113,20 +111,17 @@ class DocumentDiagnostic:
             return 0
         return self.question_generation.generated
 
-
     @property
     def skipped_questions(self) -> int:
         if self.question_generation is None:
             return 0
         return self.question_generation.skipped
 
-
     @property
     def question_coverage_ratio(self) -> float:
         if self.question_generation is None:
             return 0.0
         return self.question_generation.coverage
-
 
 
 @dataclass
@@ -145,20 +140,8 @@ class DocumentTypeMetadataCoverage:
     """Metadata extraction coverage for one document type, field by field."""
 
     document_type: str
-    fields: list[FieldCoverage]
+    fields: list[FieldCoverageStatistic]
     overall_coverage_percent: float
-
-# @dataclass
-# class DatasetCoverage:
-#
-# @dataclass
-# class ExtractionCoverage:
-#
-# @dataclass
-# class GenerationCoverage:
-#
-# @dataclass
-# class TemplateCoverage:
 
 
 @dataclass
@@ -182,6 +165,7 @@ class ReadinessScores:
     overall_score: float
     status: str
 
+
 @dataclass(frozen=True)
 class Recommendation:
     """One actionable diagnostic finding."""
@@ -190,6 +174,7 @@ class Recommendation:
     issue: str
     suggestion: str
     severity: str = SEVERITY_WARNING
+
 
 @dataclass(slots=True)
 class QuestionGeneration:
@@ -204,20 +189,21 @@ class QuestionGeneration:
     coverage: float = 0.0
 
 
-
 @dataclass(slots=True)
 class UnusedQuestionTemplate:
     document_type: str
     template: str
 
+
 @dataclass
-class FieldCoverage:
+class FieldCoverageStatistic:
     """Coverage of a single expected metadata field across one document type."""
 
     field_name: str
     documents_with_field: int
     total_documents_of_type: int
     coverage_percent: float
+
 
 @dataclass
 class RegexStat:
@@ -239,6 +225,7 @@ class FieldCoverageResult:
     missing: list[str]
     coverage: float
 
+
 @dataclass
 class DocumentSummary:
     filename: str
@@ -247,6 +234,7 @@ class DocumentSummary:
     missing_fields: list[str]
     regex_stats: list[RegexStat]
     field_coverage: float
+
 
 @dataclass
 class DiagnosticsReport:
@@ -259,15 +247,19 @@ class DiagnosticsReport:
     readiness: ReadinessScores
     recommendations: list[Recommendation]
 
+
 @dataclass
 class RegexCandidate:
     label: str
     count: int
+
+
 @dataclass
 class RegexSuggestion:
     label: str
     occurrences: int
-    regex: (str)
+    regex: str
+
 
 @dataclass
 class MetadataCoverageResult:
@@ -276,11 +268,13 @@ class MetadataCoverageResult:
     missing: int
     coverage: float
 
+
 @dataclass
 class QuestionCoverageResult:
     expected: int
     generated: int
     coverage: float
+
 
 @dataclass
 class ReadinessResult:
@@ -289,15 +283,18 @@ class ReadinessResult:
     questions: float
     overall: float
 
+
 @dataclass
 class ClassificationScore:
     document_type: str
     score: float
 
+
 @dataclass
 class MatchedKeyword:
     keyword: str
     source: str
+
 
 @dataclass
 class MetadataDetail:
@@ -306,6 +303,7 @@ class MetadataDetail:
     matched: bool
     extracted_value: str | None
 
+
 @dataclass
 class RegexCoverage:
     total: int
@@ -313,10 +311,12 @@ class RegexCoverage:
     missing: int
     coverage: float
 
+
 @dataclass
 class TemplateSuggestion:
     field: str
     reason: str
+
 
 @dataclass
 class ReadinessReport:
@@ -324,6 +324,7 @@ class ReadinessReport:
     question_score: float
     regex_score: float
     overall_score: float
+
 
 @dataclass
 class InspectSummary:
@@ -336,6 +337,7 @@ class InspectSummary:
     regex_total: int
     readiness: float
 
+
 @dataclass(slots=True)
 class GeneratedQuestion:
     query: str
@@ -343,6 +345,7 @@ class GeneratedQuestion:
     metadata_field: str | None = None
     template_name: str | None = None
     confidence: float | None = None
+
 
 @dataclass
 class MissingImprovement:

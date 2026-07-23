@@ -6,9 +6,9 @@ from collections.abc import Sequence
 from rich.console import Console
 from rich.rule import Rule
 from rich.table import Table
+from rules.models import TemplateDefinition
 
 from rag_benchmark.models import ClassifiedDocument
-from rag_benchmark.templates import TemplateDefinition
 
 console = Console()
 

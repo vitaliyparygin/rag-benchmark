@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from rules.models import TemplateDefinition
+
 from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.models import ScannedFile
-from rag_benchmark.templates import TemplateDefinition
 
 from .models import BenchmarkDataset, ClassifiedDocument
 

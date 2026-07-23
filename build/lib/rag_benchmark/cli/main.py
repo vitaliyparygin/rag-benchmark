@@ -10,51 +10,75 @@ Commands:
     diagnose  Run the full pipeline read-only and explain pipeline health.
     inspect   Deep-dive into a single document's pipeline journey.
 """
+
 from __future__ import annotations
+
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
-from typing import Annotated
+
 import typer
-from rag_benchmark.config import build_config
-from rag_benchmark.commands.init import run_init
-from rag_benchmark.commands.generate import run_generate
-from rag_benchmark.commands.report import run_report
-from rag_benchmark.commands.export import run_export
-from rag_benchmark.commands.diagnose import run_diagnose
-from rag_benchmark.commands.inspect import run_inspection
-from rag_benchmark.commands.validate import run_validate
-from rag_benchmark.commands.scan import run_scan
 from rich.console import Console
-from rag_benchmark.cli.options import TemplateOpt, ForceOpt, VerboseOpt, DryRunOpt, OutputOpt, ConfigOpt,DatasetOpt, FileOpt, SaveReportOpt
+
 from rag_benchmark.cli.app import app
+from rag_benchmark.cli.options import (
+    ConfigOpt,
+    DatasetOpt,
+    DryRunOpt,
+    FileOpt,
+    ForceOpt,
+    OutputOpt,
+    SaveReportOpt,
+    TemplateOpt,
+    VerboseOpt,
+)
+from rag_benchmark.commands.diagnose import run_diagnose
+from rag_benchmark.commands.export import run_export
+from rag_benchmark.commands.generate import run_generate
+from rag_benchmark.commands.init import run_init
+from rag_benchmark.commands.inspect import run_inspection
+from rag_benchmark.commands.report import run_report
+from rag_benchmark.commands.scan import run_scan
+from rag_benchmark.commands.validate import run_validate
+from rag_benchmark.config import build_config
+
 console = Console()
 
+__all__ = ["app"]
 
 
-def run_with_config(
-    runner,
-    dataset,
-    output,
-    template,
-    config,
-    verbose,
-):
+def version_callback(value: bool) -> None:
+    if not value:
+        return
 
-    cfg = build_config(
-        dataset,
-        output,
-        template,
-        config,
-    )
+    try:
+        print(f"rag-benchmark {version('rag-benchmark')}")
+    except PackageNotFoundError:
+        print("rag-benchmark (development)")
 
-    runner(cfg,verbose)
+    raise typer.Exit()
+
+
+@app.callback()
+def main(
+    version: bool = typer.Option(
+        False,
+        "--version",
+        help="Show rag-benchmark version and exit.",
+        callback=version_callback,
+        is_eager=True,
+    ),
+) -> None:
+    pass
+
 
 @app.command()
 def init(
     output: Path = Path("."),
     template: TemplateOpt = "generic",
     force: ForceOpt = False,
-):
+) -> None:
     run_init(output, template, force)
+
 
 @app.command()
 def generate(
@@ -67,7 +91,8 @@ def generate(
     dry_run: DryRunOpt = False,
 ) -> None:
     cfg = build_config(dataset, output, template, config)
-    run_generate(cfg,  verbose=verbose, force=force, dry_run=dry_run)
+    run_generate(cfg, verbose=verbose, force=force, dry_run=dry_run)
+
 
 @app.command()
 def report(
@@ -80,7 +105,8 @@ def report(
     dry_run: DryRunOpt = False,
 ) -> None:
     cfg = build_config(dataset, output, template, config)
-    run_report(cfg,  verbose=verbose, force=force, dry_run=dry_run)
+    run_report(cfg, verbose=verbose, force=force, dry_run=dry_run)
+
 
 @app.command()
 def export(
@@ -93,7 +119,7 @@ def export(
     dry_run: DryRunOpt = False,
 ) -> None:
     cfg = build_config(dataset, output, template, config)
-    run_export(cfg,  verbose=verbose, force=force, dry_run=dry_run)
+    run_export(cfg, verbose=verbose, force=force, dry_run=dry_run)
 
 
 @app.command()
@@ -114,13 +140,14 @@ def diagnose(
         file=file,
     )
 
+
 @app.command()
 def inspect(
     dataset: DatasetOpt = None,
     output: OutputOpt = None,
     template: TemplateOpt = None,
     config: ConfigOpt = None,
-    file: FileOpt = False,
+    file: FileOpt = None,
     verbose: VerboseOpt = False,
     save_report: SaveReportOpt = False,
 ) -> None:
@@ -132,13 +159,14 @@ def inspect(
         file=file,
     )
 
+
 @app.command()
 def validate(
     dataset: DatasetOpt = None,
     output: OutputOpt = None,
     template: TemplateOpt = None,
     config: ConfigOpt = None,
-    file: FileOpt = False,
+    file: FileOpt = None,
     verbose: VerboseOpt = False,
     save_report: SaveReportOpt = False,
 ) -> None:
@@ -150,13 +178,14 @@ def validate(
         file=file,
     )
 
+
 @app.command()
 def scan(
     dataset: DatasetOpt = None,
     output: OutputOpt = None,
     template: TemplateOpt = None,
     config: ConfigOpt = None,
-    file: FileOpt = False,
+    file: FileOpt = None,
     verbose: VerboseOpt = False,
     save_report: SaveReportOpt = False,
 ) -> None:

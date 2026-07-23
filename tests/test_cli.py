@@ -58,6 +58,9 @@ def test_generate_writes_benchmark_json(dataset_dir: Path, tmp_path: Path) -> No
             "generic",
         ],
     )
+
+    if result.exception:
+        raise result.exception
     assert result.exit_code == 0
     queries_path = output_dir / "benchmark_queries.json"
     assert queries_path.exists()

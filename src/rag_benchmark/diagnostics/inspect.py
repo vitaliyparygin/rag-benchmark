@@ -12,6 +12,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
+from rules.models import QuestionTemplateRule, TemplateDefinition
+
 from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.diagnostics.analyzer import (
@@ -35,12 +37,10 @@ from rag_benchmark.diagnostics.models import (
     TemplateSuggestion,
 )
 from rag_benchmark.extractor import RegexMetadataExtractor
-from rag_benchmark.generators.base import QuestionTemplateMap
 from rag_benchmark.logging import get_logger
 from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, DocumentFormat, ScannedFile
 from rag_benchmark.pipeline import BenchmarkPipeline
 from rag_benchmark.scanner import detect_format
-from rag_benchmark.templates import TemplateDefinition
 from rag_benchmark.utils.text import truncate
 
 logger = get_logger("diagnostics.inspect")
@@ -60,7 +60,8 @@ class InspectResult:
     scanned_file: ScannedFile
     classified: ClassifiedDocument
     template: TemplateDefinition
-    question_templates: QuestionTemplateMap
+
+    question_templates: dict[str, list[QuestionTemplateRule]]
     questions: list[BenchmarkQuery]
 
     # Metadata

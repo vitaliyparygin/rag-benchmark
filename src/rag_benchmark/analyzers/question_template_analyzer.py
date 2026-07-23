@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from rich.console import Console
 from rich.table import Table
+from rules.models import TemplateDefinition
 
 from rag_benchmark.diagnostics.models import DocumentDiagnostic, UnusedQuestionTemplate
-from rag_benchmark.templates import TemplateDefinition
 
 console = Console()
 

@@ -218,15 +218,15 @@ class QuestionGenerationResult:
     statistics: list[GenerationStats]
 
 
-@dataclass
-class QuestionField:
-    name: str
-    required: bool = False
-    aliases: list[str] = field(default_factory=list)
-    weight: int = 1
-
-    def __str__(self) -> str:
-        return self.name
+# @dataclass
+# class QuestionField:
+#     name: str
+#     required: bool = False
+#     aliases: list[str] = field(default_factory=list)
+#     weight: int = 1
+#
+#     def __str__(self) -> str:
+#         return self.name
 
 
 @dataclass

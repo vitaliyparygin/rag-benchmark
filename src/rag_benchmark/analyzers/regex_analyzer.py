@@ -4,11 +4,11 @@ from typing import cast
 
 from rich.console import Console
 from rich.text import Text
+from rules.models import TemplateDefinition
 
 from rag_benchmark.diagnostics.models import RegexStat
 from rag_benchmark.models import ClassifiedDocument, ResourceGroup
 from rag_benchmark.suggestions.regex_suggestions import build_regex
-from rag_benchmark.templates import TemplateDefinition
 from rag_benchmark.utils.resources import load_json
 
 console = Console()

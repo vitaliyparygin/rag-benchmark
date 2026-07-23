@@ -11,6 +11,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+import typer
 import yaml
 from pydantic import BaseModel, Field, field_validator
 
@@ -36,19 +37,21 @@ class BenchmarkConfig(BaseModel):
 
     @classmethod
     def load(cls, path: Path | None) -> BenchmarkConfig:
-        """Load configuration from a YAML file, falling back to defaults.
-
-        Args:
-            path: Path to a YAML config file. If None or missing, defaults
-                are used.
-
-        Returns:
-            A populated BenchmarkConfig instance.
         """
-        if path is None or not Path(path).exists():
+        Load configuration from benchmark.yaml.
+
+        If path is None, benchmark.yaml in the current working directory
+        is used.
+        """
+
+        path = Path(path) if path else Path("benchmark.yaml")
+
+        if not path.exists():
             return cls()
-        with Path(path).open("r", encoding="utf-8") as handle:
-            raw: dict[str, Any] = yaml.safe_load(handle) or {}
+
+        with path.open("r", encoding="utf-8") as f:
+            raw = yaml.safe_load(f) or {}
+
         return cls(**raw)
 
     def with_overrides(self, **overrides: Any) -> BenchmarkConfig:
@@ -76,6 +79,7 @@ class BenchmarkConfig(BaseModel):
         with path.open("w", encoding="utf-8") as handle:
             yaml.safe_dump(payload, handle, sort_keys=False)
 
+
 def build_config(
     dataset: Path | None,
     output: Path | None,
@@ -86,8 +90,7 @@ def build_config(
     base = BenchmarkConfig.load(config)
     cfg = base.with_overrides(dataset=dataset, output=output, template=template)
     if cfg.dataset is None:
-        raise ValueError(
-            "Dataset directory is required. "
-            "Pass --dataset or specify it in benchmark.yaml."
+        raise typer.BadParameter(
+            "Dataset directory is required. " "Run 'rag-benchmark init' or pass --dataset."
         )
     return cfg

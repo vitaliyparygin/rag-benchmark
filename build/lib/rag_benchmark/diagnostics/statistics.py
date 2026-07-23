@@ -8,16 +8,16 @@ trivially testable.
 from __future__ import annotations
 
 from rag_benchmark.classifier import UNKNOWN_TYPE
-from rag_benchmark.logging import get_logger
 from rag_benchmark.diagnostics.models import (
-    PipelineDiagnostics,
-    DocumentDiagnostic,
     ClassificationStats,
+    DocumentDiagnostic,
     DocumentTypeMetadataCoverage,
+    FieldCoverageStatistic,
+    PipelineDiagnostics,
     QuestionTypeStats,
     ReadinessScores,
-    FieldCoverageStatistic
 )
+from rag_benchmark.logging import get_logger
 
 logger = get_logger("diagnostics.statistics")
 
@@ -44,6 +44,7 @@ def _mean(values: list[float]) -> float:
     if not values:
         return 0.0
     return round(sum(values) / len(values), 1)
+
 
 def compute_classification_stats(diagnostics: PipelineDiagnostics) -> ClassificationStats:
     """Tally how many documents landed in each document type.
@@ -164,17 +165,9 @@ def compute_question_stats(diagnostics: PipelineDiagnostics) -> list[QuestionTyp
         possible_per_document = sum(len(spec.fields) or 1 for spec in specs)
         possible = possible_per_document * len(diags)
         generated = sum(
-            d.question_generation.generated
-            if d.question_generation
-            else 0
-            for d in diags
+            d.question_generation.generated if d.question_generation else 0 for d in diags
         )
-        skipped = sum(
-            d.question_generation.skipped
-            if d.question_generation
-            else 0
-            for d in diags
-        )
+        skipped = sum(d.question_generation.skipped if d.question_generation else 0 for d in diags)
 
         results.append(
             QuestionTypeStats(

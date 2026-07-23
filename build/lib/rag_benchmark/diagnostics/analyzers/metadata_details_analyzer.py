@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from rag_benchmark.diagnostics.inspect import InspectResult
 from rag_benchmark.diagnostics.models import MetadataDetail
+
 
 class MetadataDetailsAnalyzer:
 
@@ -10,10 +12,7 @@ class MetadataDetailsAnalyzer:
     ) -> list[MetadataDetail]:
 
         rows = []
-        stats = {
-            s.field: s
-            for s in result.regex_stats
-        }
+        stats = {s.field: s for s in result.regex_stats}
         extracted = result.classified.metadata.fields
         for field in result.expected_fields:
             value = extracted.get(field)

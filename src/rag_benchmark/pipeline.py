@@ -12,6 +12,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from rules.loader import load_template
+from rules.models import TemplateDefinition
+
 from rag_benchmark.classifier import DefaultClassifier, DocumentClassifier
 from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.extractor import MetadataExtractor, RegexMetadataExtractor
@@ -26,7 +29,6 @@ from rag_benchmark.models import (
 from rag_benchmark.pdf_reader import ReaderRegistry
 from rag_benchmark.pipeline_models import PipelineResult
 from rag_benchmark.scanner import DocumentScanner
-from rag_benchmark.templates import TemplateDefinition, load_template
 
 logger = get_logger("pipeline")
 

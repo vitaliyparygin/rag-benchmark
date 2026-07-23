@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import re
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+
+from rules.loader import load_field_rules
+from rules.models import FieldRule
 
 from rag_benchmark.logging import get_logger
 from rag_benchmark.models import Document as DocumentModel
@@ -39,167 +41,16 @@ class MetadataExtractor(ABC):
         raise NotImplementedError
 
 
-@dataclass(frozen=True)
-class FieldRule:
-    """A single named field and the regex pattern(s) that can extract it.
-
-    The first capturing group of the first pattern that matches is used as
-    the extracted value.
-    """
-
-    name: str
-    patterns: tuple[str, ...]
-
-
-# Generic field rules per document type. Domain templates may extend or
-# override this mapping via `RegexMetadataExtractor(extra_rules=...)`.
-DEFAULT_FIELD_RULES: dict[str, tuple[FieldRule, ...]] = {
-    "Invoice": (
-        FieldRule("invoice_number", (r"invoice\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
-        FieldRule(
-            "customer",
-            (
-                r"customer\s*:\s*([^\n]+)",
-                r"bill\s*to\s*:\s*([^\n]+)",
-            ),
-        ),
-        FieldRule(
-            "amount",
-            patterns=(
-                r"total\s*(?:due|amount)?\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",
-                r"amount\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",
-                r"сумма\s*[:\-]?\s*([\d,]+\.\d{2})",
-            ),
-        ),
-        FieldRule(
-            name="supplier",
-            patterns=(
-                r"supplier\s*:\s*([^\n]+)",
-                r"vendor\s*:\s*([^\n]+)",
-                r"seller\s*:\s*([^\n]+)",
-            ),
-        ),
-        FieldRule(
-            "currency",
-            patterns=(
-                r"amount.*?\b(USD|EUR|UAH|PLN|GBP)\b",
-                r"\b(USD|EUR|UAH|PLN|GBP)\b",
-            ),
-        ),
-    ),
-    "Purchase Order": (
-        FieldRule(
-            "po_number",
-            (r"(?:p\.?o\.?|purchase\s*order)\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",),
-        ),
-        FieldRule("vendor", (r"vendor\s*(?:name)?\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule("amount", (r"total\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",)),
-    ),
-    "Vendor Profile": (
-        FieldRule("vendor", (r"vendor\s*name\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule("phone", (r"(?:phone|tel)\s*[:\-]?\s*([\d\-\+\(\) ]{7,})",)),
-        FieldRule("email", (r"([\w.\-]+@[\w.\-]+\.\w+)",)),
-        FieldRule("address", (r"address\s*[:\-]?\s*([^\n]+)",)),
-    ),
-    "Employment Contract": (
-        FieldRule("contract_number", (r"contract\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
-        FieldRule("contractor", (r"employer\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule(
-            "customer",
-            (
-                r"customer\s*[:\-]?\s*([^\n]+)",
-                r"bill\s*to\s*[:\-]?\s*([^\n]+)",
-            ),
-        ),
-        FieldRule(
-            "start_date",
-            (
-                r"signed\s*:\s*([\d-]+)",
-                r"start\s*date\s*:\s*([\d-]+)",
-            ),
-        ),
-        FieldRule(
-            "end_date",
-            (
-                r"valid\s+until\s*:\s*([\d-]+)",
-                r"end\s*date\s*:\s*([\d-]+)",
-            ),
-        ),
-    ),
-    "Generic Contract": (
-        FieldRule("contract_number", (r"contract\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
-        FieldRule("contractor", (r"contractor\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule(
-            "customer",
-            (
-                r"customer\s*[:\-]?\s*([^\n]+)",
-                r"client\s*[:\-]?\s*([^\n]+)",
-            ),
-        ),
-        FieldRule(
-            "start_date",
-            (
-                r"signed\s*[:\-]?\s*([\d\-\.]+)",
-                r"start\s*date\s*[:\-]?\s*([\d\-\.]+)",
-            ),
-        ),
-        FieldRule(
-            "end_date",
-            (
-                r"valid\s*until\s*[:\-]?\s*([\d\-\.]+)",
-                r"end\s*date\s*[:\-]?\s*([\d\-\.]+)",
-            ),
-        ),
-    ),
-    "Insurance Policy": (
-        FieldRule("policy_number", (r"policy\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
-        FieldRule("policy_holder", (r"policy\s*holder\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule("coverage_period", (r"coverage\s*period\s*[:\-]?\s*([^\n]+)",)),
-    ),
-    "Service Ticket": (
-        FieldRule("ticket_number", (r"ticket\s*(?:no|number|#)\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),
-        FieldRule("status", (r"status\s*[:\-]?\s*([A-Za-z ]+)",)),
-        FieldRule("engineer", (r"(?:assigned\s*)?engineer\s*[:\-]?\s*([^\n]+)",)),
-    ),
-    "Bank Statement": (
-        FieldRule(
-            "account_number",
-            (
-                r"номер\s+сч[её]та\s*[:\-]?\s*([A-Za-z0-9\-]+)",
-                r"account\s*(?:number|no)\s*[:\-]?\s*([A-Za-z0-9\-]+)",
-                r"account\s*#\s*([A-Za-z0-9\-]+)",
-            ),
-        ),
-        FieldRule(
-            "statement_period",
-            (
-                r"statement\s*period\s*[:\-]?\s*([^\n]+)",
-                r"период\s+выписки\s*[:\-]?\s*([^\n]+)",
-            ),
-        ),
-        FieldRule(
-            "balance",
-            (
-                r"финальн\w*\s+баланс[\s\S]{0,120}?\$?([\d,]+\.\d{2})",
-                r"closing\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
-                r"final\s+balance[\s\S]{0,80}?\$?([\d,]+\.\d{2})",
-            ),
-        ),
-    ),
-    "CRM Opportunity": (
-        FieldRule("opportunity_name", (r"opportunity(?:\s*name)?\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule("stage", (r"(?:deal\s*)?stage\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule("value", (r"value\s*[:\-]?\s*([\d,]+(?:\.\d{2})?)",)),
-    ),
-    "Project Report": (
-        FieldRule("project_name", (r"project\s*(?:name)?\s*[:\-]?\s*([^\n]+)",)),
-        FieldRule("status", (r"status\s*[:\-]?\s*([A-Za-z ]+)",)),
-    ),
-    "Meeting Minutes": (
-        FieldRule("meeting_date", (r"date\s*[:\-]?\s*([\d/\-\.]+)",)),
-        FieldRule("attendees", (r"attendees\s*[:\-]?\s*([^\n]+)",)),
-    ),
-}
+# @dataclass(frozen=True)
+# class FieldRule:
+#     """A single named field and the regex pattern(s) that can extract it.
+#
+#     The first capturing group of the first pattern that matches is used as
+#     the extracted value.
+#     """
+#
+#     name: str
+#     patterns: tuple[str, ...]
 
 
 class RegexMetadataExtractor(MetadataExtractor):
@@ -213,7 +64,8 @@ class RegexMetadataExtractor(MetadataExtractor):
     """
 
     def __init__(self, extra_rules: dict[str, tuple[FieldRule, ...]] | None = None) -> None:
-        self._rules: dict[str, tuple[FieldRule, ...]] = dict(DEFAULT_FIELD_RULES)
+        field_rules = load_field_rules()
+        self._rules: dict[str, tuple[FieldRule, ...]] = dict(field_rules)
         if extra_rules:
             for doc_type, rules in extra_rules.items():
                 base = self._rules.get(doc_type, ())

@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
-import hashlib
-import logging
-import re
-import unicodedata
-from pathlib import Path
+import json
+from collections.abc import Mapping
 from functools import cache
 from importlib.resources import files
-import json
+from importlib.resources.abc import Traversable
+from typing import Any, cast
+
+import yaml
+
+from rag_benchmark.models import ResourceGroup
 
 _LOGGER_NAME = "rag_benchmark.utils.resources"
 PACKAGE = "rag_benchmark.resources"
@@ -41,24 +43,32 @@ PACKAGE = "rag_benchmark.resources"
 #         .read_text(encoding="utf-8")
 #     )
 
-def resource(group: str, name: str):
+
+def resource(group: str, name: str) -> Traversable:
     return files(f"{PACKAGE}.{group}").joinpath(name)
 
-@cache
-def load_json(group: str, name: str):
-    path = resource(group, _with_suffix(name, ".json"))
-    return json.loads(path.read_text("utf-8"))
 
-# @cache
-# def load_yaml(group: str, name: str):
-#     path = resource(group, _with_suffix(name, ".yaml"))
-#     return yaml.safe_load(path.read_text("utf-8"))
+def load_json(group: ResourceGroup, name: str) -> Mapping[str, Any]:
+    path = files(PACKAGE).joinpath(group.value, name)
+    return cast(
+        Mapping[str, Any],
+        json.loads(path.read_text("utf-8")),
+    )
 
 
 @cache
-def load_text(group: str, name: str):
+def load_yaml(group: str, name: str) -> Mapping[str, Any]:
+    path = resource(group, _with_suffix(name, ".yaml"))
+    return cast(
+        Mapping[str, Any],
+        yaml.safe_load(path.read_text("utf-8")),
+    )
+
+
+@cache
+def load_text(group: str, name: str) -> str:
     return resource(group, name).read_text("utf-8")
 
 
-def _with_suffix(name: str, suffix: str):
+def _with_suffix(name: str, suffix: str) -> str:
     return name if name.endswith(suffix) else name + suffix

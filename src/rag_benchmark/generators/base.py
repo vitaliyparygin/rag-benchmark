@@ -10,27 +10,29 @@ knowledge themselves, which is what keeps the core package framework
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
-from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, Difficulty, QuestionField
+from rules.models import QuestionTemplateRule
+
+from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument
+
+# @dataclass(frozen=True)
+# class QuestionSpec:
+#     """
+#     Template describing one family of questions.
+#     """
+#
+#     key: str
+#     query_template: list[str]
+#     fields: tuple[QuestionField, ...]
+#     difficulty: Difficulty = Difficulty.EASY
+#     tags: tuple[str, ...] = ()
+#     max_questions: int | None = None
+#
+#
+# # document_type -> question specs for that type.
 
 
-@dataclass(frozen=True)
-class QuestionSpec:
-    """
-    Template describing one family of questions.
-    """
-
-    key: str
-    query_template: list[str]
-    fields: tuple[QuestionField, ...]
-    difficulty: Difficulty = Difficulty.EASY
-    tags: tuple[str, ...] = ()
-    max_questions: int | None = None
-
-
-# document_type -> question specs for that type.
-QuestionTemplateMap = dict[str, list[QuestionSpec]]
+QuestionTemplateMap = dict[str, list[QuestionTemplateRule]]
 
 TemplateRegistry = QuestionTemplateMap
 

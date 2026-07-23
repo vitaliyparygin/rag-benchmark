@@ -5,8 +5,11 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from rag_benchmark.models import DocumentFormat, ScannedFile
 from rag_benchmark.logging import get_logger
+
+from .models import DocumentFormat, ScannedFile
+
+__all__ = ["DocumentFormat", "ScannedFile"]
 
 logger = get_logger("scanner")
 
@@ -56,8 +59,6 @@ class DocumentScanner:
             NotADirectoryError: If dataset_dir is not a directory.
         """
         from pathlib import Path
-        import os
-
 
         dataset_dir = Path(dataset_dir)
         if not dataset_dir.exists():

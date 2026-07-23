@@ -6,7 +6,7 @@ from rich.console import Console
 
 from rag_benchmark.generators.base import QuestionGenerator, QuestionTemplateMap
 from rag_benchmark.logging import get_logger
-from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, GenerationStats
+from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument, Difficulty, GenerationStats
 
 logger = get_logger("generators.template")
 
@@ -93,7 +93,7 @@ class TemplateQuestionGenerator(QuestionGenerator):
                                 expected_document=classified.document.filename,
                                 expected_fields=[field_name],
                                 document_type=doc_type,
-                                difficulty=spec.difficulty,
+                                difficulty=Difficulty(spec.difficulty),
                                 tags=list(spec.tags),
                                 template_id=spec.key,
                             )

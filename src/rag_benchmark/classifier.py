@@ -10,9 +10,9 @@ from __future__ import annotations
 
 import re
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
 
 from rich.console import Console
+from rules.models import ClassificationRule
 
 from rag_benchmark.logging import get_logger
 
@@ -46,21 +46,21 @@ class DocumentClassifier(ABC):
         raise NotImplementedError
 
 
-@dataclass(frozen=True)
-class ClassificationRule:
-    """A single rule mapping filename/content signals to a document type.
-
-    Attributes:
-        document_type: The label produced when this rule matches.
-        filename_patterns: Regex patterns checked against the filename.
-        content_patterns: Regex patterns checked against document text.
-        content_weight: Relative importance of a content match vs filename.
-    """
-
-    document_type: str
-    filename_patterns: tuple[str, ...] = field(default_factory=tuple)
-    content_patterns: tuple[str, ...] = field(default_factory=tuple)
-    content_weight: float = 0.7
+# @dataclass(frozen=True)
+# class ClassificationRule:
+#     """A single rule mapping filename/content signals to a document type.
+#
+#     Attributes:
+#         document_type: The label produced when this rule matches.
+#         filename_patterns: Regex patterns checked against the filename.
+#         content_patterns: Regex patterns checked against document text.
+#         content_weight: Relative importance of a content match vs filename.
+#     """
+#
+#     document_type: str
+#     filename_patterns: tuple[str, ...] = field(default_factory=tuple)
+#     content_patterns: tuple[str, ...] = field(default_factory=tuple)
+#     content_weight: float = 0.7
 
 
 # Generic, domain-agnostic default rule set. Callers/templates can supply

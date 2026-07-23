@@ -1,15 +1,19 @@
 from __future__ import annotations
+
 import typer
-from rag_benchmark.pipeline import BenchmarkPipeline
-from rag_benchmark.logging import configure_logging, get_logger
 from rich.console import Console
-from rag_benchmark.config import BenchmarkConfig
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from rag_benchmark.diagnostics.runner import build_diagnostics_report
+
+from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.diagnostics.reporter import DiagnosticsReporter, write_markdown_report
+from rag_benchmark.diagnostics.runner import build_diagnostics_report
+from rag_benchmark.logging import configure_logging, get_logger
+from rag_benchmark.pipeline import BenchmarkPipeline
+
 console = Console()
 
 logger = get_logger("cli.diagnose")
+
 
 def run_diagnose(
     cfg: BenchmarkConfig,

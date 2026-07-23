@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from rag_benchmark.models import BenchmarkDataset
 from rag_benchmark.logging import get_logger
+from rag_benchmark.models import BenchmarkDataset
 
 logger = get_logger("writers.json")
 
@@ -24,9 +24,7 @@ def write_benchmark_json(dataset: BenchmarkDataset, output_path: Path) -> Path:
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    payload = [
-        json.loads(query.model_dump_json()) for query in dataset.queries
-    ]
+    payload = [json.loads(query.model_dump_json()) for query in dataset.queries]
 
     with output_path.open("w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=2, ensure_ascii=False)

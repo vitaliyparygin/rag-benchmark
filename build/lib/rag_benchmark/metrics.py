@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import Counter
 
 from rag_benchmark.classifier import UNKNOWN_TYPE
+from rag_benchmark.logging import get_logger
 from rag_benchmark.models import (
     BenchmarkDataset,
     ClassifiedDocument,
@@ -12,7 +13,6 @@ from rag_benchmark.models import (
     ValidationIssue,
     ValidationReport,
 )
-from rag_benchmark.logging import get_logger
 
 logger = get_logger("metrics")
 
@@ -31,9 +31,7 @@ def compute_statistics(
     Returns:
         A populated DatasetStatistics instance.
     """
-    doc_type_counts = Counter(
-        cd.classification.document_type for cd in classified_documents
-    )
+    doc_type_counts = Counter(cd.classification.document_type for cd in classified_documents)
     unknown_count = doc_type_counts.get(UNKNOWN_TYPE, 0)
 
     field_counts: Counter[str] = Counter()

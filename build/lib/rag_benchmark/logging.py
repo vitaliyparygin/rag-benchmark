@@ -23,13 +23,13 @@ def configure_logging(verbose: bool = False, debug: bool = False) -> logging.Log
 
     logger.setLevel(level)
     if not logger.handlers:
-        handler = logging.StreamHandler()
+        stream_handler = logging.StreamHandler()
         formatter = logging.Formatter(
             fmt="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
         )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
+        stream_handler.setFormatter(formatter)
+        logger.addHandler(stream_handler)
     else:
         for handler in logger.handlers:
             handler.setLevel(level)

@@ -1,9 +1,7 @@
 from rag_benchmark.config import BenchmarkConfig
-from rag_benchmark.diagnostics.models import (
-    PipelineDiagnostics
-)
-from rag_benchmark.pipeline import BenchmarkPipeline
 from rag_benchmark.diagnostics.analyzer import run_diagnostics
+from rag_benchmark.diagnostics.models import PipelineDiagnostics
+from rag_benchmark.pipeline import BenchmarkPipeline
 
 
 class DiagnosticsService:

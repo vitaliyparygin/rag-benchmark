@@ -1,28 +1,22 @@
-
 from __future__ import annotations
+
+from rag_benchmark.diagnostics.models import ClassificationScore
 from rag_benchmark.models import ClassifiedDocument
-from rag_benchmark.diagnostics.models import MatchedKeyword
+
 
 class KeywordAnalyzer:
 
     @staticmethod
     def analyze(
         classified: ClassifiedDocument,
-    ) -> list[MatchedKeyword]:
-
+    ) -> list[ClassificationScore]:
         result = []
-        scores = classified.classification.scores
 
-        for doc_type, score in sorted(
-            scores.items(),
-            key=lambda x: x[1],
-            reverse=True,
-        ):
-
+        for candidate in classified.classification.candidates:
             result.append(
-                MatchedKeyword(
-                    document_type=doc_type,
-                    score=score,
+                ClassificationScore(
+                    document_type=candidate.document_type,
+                    score=candidate.confidence,
                 )
             )
 
