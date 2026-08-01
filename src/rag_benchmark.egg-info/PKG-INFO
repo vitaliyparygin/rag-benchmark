@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: rag-benchmark
-Version: 0.1.2
+Version: 0.1.1
 Summary: Framework-agnostic benchmark dataset and evaluation asset generator for RAG systems.
 Author: vitaliy.parygin
 Author-email: vitaliy.parygin@gmail.com
@@ -44,7 +44,7 @@ Requires-Dist: pdfplumber>=0.11.0
 Requires-Dist: python-docx>=1.1.0
 Requires-Dist: rich>=13.7.0
 Requires-Dist: anthropic>=0.117.0
-Requires-Dist: rules @ git+ssh://git@github.com/vitaliyparygin/rules.git@v0.1.2
+Requires-Dist: rules @ git+ssh://git@github.com/vitaliyparygin/rules.git@v0.1.4
 Provides-Extra: llm
 Requires-Dist: anthropic>=0.30.0; extra == "llm"
 Provides-Extra: dev
