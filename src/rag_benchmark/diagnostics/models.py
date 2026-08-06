@@ -274,6 +274,7 @@ class MetadataCoverageResult:
 class QuestionCoverageResult:
     expected: int
     generated: int
+    missing: list[str]
     coverage: float
 
 
@@ -346,6 +347,7 @@ class GeneratedQuestion:
     metadata_field: str | None = None
     template_name: str | None = None
     confidence: float | None = None
+
 
 
 @dataclass

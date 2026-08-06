@@ -1,18 +1,24 @@
 from rag_benchmark.diagnostics.inspect import InspectResult
-from rag_benchmark.diagnostics.models import MetadataCoverageResult
+from rag_benchmark.diagnostics.models import FieldCoverageResult
 
 
 class MetadataCoverageAnalyzer:
 
     @staticmethod
-    def analyze(result: InspectResult) -> MetadataCoverageResult:
+    def analyze(result: InspectResult) -> FieldCoverageResult:
+        expected = list(result.expected_fields)
+        extracted = list(result.classified.metadata.fields.keys())
+        missing = [field for field in expected if field not in extracted]
 
-        expected = len(result.expected_fields)
-        extracted = len(result.classified.metadata.fields)
+        coverage = (
+            len(extracted) / len(expected)
+            if expected
+            else 0.0
+        )
 
-        return MetadataCoverageResult(
+        return FieldCoverageResult(
             expected=expected,
             extracted=extracted,
-            missing=expected - extracted,
-            coverage=(extracted / expected * 100 if expected else 0.0),
+            missing=missing,
+            coverage=coverage,
         )

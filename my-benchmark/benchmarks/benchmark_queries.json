@@ -43,5 +43,19 @@
       "erp",
       "metadata"
     ]
+  },
+  {
+    "query": "яка кількість товару вказана в P00019?",
+    "expected_documents": [
+      "Purchase Order - P00019.pdf"
+    ],
+    "expected_answer_contains": [
+      "..."
+    ]
+  },
+  {
+    "query": "Який VIN номер автомобіля?",
+    "expected_documents": [],
+    "expected_answer": "not_found"
   }
 ]

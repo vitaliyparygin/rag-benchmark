@@ -8,18 +8,10 @@ class MissingImprovementsAnalyzer:
 
     @staticmethod
     def analyze(result: InspectResult) -> list[MissingImprovement]:
-        improvements = []
-        for field in result.missing_fields:
-            improvements.append(
-                MissingImprovement(
-                    category="Metadata",
-                    item=field,
-                    suggestion=f"Add regex for '{field}'",
-                )
-            )
+        improvements: list[MissingImprovement] = []
 
         for stat in result.regex_stats:
-            if not stat.matched:
+            if not stat.matched and stat.field not in result.missing_fields:
                 improvements.append(
                     MissingImprovement(
                         category="Regex",
@@ -27,15 +19,24 @@ class MissingImprovementsAnalyzer:
                         suggestion=f"Regex does not match '{stat.field}'",
                     )
                 )
-        template = result.question_templates
 
+        template = result.question_templates
         question_specs = template.get(
             result.classified.classification.document_type,
             [],
         )
 
-        expected = {field.name for spec in question_specs for field in spec.fields}
-        generated = {q.field for q in result.questions if hasattr(q, "field")}
+        expected = {
+            field.name
+            for spec in question_specs
+            for field in spec.fields
+        }
+
+        generated = {
+            field
+            for question in result.questions
+            for field in question.expected_fields
+        }
 
         for field in sorted(expected - generated):
             improvements.append(
@@ -47,3 +48,5 @@ class MissingImprovementsAnalyzer:
             )
 
         return improvements
+
+
