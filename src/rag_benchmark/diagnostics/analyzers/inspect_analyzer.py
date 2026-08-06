@@ -54,21 +54,15 @@ class InspectAnalyzer:
             result.regex_candidates,
         )
 
-        # result.unused_regex = UnusedRegexAnalyzer.analyze(
-        #     result.regex_stats,
-        # )
+        metadata_coverage = MetadataCoverageAnalyzer.analyze(result)
+        result.field_coverage = metadata_coverage
 
-        metadata_coverage = MetadataCoverageAnalyzer.analyze(
-            result,
-        )
-        print(type(metadata_coverage))
-        result.question_coverage = QuestionCoverageAnalyzer.analyze(
-            result,
-        )
-        result.regex_coverage = RegexCoverageAnalyzer.analyze(
-            result,
-        )
+        result.question_coverage = QuestionCoverageAnalyzer.analyze(result)
+
+        result.regex_coverage = RegexCoverageAnalyzer.analyze(result)
+
         result.missing_improvements = MissingImprovementsAnalyzer.analyze(result)
+
         result.readiness = ReadinessAnalyzer.analyze(
             result,
             result.field_coverage,

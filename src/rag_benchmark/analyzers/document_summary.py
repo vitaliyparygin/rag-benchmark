@@ -14,7 +14,7 @@ class DocumentSummaryAnalyzer:
     @staticmethod
     def analyze(result: InspectResult) -> DocumentSummary:
         field_coverage = (
-            result.field_coverage.coverage_percent if result.field_coverage is not None else 0.0
+            result.field_coverage.coverage if result.field_coverage is not None else 0.0
         )
         summary = DocumentSummary(
             filename=result.classified.document.filename,

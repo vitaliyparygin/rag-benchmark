@@ -9,36 +9,27 @@ console = Console()
 
 
 class QuestionCoverageAnalyzer:
-    """Analyze question generation coverage."""
 
     @staticmethod
-    def analyze(
-        result: InspectResult,
-    ) -> QuestionCoverageResult:
-        expected = len(result.expected_fields)
-        generated = len(result.questions)
+    def analyze(result: InspectResult) -> QuestionCoverageResult:
+        expected_fields = set(result.expected_fields)
+
+        generated_fields = {
+            field
+            for question in result.questions
+            for field in question.expected_fields
+        }
+
+        generated_fields &= expected_fields
+
+        missing_fields = sorted(expected_fields - generated_fields)
+
+        expected = len(expected_fields)
+        generated = len(generated_fields)
 
         return QuestionCoverageResult(
             expected=expected,
             generated=generated,
-            coverage=generated / expected if expected else 0.0,
+            missing=missing_fields,
+            coverage=generated / expected * 100 if expected else 0.0,
         )
-
-    # @staticmethod
-    # def report(
-    #     diagnostics: list[DocumentDiagnostic],
-    # ) -> None:
-    #
-    #     console.rule("[bold]Question Coverage[/bold]")
-    #     for diag in diagnostics:
-    #         result = QuestionCoverageAnalyzer.analyze(
-    #             diag,
-    #         )
-    #         tree = Tree(
-    #             f"[cyan]{diag.classified.document.filename}[/cyan] " f"({result.coverage:.0%})"
-    #         )
-    #
-    #         tree.add(f"Expected questions : {result.expected}")
-    #         tree.add(f"Generated questions: {result.generated}")
-    #         tree.add(f"Coverage           : {result.coverage:.0%}")
-    #         console.print(tree)

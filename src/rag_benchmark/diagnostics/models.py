@@ -274,6 +274,7 @@ class MetadataCoverageResult:
 class QuestionCoverageResult:
     expected: int
     generated: int
+    missing: list[str]
     coverage: float
 
 

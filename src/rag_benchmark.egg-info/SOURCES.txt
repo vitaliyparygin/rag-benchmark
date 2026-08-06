@@ -27,6 +27,7 @@ src/rag_benchmark.egg-info/requires.txt
 src/rag_benchmark.egg-info/top_level.txt
 src/rag_benchmark/analyzers/document_summary.py
 src/rag_benchmark/analyzers/field_coverage.py
+src/rag_benchmark/analyzers/improvement_analyzer.py
 src/rag_benchmark/analyzers/metadata_coverage.py
 src/rag_benchmark/analyzers/question_coverage.py
 src/rag_benchmark/analyzers/question_generation.py
@@ -128,7 +129,9 @@ tests/test_classifier.py
 tests/test_cli.py
 tests/test_extractor.py
 tests/test_generator.py
+tests/test_loader.py
 tests/test_metrics.py
+tests/test_missing_improvements_analyzer.py
 tests/test_rules.py
 tests/test_scanner.py
 tests/test_writers.py
