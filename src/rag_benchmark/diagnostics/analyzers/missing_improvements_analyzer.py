@@ -26,17 +26,9 @@ class MissingImprovementsAnalyzer:
             [],
         )
 
-        expected = {
-            field.name
-            for spec in question_specs
-            for field in spec.fields
-        }
+        expected = {field.name for spec in question_specs for field in spec.fields}
 
-        generated = {
-            field
-            for question in result.questions
-            for field in question.expected_fields
-        }
+        generated = {field for question in result.questions for field in question.expected_fields}
 
         for field in sorted(expected - generated):
             improvements.append(
@@ -48,5 +40,3 @@ class MissingImprovementsAnalyzer:
             )
 
         return improvements
-
-

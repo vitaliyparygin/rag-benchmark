@@ -10,11 +10,7 @@ class MetadataCoverageAnalyzer:
         extracted = list(result.classified.metadata.fields.keys())
         missing = [field for field in expected if field not in extracted]
 
-        coverage = (
-            len(extracted) / len(expected)
-            if expected
-            else 0.0
-        )
+        coverage = len(extracted) / len(expected) if expected else 0.0
 
         return FieldCoverageResult(
             expected=expected,

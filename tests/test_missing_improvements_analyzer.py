@@ -57,8 +57,7 @@ def test_missing_field_does_not_produce_regex_improvement_when_field_is_absent_f
     improvements = MissingImprovementsAnalyzer.analyze(result)
 
     assert not any(
-        improvement.category == "Regex"
-        and improvement.item == "address"
+        improvement.category == "Regex" and improvement.item == "address"
         for improvement in improvements
     )
 
@@ -92,7 +91,6 @@ def test_missing_question_field_produces_questions_improvement():
     assert improvements[0].category == "Questions"
     assert improvements[0].item == "address"
     assert improvements[0].suggestion == "Question was not generated"
-
 
 
 def test_missing_field_with_existing_unmatched_regex_is_not_regex_improvement():
@@ -173,4 +171,3 @@ def test_missing_field_with_unmatched_regex_does_not_produce_regex_improvement()
     improvements = MissingImprovementsAnalyzer.analyze(result)
 
     assert improvements == []
-

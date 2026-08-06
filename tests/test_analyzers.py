@@ -238,6 +238,7 @@ def test_question_coverage_all_fields_generated():
     assert coverage.missing == []
     assert coverage.coverage == pytest.approx(1.0)
 
+
 def test_question_coverage_uses_expected_fields_from_questions():
     result = SimpleNamespace(
         expected_fields=[
@@ -332,4 +333,3 @@ def test_missing_field_does_not_produce_regex_improvement_when_field_is_absent_f
     improvements = MissingImprovementsAnalyzer.analyze(result)
 
     assert improvements == []
-

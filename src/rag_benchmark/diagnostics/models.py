@@ -349,7 +349,6 @@ class GeneratedQuestion:
     confidence: float | None = None
 
 
-
 @dataclass
 class MissingImprovement:
     category: str

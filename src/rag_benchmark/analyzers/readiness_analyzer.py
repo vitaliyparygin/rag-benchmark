@@ -20,16 +20,9 @@ class ReadinessAnalyzer:
         question_score = questions.coverage if questions is not None else 0.0
         regex_score_value = regex_score.coverage if regex_score is not None else 0.0
 
-        classification_score = (
-            result.classified.classification.confidence
-        )
+        classification_score = result.classified.classification.confidence
 
-        overall = (
-            classification_score
-            + metadata_score
-            + question_score
-            + regex_score_value
-        ) / 4
+        overall = (classification_score + metadata_score + question_score + regex_score_value) / 4
 
         return ReadinessReport(
             metadata_score=metadata_score,

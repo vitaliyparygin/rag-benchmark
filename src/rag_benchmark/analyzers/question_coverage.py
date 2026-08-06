@@ -14,9 +14,7 @@ class QuestionCoverageAnalyzer:
         expected_fields = set(result.expected_fields)
 
         generated_fields = {
-            field
-            for question in result.questions
-            for field in question.expected_fields
+            field for question in result.questions for field in question.expected_fields
         }
 
         generated_fields &= expected_fields
