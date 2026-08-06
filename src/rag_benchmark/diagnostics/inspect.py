@@ -23,7 +23,7 @@ from rag_benchmark.diagnostics.analyzer import (
 )
 from rag_benchmark.diagnostics.models import (
     ClassificationScore,
-    FieldCoverageStatistic,
+    FieldCoverageResult,
     MatchedKeyword,
     MetadataDetail,
     MissingImprovement,
@@ -75,7 +75,7 @@ class InspectResult:
     matched_keywords: list[MatchedKeyword] = field(default_factory=list)
     missing_improvements: list[MissingImprovement] = field(default_factory=list)
     metadata_details: list[MetadataDetail] = field(default_factory=list)
-    field_coverage: FieldCoverageStatistic | None = None
+    field_coverage: FieldCoverageResult | None = None
 
     regex_stats: list[RegexStat] = field(default_factory=list)
     regex_coverage: RegexCoverage | None = None

@@ -5,14 +5,16 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 import pytest
-from rag_benchmark.models import BenchmarkQuery, Difficulty
+
 from rag_benchmark.analyzers.field_coverage import FieldCoverageAnalyzer
 from rag_benchmark.analyzers.question_coverage import QuestionCoverageAnalyzer
 from rag_benchmark.analyzers.regex_analyzer import RegexAnalyzer
-from rag_benchmark.diagnostics.models import DocumentSummary
 from rag_benchmark.diagnostics.analyzers.missing_improvements_analyzer import (
     MissingImprovementsAnalyzer,
 )
+from rag_benchmark.diagnostics.models import DocumentSummary
+from rag_benchmark.models import BenchmarkQuery, Difficulty
+
 
 def test_field_coverage():
     classified = SimpleNamespace(
