@@ -16,7 +16,7 @@ from rag_benchmark.models import (
 )
 from rag_benchmark.pipeline import BenchmarkPipeline
 
-__version__ = "0.1.2"
+__version__ = "0.1.4"
 
 __all__ = [
     "__version__",

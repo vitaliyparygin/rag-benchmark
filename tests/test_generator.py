@@ -30,11 +30,11 @@ def _classified_invoice() -> ClassifiedDocument:
         char_count=10,
     )
     classification = ClassificationResult(
-        document_id="doc1", document_type="Invoice", confidence=0.9, matched_signals=["x"]
+        document_id="doc1", document_type="invoice", confidence=0.9, matched_signals=["x"]
     )
     metadata = ExtractedMetadata(
         document_id="doc1",
-        document_type="Invoice",
+        document_type="invoice",
         fields={
             "invoice_number": ExtractedField(name="invoice_number", value="INV-1"),
             "amount": ExtractedField(name="amount", value="1.00"),
@@ -45,9 +45,9 @@ def _classified_invoice() -> ClassifiedDocument:
 
 def test_template_generator_skips_spec_when_any_required_field_missing() -> None:
     template_map = {
-        "Invoice": [
+        "invoice": [
             QuestionTemplateRule(
-                key="Invoice",
+                key="invoice",
                 query_template=[
                     "What is the {field} on invoice {filename}?",
                     "Extract the {field} from {filename}.",
@@ -83,9 +83,9 @@ def test_template_generator_skips_spec_when_any_required_field_missing() -> None
 
 def test_template_generator_generates_when_all_required_fields_present() -> None:
     template_map = {
-        "Invoice": [
+        "invoice": [
             QuestionTemplateRule(
-                key="Invoice",
+                key="invoice",
                 query_template=["What is the {field} on {filename}?"],
                 fields=[
                     QuestionField("invoice_number"),
@@ -108,9 +108,9 @@ def test_template_generator_generates_when_all_required_fields_present() -> None
 
 def test_template_generator_respects_max_questions_per_document() -> None:
     template_map = {
-        "Invoice": [
+        "invoice": [
             QuestionTemplateRule(
-                key="Invoice",
+                key="invoice",
                 query_template=["What is the {field} on {filename}?"],
                 fields=[
                     QuestionField("invoice_number"),
@@ -153,7 +153,7 @@ def test_llm_generator_parses_valid_json_response() -> None:
     )
     generator = LLMQuestionGenerator(client=_FakeLLMClient(response))
     queries = generator.generate(
-        [_classified_invoice()], {"Invoice": []}, max_questions_per_document=5
+        [_classified_invoice()], {"invoice": []}, max_questions_per_document=5
     )
     assert len(queries) == 1
     assert queries[0].query == "What is the invoice number?"
@@ -162,7 +162,7 @@ def test_llm_generator_parses_valid_json_response() -> None:
 def test_llm_generator_skips_malformed_response_gracefully() -> None:
     generator = LLMQuestionGenerator(client=_FakeLLMClient("not json"))
     queries = generator.generate(
-        [_classified_invoice()], {"Invoice": []}, max_questions_per_document=5
+        [_classified_invoice()], {"invoice": []}, max_questions_per_document=5
     )
     assert queries == []
 

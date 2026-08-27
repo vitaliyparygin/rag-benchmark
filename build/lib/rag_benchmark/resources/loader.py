@@ -1,1 +1,0 @@
-PACKAGE = "rag_benchmark.resources"

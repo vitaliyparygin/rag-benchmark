@@ -67,57 +67,57 @@ class DocumentClassifier(ABC):
 # their own rule list for domain-specific classification (see templates/).
 DEFAULT_RULES: tuple[ClassificationRule, ...] = (
     ClassificationRule(
-        document_type="Invoice",
+        document_type="invoice",
         filename_patterns=(r"invoice", r"\binv[-_]?\d+"),
         content_patterns=(r"invoice\s*(no|number|#)", r"total\s*due", r"bill\s*to"),
     ),
     ClassificationRule(
-        document_type="Purchase Order",
+        document_type="purchase_order",
         filename_patterns=(r"purchase[-_ ]?order", r"\bpo[-_]?\d+"),
         content_patterns=(r"purchase\s*order", r"\bp\.?o\.?\s*(no|number|#)"),
     ),
     ClassificationRule(
-        document_type="Vendor Profile",
+        document_type="vendor_profile",
         filename_patterns=(r"vendor", r"supplier"),
         content_patterns=(r"vendor\s*(name|profile|id)", r"supplier\s*information"),
     ),
     ClassificationRule(
-        document_type="Employment Contract",
+        document_type="employment_contract",
         filename_patterns=(r"employment[-_ ]?contract", r"offer[-_ ]?letter"),
         content_patterns=(r"employment\s*agreement", r"employee\s*and\s*employer"),
     ),
     ClassificationRule(
-        document_type="Insurance Policy",
+        document_type="insurance_policy",
         filename_patterns=(r"insurance", r"policy"),
         content_patterns=(r"policy\s*(number|holder)", r"coverage\s*period"),
     ),
     ClassificationRule(
-        document_type="Meeting Minutes",
+        document_type="meeting_minutes",
         filename_patterns=(r"minutes", r"meeting[-_ ]?notes"),
         content_patterns=(r"meeting\s*minutes", r"attendees\s*:", r"action\s*items"),
     ),
     ClassificationRule(
-        document_type="CRM Opportunity",
+        document_type="crm_opportunity",
         filename_patterns=(r"opportunity", r"\bcrm\b"),
         content_patterns=(r"opportunity\s*(name|stage|value)", r"deal\s*stage"),
     ),
     ClassificationRule(
-        document_type="Service Ticket",
+        document_type="service_ticket",
         filename_patterns=(r"ticket", r"service[-_ ]?request"),
         content_patterns=(r"ticket\s*(no|number|#)", r"assigned\s*engineer", r"priority\s*:"),
     ),
     ClassificationRule(
-        document_type="Bank Statement",
+        document_type="bank_statement",
         filename_patterns=(r"bank[-_ ]?statement", r"statement"),
         content_patterns=(r"account\s*(number|balance)", r"statement\s*period"),
     ),
     ClassificationRule(
-        document_type="Project Report",
+        document_type="project_report",
         filename_patterns=(r"project[-_ ]?report", r"status[-_ ]?report"),
         content_patterns=(r"project\s*status", r"milestones?", r"deliverables?"),
     ),
     ClassificationRule(
-        document_type="Generic Contract",
+        document_type="generic_contract",
         filename_patterns=(r"contract", r"agreement"),
         content_patterns=(r"this\s*agreement", r"terms\s*and\s*conditions", r"parties\s*hereto"),
     ),

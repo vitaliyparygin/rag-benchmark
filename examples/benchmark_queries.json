@@ -10,7 +10,7 @@
       "expected_fields": [
         "invoice_number"
       ],
-      "document_type": "Invoice",
+      "document_type": "invoice",
       "difficulty": "easy",
       "tags": [
         "invoice",
@@ -25,7 +25,7 @@
       "expected_fields": [
         "amount"
       ],
-      "document_type": "Invoice",
+      "document_type": "invoice",
       "difficulty": "easy",
       "tags": [
         "invoice",
@@ -40,7 +40,7 @@
       "expected_fields": [
         "vendor"
       ],
-      "document_type": "Purchase Order",
+      "document_type": "purchase_order",
       "difficulty": "easy",
       "tags": [
         "purchase-order"
@@ -54,7 +54,7 @@
       "expected_fields": [
         "po_number"
       ],
-      "document_type": "Purchase Order",
+      "document_type": "purchase_order",
       "difficulty": "easy",
       "tags": [
         "purchase-order"

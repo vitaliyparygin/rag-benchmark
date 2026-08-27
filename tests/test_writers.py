@@ -25,10 +25,10 @@ def _query(i: int) -> BenchmarkQuery:
         query=f"query {i}",
         expected_document="doc.txt",
         expected_fields=["field_a"],
-        document_type="Invoice",
+        document_type="invoice",
         difficulty=Difficulty.EASY,
         tags=["retrieval"],
-        template_id="Invoice",
+        template_id="invoice",
     )
 
 
@@ -102,7 +102,7 @@ def test_write_latency_csv_writes_rows(tmp_path: Path) -> None:
 def test_write_report_markdown_includes_key_sections(tmp_path: Path) -> None:
     stats = DatasetStatistics(
         total_documents=3,
-        document_type_counts={"Invoice": 2, "Unknown": 1},
+        document_type_counts={"invoice": 2, "Unknown": 1},
         total_questions=5,
         avg_questions_per_document=1.67,
         unknown_document_types=1,
@@ -114,6 +114,6 @@ def test_write_report_markdown_includes_key_sections(tmp_path: Path) -> None:
 
     assert "# Benchmark Results" in content
     assert "generic" in content
-    assert "Invoice" in content
+    assert "invoice" in content
     assert "invoice_number" in content
     assert "could not be classified" in content

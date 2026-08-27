@@ -80,7 +80,7 @@ Each `FieldRule` has a field name and one or more regex patterns; the
 first pattern with a capturing group that matches wins. Rules you define
 here are *merged on top of* the package's generic rules — you don't need
 to redefine fields for document types the generic extractor already
-handles well (e.g. `Invoice`, `Bank Statement`).
+handles well (e.g. `invoice`, `bank_statement`).
 
 ## Writing question specs
 
