@@ -1,0 +1,27 @@
+[
+  {
+    "id": "citation-p00019-quantity",
+    "query": "яка кількість товару вказана в P00019?",
+    "expected_documents": [
+      "Purchase Order - P00019.pdf"
+    ],
+    "category": "retrieval",
+    "source": "e2e_chat"
+  },
+  {
+    "id": "missing-vin",
+    "query": "Який VIN номер автомобіля?",
+    "expected_documents": [],
+    "category": "missing_information",
+    "source": "e2e_chat"
+  },
+  {
+    "id": "citation-vendor-id",
+    "query": "Який vendor id",
+    "expected_documents": [
+      "Vendor Profile.pdf"
+    ],
+    "category": "citation",
+    "source": "e2e_chat"
+  }
+]

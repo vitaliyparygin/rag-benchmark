@@ -12,7 +12,7 @@ import re
 from abc import ABC, abstractmethod
 
 from rich.console import Console
-from rules.models import ClassificationRule
+from rules.models import ClassificationRule, DocumentType
 
 from rag_benchmark.logging import get_logger
 
@@ -26,7 +26,7 @@ __all__ = [
 logger = get_logger("classifier")
 console = Console()
 
-UNKNOWN_TYPE = "Unknown"
+UNKNOWN_TYPE = DocumentType.UNKNOWN
 
 
 class DocumentClassifier(ABC):
@@ -165,11 +165,12 @@ class DefaultClassifier(DocumentClassifier):
 
             if score > best_score:
                 best_score = score
-                best_type = rule.document_type
+                best_type = DocumentType(rule.document_type)
                 best_signals = signals
+
             all_scores.append(
                 ClassificationCandidate(
-                    document_type=rule.document_type,
+                    document_type=best_type,
                     confidence=round(score, 3),
                     matched_signals=signals,
                 )

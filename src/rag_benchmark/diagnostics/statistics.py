@@ -7,6 +7,8 @@ trivially testable.
 
 from __future__ import annotations
 
+from rules.models import DocumentType
+
 from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.diagnostics.models import (
     ClassificationStats,
@@ -83,6 +85,7 @@ def compute_classification_stats(diagnostics: PipelineDiagnostics) -> Classifica
 def _group_by_document_type(
     diagnostics: PipelineDiagnostics, *, exclude_unknown: bool
 ) -> dict[str, list[DocumentDiagnostic]]:
+
     grouped: dict[str, list[DocumentDiagnostic]] = {}
     for diag in diagnostics.document_diagnostics:
         if exclude_unknown and diag.is_unknown:
@@ -158,7 +161,12 @@ def compute_question_stats(diagnostics: PipelineDiagnostics) -> list[QuestionTyp
     results: list[QuestionTypeStats] = []
 
     for doc_type, diags in sorted(grouped.items()):
-        specs = template_map.get(doc_type, [])
+        try:
+            document_type = DocumentType(doc_type)
+        except ValueError:
+            continue
+
+        specs = template_map.get(document_type.value, [])
         if not specs:
             continue
 

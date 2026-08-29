@@ -16,7 +16,6 @@ from pathlib import Path
 from rag_benchmark.analyzers.field_coverage import FieldCoverageAnalyzer
 from rag_benchmark.analyzers.question_generation import QuestionGenerationAnalyzer
 from rag_benchmark.analyzers.regex_analyzer import LABEL_REGEX, RegexAnalyzer
-from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.diagnostics.models import (
     DocumentDiagnostic,
@@ -201,7 +200,7 @@ def run_diagnostics(
         keywords: list[str] = []
         suggested_rule: SuggestedClassificationRule | None = None
 
-        if classified.classification.document_type == UNKNOWN_TYPE:
+        if classified.classification.document_type is None:
             keywords = extract_keywords(classified.document.text)
 
             suggested_rule = suggest_classification_rule(

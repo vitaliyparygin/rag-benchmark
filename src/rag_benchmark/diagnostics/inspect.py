@@ -14,7 +14,6 @@ from pathlib import Path
 
 from rules.models import QuestionTemplateRule, TemplateDefinition
 
-from rag_benchmark.classifier import UNKNOWN_TYPE
 from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.diagnostics.analyzer import (
     TEXT_PREVIEW_CHARS,
@@ -90,7 +89,7 @@ class InspectResult:
 
     @property
     def is_unknown(self) -> bool:
-        return self.classified.classification.document_type == UNKNOWN_TYPE
+        return self.classified.classification.document_type is None
 
 
 def find_document(dataset_dir: Path, name: str, recursive: bool = True) -> Path:
@@ -191,7 +190,7 @@ def inspect_document(
 
     keywords: list[str] = []
     suggested_rule: SuggestedClassificationRule | None = None
-    if classification.document_type == UNKNOWN_TYPE:
+    if classification.document_type is None:
         keywords = extract_keywords(document.text)
         suggested_rule = suggest_classification_rule(document.filename, keywords)
 

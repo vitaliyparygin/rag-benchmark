@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from rules.loader import load_template
-from rules.models import TemplateDefinition
+from rules.models import DocumentType, TemplateDefinition
 
 from rag_benchmark.classifier import DefaultClassifier, DocumentClassifier
 from rag_benchmark.config import BenchmarkConfig
@@ -62,9 +62,13 @@ class BenchmarkPipeline:
         return self.classifier or DefaultClassifier(rules=template.classification_rules or None)
 
     def _build_extractor(self, template: TemplateDefinition) -> MetadataExtractor:
-        """Return the extractor that would be used for a given template."""
+        extra_rules = {
+            DocumentType(document_type): rules
+            for document_type, rules in template.extraction_rules.items()
+        }
+
         return self.extractor or RegexMetadataExtractor(
-            extra_rules=template.extraction_rules or None
+            extra_rules=extra_rules or None,
         )
 
     def scan(self, dataset_dir: Path, recursive: bool = True) -> list[ScannedFile]:

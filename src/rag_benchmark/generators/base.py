@@ -31,7 +31,6 @@ from rag_benchmark.models import BenchmarkQuery, ClassifiedDocument
 #
 # # document_type -> question specs for that type.
 
-
 QuestionTemplateMap = dict[str, list[QuestionTemplateRule]]
 
 TemplateRegistry = QuestionTemplateMap
