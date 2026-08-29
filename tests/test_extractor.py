@@ -26,7 +26,7 @@ def test_extracts_invoice_fields() -> None:
     doc = _doc(
         "Invoice Number: INV-1001\nBill To: Acme Corp\nTotal Due: $1,250.00\nCurrency: USD\n"
     )
-    metadata = extractor.extract(doc, DocumentType.INVOICE)
+    metadata = extractor.extract(doc, "invoice")
 
     fields = metadata.as_plain_dict()
     assert fields["invoice_number"] == "INV-1001"
@@ -59,7 +59,7 @@ def test_unknown_document_type_yields_no_fields() -> None:
 def test_missing_field_is_simply_omitted() -> None:
     extractor = RegexMetadataExtractor()
     doc = _doc("Invoice Number: INV-1\n")  # no amount, customer, currency
-    metadata = extractor.extract(doc, DocumentType.INVOICE)
+    metadata = extractor.extract(doc, "invoice")
     fields = metadata.as_plain_dict()
     assert "invoice_number" in fields
     assert "amount" not in fields

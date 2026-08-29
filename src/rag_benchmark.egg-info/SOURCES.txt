@@ -118,6 +118,7 @@ src/rag_benchmark/utils/hashing.py
 src/rag_benchmark/utils/json.py
 src/rag_benchmark/utils/paths.py
 src/rag_benchmark/utils/resources.py
+src/rag_benchmark/utils/rules_adapter.py
 src/rag_benchmark/utils/text.py
 src/rag_benchmark/writers/__init__.py
 src/rag_benchmark/writers/benchmark_json.py

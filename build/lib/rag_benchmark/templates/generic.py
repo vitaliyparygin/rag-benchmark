@@ -14,9 +14,9 @@ from rules.models import QuestionField, QuestionTemplateRule
 TEMPLATE_NAME = "generic"
 
 QUESTION_TEMPLATES: QuestionTemplateMap = {
-    "Invoice": [
+    "invoice": [
         QuestionSpec(
-            "Invoice",
+            "invoice",
             query_template=[
                 "What is the {field} on invoice {filename}?",
                 "Extract the {field} from {filename}.",
@@ -31,9 +31,9 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
             ),
         ),
     ],
-    "Vendor Profile": [
+    "vendor_profile": [
         QuestionSpec(
-            "Vendor Profile",
+            "vendor_profile",
             [
                 "What is the {field} of the vendor described in {filename}?",
             ],
@@ -45,9 +45,9 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
             ),
         ),
     ],
-    "Generic Contract": [
+    "generic_contract": [
         QuestionSpec(
-            "Generic Contract",
+            "generic_contract",
             [
                 "What is the {field} in the contract {filename}?",
             ],
@@ -60,9 +60,9 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
             ),
         ),
     ],
-    "Bank Statement": [
+    "bank_statement": [
         QuestionSpec(
-            "Bank Statement",
+            "bank_statement",
             [
                 "What is the {field} shown in {filename}?",
             ],
@@ -73,18 +73,18 @@ QUESTION_TEMPLATES: QuestionTemplateMap = {
             ),
         ),
     ],
-    "Meeting Minutes": [
+    "meeting_minutes": [
         QuestionSpec(
-            "Meeting Minutes",
+            "meeting_minutes",
             [
                 "Who attended the meeting recorded in {filename}?",
             ],
             fields=(QuestionField("attendees"),),
         ),
     ],
-    "Project Report": [
+    "project_report": [
         QuestionSpec(
-            "Project Report",
+            "project_report",
             [
                 "What is the current {field} of the project in {filename}?",
             ],

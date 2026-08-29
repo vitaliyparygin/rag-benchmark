@@ -97,7 +97,7 @@ def find_document(dataset_dir: Path, name: str, recursive: bool = True) -> Path:
 
     Matching is case-insensitive and tries, in order: an exact filename
     match, then a match on the filename stem (extension-agnostic), so
-    `inspect "Vendor Profile"` and `inspect vendor_profile.txt` both work.
+    `inspect "vendor_profile"` and `inspect vendor_profile.txt` both work.
 
     Args:
         dataset_dir: Directory to search.

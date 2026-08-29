@@ -47,8 +47,8 @@ def _classified(
 
 def test_compute_statistics_counts_and_averages() -> None:
     documents = [
-        _classified(DocumentType.INVOICE, "a.txt"),
-        _classified(DocumentType.UNKNOWN, "b.txt")
+        _classified("invoice", "a.txt"),
+        _classified(DocumentType.UNKNOWN, "b.txt"),
     ]
     dataset = BenchmarkDataset(
         queries=[
@@ -57,7 +57,7 @@ def test_compute_statistics_counts_and_averages() -> None:
                 query="q1",
                 expected_document="a.txt",
                 expected_fields=[],
-                document_type=DocumentType.INVOICE,
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 template_id="invoice",
             )
@@ -79,7 +79,7 @@ def test_validate_dataset_detects_duplicate_ids() -> None:
                 id=1,
                 query="q1",
                 expected_document="a.txt",
-                document_type=DocumentType.INVOICE,
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 template_id="invoice",
             ),
@@ -87,7 +87,7 @@ def test_validate_dataset_detects_duplicate_ids() -> None:
                 id=1,
                 query="q2",
                 expected_document="a.txt",
-                document_type=DocumentType.INVOICE,
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 template_id="invoice",
             ),
@@ -106,7 +106,7 @@ def test_validate_dataset_detects_missing_expected_document() -> None:
                 id=1,
                 query="q1",
                 expected_document="",
-                document_type=DocumentType.INVOICE,
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 template_id="invoice",
             ),
@@ -118,7 +118,7 @@ def test_validate_dataset_detects_missing_expected_document() -> None:
 
 
 def test_validate_dataset_detects_missing_extracted_fields() -> None:
-    documents = [_classified(DocumentType.INVOICE, "a.txt")]
+    documents = [_classified("invoice", "a.txt")]
     dataset = BenchmarkDataset(
         queries=[
             BenchmarkQuery(
@@ -126,7 +126,7 @@ def test_validate_dataset_detects_missing_extracted_fields() -> None:
                 query="q1",
                 expected_document="a.txt",
                 expected_fields=["invoice_number"],
-                document_type=DocumentType.INVOICE,
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 template_id="invoice",
             )
@@ -144,7 +144,7 @@ def test_validate_dataset_no_issues_on_clean_dataset() -> None:
                 id=1,
                 query="q1",
                 expected_document="a.txt",
-                document_type=DocumentType.INVOICE,
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 template_id="invoice",
             ),

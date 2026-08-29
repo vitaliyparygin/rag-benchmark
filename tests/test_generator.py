@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from rules.models import DocumentType, QuestionField
+from rules.models import QuestionField
 
 from rag_benchmark.generators.base import QuestionTemplateRule
 from rag_benchmark.generators.llm_generator import LLMQuestionGenerator
@@ -31,13 +31,13 @@ def _classified_invoice() -> ClassifiedDocument:
     )
     classification = ClassificationResult(
         document_id="doc1",
-        document_type=DocumentType.INVOICE,
+        document_type="invoice",
         confidence=0.9,
-        matched_signals=["x"]
+        matched_signals=["x"],
     )
     metadata = ExtractedMetadata(
         document_id="doc1",
-        document_type=DocumentType.INVOICE,
+        document_type="invoice",
         fields={
             "invoice_number": ExtractedField(name="invoice_number", value="INV-1"),
             "amount": ExtractedField(name="amount", value="1.00"),
@@ -48,9 +48,9 @@ def _classified_invoice() -> ClassifiedDocument:
 
 def test_template_generator_skips_spec_when_any_required_field_missing() -> None:
     template_map = {
-        DocumentType.INVOICE: [
+        "invoice": [
             QuestionTemplateRule(
-                key=DocumentType.INVOICE,
+                key="invoice",
                 query_template=[
                     "What is the {field} on invoice {filename}?",
                     "Extract the {field} from {filename}.",
@@ -86,9 +86,9 @@ def test_template_generator_skips_spec_when_any_required_field_missing() -> None
 
 def test_template_generator_generates_when_all_required_fields_present() -> None:
     template_map = {
-        DocumentType.INVOICE: [
+        "invoice": [
             QuestionTemplateRule(
-                key=DocumentType.INVOICE,
+                key="invoice",
                 query_template=["What is the {field} on {filename}?"],
                 fields=[
                     QuestionField("invoice_number"),
@@ -111,9 +111,9 @@ def test_template_generator_generates_when_all_required_fields_present() -> None
 
 def test_template_generator_respects_max_questions_per_document() -> None:
     template_map = {
-        DocumentType.INVOICE: [
+        "invoice": [
             QuestionTemplateRule(
-                key=DocumentType.INVOICE,
+                key="invoice",
                 query_template=["What is the {field} on {filename}?"],
                 fields=[
                     QuestionField("invoice_number"),
