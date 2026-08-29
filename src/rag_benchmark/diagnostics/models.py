@@ -5,7 +5,7 @@ from datetime import datetime
 
 from rules.models import TemplateDefinition
 
-from rag_benchmark.classifier import UNKNOWN_TYPE, ClassificationResult
+from rag_benchmark.classifier import ClassificationResult
 from rag_benchmark.config import BenchmarkConfig
 from rag_benchmark.extractor import ExtractedMetadata
 from rag_benchmark.models import BenchmarkDataset, BenchmarkQuery, ClassifiedDocument, Document
@@ -66,7 +66,7 @@ class DocumentDiagnostic:
 
     @property
     def is_unknown(self) -> bool:
-        return self.classified.classification.document_type == UNKNOWN_TYPE
+        return self.classified.classification.document_type is None
 
     @property
     def available_fields(self) -> list[str]:

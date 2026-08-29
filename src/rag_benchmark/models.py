@@ -13,6 +13,7 @@ from enum import StrEnum
 from pathlib import Path
 
 from pydantic import BaseModel, Field, field_validator
+from rules.models import DocumentType
 
 
 class DocumentFormat(StrEnum):
@@ -64,14 +65,14 @@ class Document(BaseModel):
 
 
 class ClassificationCandidate(BaseModel):
-    document_type: str
+    document_type: DocumentType
     confidence: float
     matched_signals: list[str] = Field(default_factory=list)
 
 
 class ClassificationResult(BaseModel):
     document_id: str
-    document_type: str
+    document_type: DocumentType
     confidence: float
     matched_signals: list[str] = Field(default_factory=list)
     candidates: list[ClassificationCandidate] = Field(default_factory=list)
@@ -89,7 +90,7 @@ class ExtractedMetadata(BaseModel):
     """All metadata fields extracted from a single document."""
 
     document_id: str
-    document_type: str
+    document_type: DocumentType
     fields: dict[str, ExtractedField] = Field(default_factory=dict)
 
     def as_plain_dict(self) -> dict[str, str]:

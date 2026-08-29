@@ -26,7 +26,7 @@ def test_classifies_invoice_by_content_and_filename() -> None:
         "Invoice Number: INV-1001\nTotal Due: $100.00\nBill To: Acme\n",
     )
     result = classifier.classify(doc)
-    assert result.document_type == "Invoice"
+    assert result.document_type == "invoice"
     assert result.confidence > 0.5
     assert result.matched_signals
 
@@ -35,7 +35,7 @@ def test_classifies_vendor_profile() -> None:
     classifier = DefaultClassifier()
     doc = _doc("vendor.txt", "Vendor Name: Globex\nPhone: 555-0100\nEmail: a@b.com\n")
     result = classifier.classify(doc)
-    assert result.document_type == "Vendor Profile"
+    assert result.document_type == "vendor_profile"
 
 
 def test_unclassifiable_document_returns_unknown() -> None:
@@ -55,6 +55,6 @@ def test_filename_only_match_scores_lower_than_content_match() -> None:
     )
     result_filename = classifier.classify(filename_only)
     result_content = classifier.classify(content_only)
-    assert result_filename.document_type == "Invoice"
-    assert result_content.document_type == "Invoice"
+    assert result_filename.document_type == "invoice"
+    assert result_content.document_type == "invoice"
     assert result_content.confidence > result_filename.confidence

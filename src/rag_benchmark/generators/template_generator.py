@@ -33,14 +33,14 @@ class TemplateQuestionGenerator(QuestionGenerator):
         next_id = 1
 
         for classified in documents:
-            doc_type = classified.classification.document_type
+            document_type = classified.classification.document_type
 
-            specs = template_map.get(doc_type, [])
+            specs = template_map.get(document_type.value, [])
 
             if not specs:
                 logger.debug(
                     "No question specs for document_type=%s (%s)",
-                    doc_type,
+                    document_type,
                     classified.document.filename,
                 )
                 continue
@@ -48,7 +48,7 @@ class TemplateQuestionGenerator(QuestionGenerator):
             available_fields = classified.metadata.as_plain_dict()
             doc_stats = GenerationStats(
                 document_name=classified.document.filename,
-                document_type=doc_type,
+                document_type=document_type.value,
             )
             generated_for_doc = 0
             logger.debug(
@@ -92,7 +92,7 @@ class TemplateQuestionGenerator(QuestionGenerator):
                                 query=query_text,
                                 expected_document=classified.document.filename,
                                 expected_fields=[field_name],
-                                document_type=doc_type,
+                                document_type=document_type.value,
                                 difficulty=Difficulty(spec.difficulty),
                                 tags=list(spec.tags),
                                 template_id=spec.key,

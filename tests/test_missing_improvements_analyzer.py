@@ -19,7 +19,7 @@ def make_result(
         questions=questions or [],
         classified=SimpleNamespace(
             classification=SimpleNamespace(
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
             ),
         ),
     )
@@ -65,7 +65,7 @@ def test_missing_field_does_not_produce_regex_improvement_when_field_is_absent_f
 def test_missing_question_field_produces_questions_improvement():
     result = make_result(
         question_templates={
-            "Vendor Profile": [
+            "vendor_profile": [
                 SimpleNamespace(
                     fields=[
                         SimpleNamespace(name="vendor"),
@@ -106,7 +106,7 @@ def test_missing_field_with_existing_unmatched_regex_is_not_regex_improvement():
         questions=[],
         classified=SimpleNamespace(
             classification=SimpleNamespace(
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
             ),
         ),
     )
@@ -121,7 +121,7 @@ def test_missing_question_field_gets_question_improvement():
         missing_fields=[],
         regex_stats=[],
         question_templates={
-            "Vendor Profile": [
+            "vendor_profile": [
                 SimpleNamespace(
                     fields=[
                         SimpleNamespace(name="vendor"),
@@ -137,7 +137,7 @@ def test_missing_question_field_gets_question_improvement():
         ],
         classified=SimpleNamespace(
             classification=SimpleNamespace(
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
             ),
         ),
     )
@@ -163,7 +163,7 @@ def test_missing_field_with_unmatched_regex_does_not_produce_regex_improvement()
         questions=[],
         classified=SimpleNamespace(
             classification=SimpleNamespace(
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
             ),
         ),
     )

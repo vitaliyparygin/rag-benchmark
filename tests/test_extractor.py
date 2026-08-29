@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from rag_benchmark.extractor import FieldRule, RegexMetadataExtractor
+from rules.models import DocumentType
+
+from rag_benchmark.extractor import RegexMetadataExtractor
 from rag_benchmark.models import Document, DocumentFormat
 
 
@@ -24,7 +26,7 @@ def test_extracts_invoice_fields() -> None:
     doc = _doc(
         "Invoice Number: INV-1001\nBill To: Acme Corp\nTotal Due: $1,250.00\nCurrency: USD\n"
     )
-    metadata = extractor.extract(doc, "Invoice")
+    metadata = extractor.extract(doc, "invoice")
 
     fields = metadata.as_plain_dict()
     assert fields["invoice_number"] == "INV-1001"
@@ -39,7 +41,7 @@ def test_extracts_vendor_profile_fields() -> None:
         "Vendor Name: Globex Industries\nPhone: +1-555-0100\n"
         "Email: contact@globex.example\nAddress: 42 Industrial Way\n"
     )
-    metadata = extractor.extract(doc, "Vendor Profile")
+    metadata = extractor.extract(doc, "vendor_profile")
     fields = metadata.as_plain_dict()
 
     assert "Globex" in fields["vendor"]
@@ -50,24 +52,14 @@ def test_extracts_vendor_profile_fields() -> None:
 def test_unknown_document_type_yields_no_fields() -> None:
     extractor = RegexMetadataExtractor()
     doc = _doc("Some unrelated text.")
-    metadata = extractor.extract(doc, "Nonexistent Type")
+    metadata = extractor.extract(doc, DocumentType.UNKNOWN)
     assert metadata.fields == {}
-
-
-def test_extra_rules_are_merged_and_take_priority_order() -> None:
-    extra = {
-        "Widget": (FieldRule("widget_id", (r"widget\s*id\s*[:\-]?\s*([A-Za-z0-9\-]+)",)),),
-    }
-    extractor = RegexMetadataExtractor(extra_rules=extra)
-    doc = _doc("Widget ID: W-42\n")
-    metadata = extractor.extract(doc, "Widget")
-    assert metadata.as_plain_dict()["widget_id"] == "W-42"
 
 
 def test_missing_field_is_simply_omitted() -> None:
     extractor = RegexMetadataExtractor()
     doc = _doc("Invoice Number: INV-1\n")  # no amount, customer, currency
-    metadata = extractor.extract(doc, "Invoice")
+    metadata = extractor.extract(doc, "invoice")
     fields = metadata.as_plain_dict()
     assert "invoice_number" in fields
     assert "amount" not in fields

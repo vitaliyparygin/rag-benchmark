@@ -11,7 +11,7 @@ import re
 from abc import ABC, abstractmethod
 
 from rules.loader import load_field_rules
-from rules.models import FieldRule
+from rules.models import DocumentType, FieldRule
 
 from rag_benchmark.logging import get_logger
 from rag_benchmark.models import Document as DocumentModel
@@ -27,7 +27,11 @@ class MetadataExtractor(ABC):
     """Abstract interface for extracting fields from a classified document."""
 
     @abstractmethod
-    def extract(self, document: DocumentModel, document_type: str) -> ExtractedMetadata:
+    def extract(
+        self,
+        document: DocumentModel,
+        document_type: DocumentType,
+    ) -> ExtractedMetadata:
         """Extract metadata fields for a document of a known type.
 
         Args:
@@ -63,22 +67,26 @@ class RegexMetadataExtractor(MetadataExtractor):
             the ERP template can add PO-specific fields).
     """
 
-    def __init__(self, extra_rules: dict[str, tuple[FieldRule, ...]] | None = None) -> None:
-        field_rules = load_field_rules()
-        self._rules: dict[str, tuple[FieldRule, ...]] = dict(field_rules)
+    def __init__(
+        self,
+        extra_rules: dict[DocumentType, tuple[FieldRule, ...]] | None = None,
+    ) -> None:
+
+        self._rules: dict[DocumentType, tuple[FieldRule, ...]] = load_field_rules()
+
         if extra_rules:
             for doc_type, rules in extra_rules.items():
                 base = self._rules.get(doc_type, ())
-                # Merge by field name so a template can override a generic
-                # rule's regex without producing a duplicate entry for the
-                # same field (which would otherwise double-count that field
-                # in expected_fields(), coverage stats, and reports).
                 merged: dict[str, FieldRule] = {rule.name: rule for rule in base}
                 for rule in rules:
                     merged[rule.name] = rule
                 self._rules[doc_type] = tuple(merged.values())
 
-    def extract(self, document: DocumentModel, document_type: str) -> ExtractedMetadata:
+    def extract(
+        self,
+        document: DocumentModel,
+        document_type: DocumentType,
+    ) -> ExtractedMetadata:
         rules = self._rules.get(document_type, ())
         fields: dict[str, ExtractedField] = {}
 
@@ -98,18 +106,5 @@ class RegexMetadataExtractor(MetadataExtractor):
             document_id=document.id, document_type=document_type, fields=fields
         )
 
-    def expected_fields(self, document_type: str) -> list[str]:
-        """Return the field names this extractor knows how to extract for a type.
-
-        Used by the diagnostics subsystem to compute metadata coverage
-        (fields expected vs. fields actually extracted) without needing to
-        know anything about regex internals.
-
-        Args:
-            document_type: The classified document type to look up.
-
-        Returns:
-            Field names in rule-definition order, or an empty list if no
-            rules are registered for this document type.
-        """
+    def expected_fields(self, document_type: DocumentType) -> list[str]:
         return [rule.name for rule in self._rules.get(document_type, ())]

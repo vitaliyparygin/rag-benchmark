@@ -62,7 +62,7 @@ class Rule:
 def test_regex_analyzer():
     document = SimpleNamespace(
         classification=SimpleNamespace(
-            document_type="Vendor Profile",
+            document_type="vendor_profile",
         ),
         document=SimpleNamespace(text="""
 Vendor Name: Tech Supplies Ltd
@@ -73,7 +73,7 @@ Email: sales@test.com
 
     template = SimpleNamespace(
         extraction_rules={
-            "Vendor Profile": (
+            "vendor_profile": (
                 Rule(
                     "vendor",
                     (r"Vendor\s*Name:\s*(.+)",),
@@ -119,7 +119,7 @@ def test_question_coverage():
                 query="What is the vendor?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["vendor"],
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
                 difficulty=Difficulty.EASY,
                 tags=["metadata"],
                 template_id="vendor_profile",
@@ -129,7 +129,7 @@ def test_question_coverage():
                 query="What is the amount?",
                 expected_document="Invoice.pdf",
                 expected_fields=["amount"],
-                document_type="Invoice",
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 tags=["metadata"],
                 template_id="invoice",
@@ -151,7 +151,7 @@ def test_question_coverage():
 def test_document_summary():
     summary = DocumentSummary(
         filename="Invoice.pdf",
-        document_type="Invoice",
+        document_type="invoice",
         extracted_fields=["invoice_number", "amount"],
         missing_fields=["customer"],
         regex_stats=[],
@@ -159,7 +159,7 @@ def test_document_summary():
     )
 
     assert summary.filename == "Invoice.pdf"
-    assert summary.document_type == "Invoice"
+    assert summary.document_type == "invoice"
     assert summary.extracted_fields == [
         "invoice_number",
         "amount",
@@ -183,7 +183,7 @@ def test_question_coverage_all_fields_generated():
                 query="What is the vendor name?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["vendor"],
-                document_type="Vendor Profile",
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 tags=[],
                 template_id="vendor_profile",
@@ -193,7 +193,7 @@ def test_question_coverage_all_fields_generated():
                 query="What is the vendor ID?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["vendor_id"],
-                document_type="Vendor Profile",
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 tags=[],
                 template_id="vendor_profile",
@@ -203,7 +203,7 @@ def test_question_coverage_all_fields_generated():
                 query="What is the phone?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["phone"],
-                document_type="Vendor Profile",
+                document_type="invoice",
                 difficulty=Difficulty.EASY,
                 tags=[],
                 template_id="vendor_profile",
@@ -213,7 +213,7 @@ def test_question_coverage_all_fields_generated():
                 query="What is the email?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["email"],
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
                 difficulty=Difficulty.EASY,
                 tags=[],
                 template_id="vendor_profile",
@@ -223,7 +223,7 @@ def test_question_coverage_all_fields_generated():
                 query="What is the address?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["address"],
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
                 difficulty=Difficulty.EASY,
                 tags=[],
                 template_id="vendor_profile",
@@ -252,7 +252,7 @@ def test_question_coverage_uses_expected_fields_from_questions():
                 query="What is the vendor?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["vendor"],
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
                 difficulty=Difficulty.EASY,
                 tags=["metadata"],
                 template_id="vendor_profile",
@@ -262,7 +262,7 @@ def test_question_coverage_uses_expected_fields_from_questions():
                 query="What is the vendor ID?",
                 expected_document="Vendor Profile.pdf",
                 expected_fields=["vendor_id"],
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
                 difficulty=Difficulty.EASY,
                 tags=["metadata"],
                 template_id="vendor_profile",
@@ -325,7 +325,7 @@ def test_missing_field_does_not_produce_regex_improvement_when_field_is_absent_f
         questions=[],
         classified=SimpleNamespace(
             classification=SimpleNamespace(
-                document_type="Vendor Profile",
+                document_type="vendor_profile",
             ),
         ),
     )
